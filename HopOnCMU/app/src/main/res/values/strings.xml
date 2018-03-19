@@ -2,8 +2,15 @@
     <string name="app_name">HopOnCMU</string>
 
     <!-- LoginActivity strings -->
+    <string name="emailUsername">Email or Username</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="passwordConfirm">Confirm Password</string>
     <string name="login">Login</string>
-    <string name="sign_up">No account yet? Create one</string>
+    <string name="createAccount">Sign Up for HopOnCMU</string>
+    <string name="signUp">Sign Up</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="email">Email</string>
+
 </resources>

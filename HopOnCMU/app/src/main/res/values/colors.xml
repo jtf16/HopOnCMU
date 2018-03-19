@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
-    <color name="login_border">#C8C8C8</color>
+    <color name="colorPrimary">#537895</color>
+    <color name="colorPrimaryDark">#09203f</color>
+    <color name="colorAccent">#C8C8C8</color>
 
     <!-- SignUp TextView possible colors -->
     <color name="pressed_color">#ABABAB</color>
     <color name="normal_color">#C8C8C8</color>
+    <color name="login_border">#C8C8C8</color>
+
 </resources>

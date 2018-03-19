@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="pt.ulisboa.tecnico.cmov.project.LoginActivity"
+    tools:context="pt.ulisboa.tecnico.cmov.project.CreateAccountActivity"
     android:background="@drawable/degrade_backgroud_color"
     android:orientation="vertical">
 
@@ -12,20 +12,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="15"
-            android:src="@drawable/ic_hoponcmu"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HopOnCMU"
+            android:text="Create Account"
             android:textSize="30sp"
             android:textColor="#B8B8B8"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="-50sp"/>
+            android:layout_marginTop="100sp"/>
 
         <Space
             android:layout_width="match_parent"
@@ -39,21 +33,32 @@
             android:orientation="vertical"
             android:paddingHorizontal="60sp">
 
-            <!-- Username Label -->
+            <!-- First Name Label -->
             <EditText
+                android:id="@+id/firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
-                android:hint="@string/emailUsername"
+                android:hint="@string/firstName"
                 android:padding="10sp"
                 android:singleLine="true" />
 
-            <!-- Password Label -->
+            <!-- Last Name Label -->
             <EditText
+                android:id="@+id/lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
-                android:hint="@string/password"
+                android:hint="@string/lastName"
+                android:padding="10sp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edittext"
+                android:hint="@string/email"
                 android:padding="10sp"
                 android:singleLine="true" />
         </LinearLayout>
@@ -61,31 +66,71 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="0sp"
-            android:layout_weight="1">
+            android:layout_weight="0.3">
         </Space>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="60sp"
-            android:paddingBottom="150sp">
+            android:paddingHorizontal="60sp">
+
+            <!-- Username Label -->
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edittext"
+                android:hint="@string/username"
+                android:padding="10sp"
+                android:singleLine="true" />
+
+            <!-- Password Label -->
+            <EditText
+                android:id="@+id/password1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edittext"
+                android:hint="@string/password"
+                android:padding="10sp"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edittext"
+                android:hint="@string/passwordConfirm"
+                android:padding="10sp"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="0.7">
+        </Space>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="60sp">
 
             <Button
+                android:onClick="accountCreated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15sp"
-                android:text="@string/login" />
+                android:text="@string/signUp" />
 
-            <TextView
-                android:onClick="createAccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/createAccount"
-                android:textColor="@drawable/sign_up_selector"
-                android:textSize="15sp" />
         </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="4"
+            android:paddingBottom="150sp" >
+        </Space>
 
     </LinearLayout>
 
