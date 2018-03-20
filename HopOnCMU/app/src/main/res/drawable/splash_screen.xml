@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     android:opacity="opaque">
-    <item android:drawable="@color/colorPrimary" />
+    <item android:drawable="@drawable/degrade_backgroud_color" />
 
-    <item android:drawable="@mipmap/ic_hoponcmu"
-        android:height="200dp"
+    <item
         android:width="200dp"
-        android:gravity="center"/>
+        android:height="200dp"
+        android:drawable="@mipmap/ic_hoponcmu"
+        android:gravity="center" />
 
-    <item android:drawable="@mipmap/ic_hoponcmutext"
-        android:top="200dp"
-        android:height="200dp"
+    <item
         android:width="200dp"
-        android:gravity="center"/>
+        android:height="200dp"
+        android:drawable="@mipmap/ic_hoponcmutext"
+        android:gravity="center"
+        android:top="200dp" />
 
 </layer-list>

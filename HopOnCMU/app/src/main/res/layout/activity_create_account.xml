@@ -3,35 +3,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="pt.ulisboa.tecnico.cmov.project.CreateAccountActivity"
     android:background="@drawable/degrade_backgroud_color"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="pt.ulisboa.tecnico.cmov.hoponcmu.CreateAccountActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"></Space>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create Account"
-            android:textSize="30sp"
-            android:textColor="#B8B8B8"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100sp"/>
+            android:text="@string/createAccount"
+            android:textColor="@color/login_border"
+            android:textSize="30sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="2">
-        </Space>
+            android:layout_height="0dp"
+            android:layout_weight="1.5"></Space>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="60sp">
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp">
 
             <!-- First Name Label -->
             <EditText
@@ -40,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
                 android:hint="@string/firstName"
-                android:padding="10sp"
+                android:padding="10dp"
                 android:singleLine="true" />
 
             <!-- Last Name Label -->
@@ -50,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
                 android:hint="@string/lastName"
-                android:padding="10sp"
+                android:padding="10dp"
                 android:singleLine="true" />
 
             <EditText
@@ -59,21 +63,21 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
                 android:hint="@string/email"
-                android:padding="10sp"
+                android:padding="10dp"
                 android:singleLine="true" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="0.3">
-        </Space>
+            android:layout_height="0dp"
+            android:layout_weight="0.5"></Space>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="60sp">
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp">
 
             <!-- Username Label -->
             <EditText
@@ -82,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
                 android:hint="@string/username"
-                android:padding="10sp"
+                android:padding="10dp"
                 android:singleLine="true" />
 
             <!-- Password Label -->
@@ -92,45 +96,45 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
                 android:hint="@string/password"
-                android:padding="10sp"
+                android:padding="10dp"
                 android:singleLine="true" />
+
             <EditText
                 android:id="@+id/password2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/login_edittext"
                 android:hint="@string/passwordConfirm"
-                android:padding="10sp"
+                android:padding="10dp"
                 android:singleLine="true" />
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="0sp"
-            android:layout_weight="0.7">
-        </Space>
+            android:layout_weight="0.5"></Space>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="60sp">
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp">
 
             <Button
-                android:onClick="accountCreated"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15sp"
-                android:text="@string/signUp" />
+                android:layout_marginBottom="15dp"
+                android:onClick="accountCreated"
+                android:text="@string/signUpBtn" />
 
         </LinearLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="0sp"
+            android:layout_height="0dp"
             android:layout_weight="4"
-            android:paddingBottom="150sp" >
-        </Space>
+            android:paddingBottom="150dp"></Space>
 
     </LinearLayout>
 
@@ -138,13 +142,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:gravity="bottom"
             android:src="@drawable/bottom_image" />
     </LinearLayout>
 
