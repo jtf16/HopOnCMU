@@ -1,4 +1,4 @@
-package pt.ulisboa.tecnico.cmov.hoponcmu;
+package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,11 +12,11 @@ public class SplashActivity extends AppCompatActivity {
 
         Intent activityIntent;
 
-        // TODO: decide which activity to start
+        // TODO: verify if login is done
         if (true) {
             activityIntent = new Intent(this, LoginActivity.class);
         } else {
-            activityIntent = new Intent(this, MainActivity.class);
+            activityIntent = new Intent(this, RankingActivity.class);
         }
 
         startActivity(activityIntent);

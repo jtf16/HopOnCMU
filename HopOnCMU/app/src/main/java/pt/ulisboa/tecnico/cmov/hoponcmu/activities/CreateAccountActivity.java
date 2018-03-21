@@ -1,9 +1,11 @@
-package pt.ulisboa.tecnico.cmov.hoponcmu;
+package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 
 public class CreateAccountActivity extends Activity {
 
@@ -13,6 +15,7 @@ public class CreateAccountActivity extends Activity {
         setContentView(R.layout.activity_create_account);
     }
 
+    // TODO: All fields must be filled
     public void accountCreated(View view) {
 
         EditText editTextPassword1 = (EditText) findViewById(R.id.password1);
@@ -29,12 +32,9 @@ public class CreateAccountActivity extends Activity {
         String email = editTextEmail.getText().toString();
         String username = editTextUsername.getText().toString();
 
-        if (password1 == null) {
-        } else if (password2 == null) {
-        } else if (firstName == null) {
-        } else if (lastName == null) {
-        } else if (email == null) {
-        } else if (username == null) {
+        if (password1.equals("") || password2.equals("") || firstName.equals("") ||
+                lastName.equals("") || email.equals("") || username.equals("")) {
+            // TODO: Do something
         }
 
         if (password1.equals(password2)) {

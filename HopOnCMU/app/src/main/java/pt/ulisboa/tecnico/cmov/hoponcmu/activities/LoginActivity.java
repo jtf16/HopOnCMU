@@ -1,9 +1,11 @@
-package pt.ulisboa.tecnico.cmov.hoponcmu;
+package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 
 public class LoginActivity extends Activity {
 
