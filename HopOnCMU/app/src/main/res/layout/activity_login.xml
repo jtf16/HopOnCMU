@@ -7,88 +7,7 @@
     android:orientation="vertical"
     tools:context="pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="-50dp"
-            android:layout_weight="15"
-            android:src="@drawable/ic_hoponcmu" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/app_name"
-            android:textColor="@color/login_border"
-            android:textSize="30sp" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp">
-
-            <!-- Username Label -->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/login_edittext"
-                android:hint="@string/emailUsername"
-                android:padding="10dp"
-                android:singleLine="true" />
-
-            <!-- Password Label -->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/login_edittext"
-                android:hint="@string/password"
-                android:padding="10dp"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="150dp"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:text="@string/login" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:onClick="createAccount"
-                android:text="@string/createAccount"
-                android:textColor="@drawable/sign_up_selector"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-    </LinearLayout>
-
+    <!-- Botton image should set first to be in the background -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,6 +19,91 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:src="@drawable/bottom_image" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:paddingTop="16dp"
+                android:src="@mipmap/ic_launcher" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="150dp"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/app_name"
+                android:textColor="@color/login_border"
+                android:textSize="30sp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <!-- Username Label -->
+            <EditText
+                android:id="@+id/usernameLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edittext"
+                android:hint="@string/emailUsername"
+                android:padding="10dp"
+                android:singleLine="true" />
+
+            <!-- Password Label -->
+            <EditText
+                android:id="@+id/passLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/login_edittext"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="10dp"
+                android:singleLine="true" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="24dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:onClick="login"
+                android:text="@string/login" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:onClick="createAccount"
+                android:text="@string/createAccount"
+                android:textColor="@drawable/sign_up_selector"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

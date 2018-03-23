@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="192dp"
-    android:background="?attr/colorPrimaryDark"
+    android:layout_height="@dimen/drawer_header_height"
+    android:background="@drawable/degrade_background_color"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/profile_image"
+        android:paddingTop="16dp"
+        android:src="@mipmap/ic_launcher" />
+
     <TextView
+        android:id="@+id/full_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="My header title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/sample_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="@string/sample_email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
 </LinearLayout>

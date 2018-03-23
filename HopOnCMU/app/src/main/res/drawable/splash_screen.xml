@@ -6,14 +6,7 @@
     <item
         android:width="200dp"
         android:height="200dp"
-        android:drawable="@mipmap/ic_hoponcmu"
+        android:drawable="@mipmap/ic_launcher"
         android:gravity="center" />
-
-    <item
-        android:width="200dp"
-        android:height="200dp"
-        android:drawable="@mipmap/ic_hoponcmutext"
-        android:gravity="center"
-        android:top="200dp" />
 
 </layer-list>

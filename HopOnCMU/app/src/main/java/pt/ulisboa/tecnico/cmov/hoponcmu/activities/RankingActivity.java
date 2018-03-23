@@ -14,9 +14,10 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.RankingAdapter;
 
 public class RankingActivity extends AppCompatActivity {
 
-    RankingAdapter mRankingAdapter;
-
     DrawerLayout mDrawerLayout;
+    Toolbar mToolbar;
+
+    RankingAdapter mRankingAdapter;
     ViewPager mViewPager;
 
     @Override
@@ -24,20 +25,14 @@ public class RankingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
+        setmViewPager();
+
+        setmDrawerLayout();
+    }
+
+    private void setmViewPager() {
         mRankingAdapter = new RankingAdapter(
                 this, getSupportFragmentManager());
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle(this.getString(R.string.ranking));
-        setSupportActionBar(myToolbar);
-        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDrawer();
-            }
-        });
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // Set up the ViewPager, attaching the adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -54,7 +49,24 @@ public class RankingActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
     }
 
+    private void setmDrawerLayout() {
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        setmToolbar();
+    }
+
+    private void setmToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolbar.setTitle(this.getString(R.string.ranking));
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDrawer();
+            }
+        });
+    }
+
     public void openDrawer() {
-        mDrawerLayout.openDrawer(Gravity.LEFT);
+        mDrawerLayout.openDrawer(Gravity.START);
     }
 }

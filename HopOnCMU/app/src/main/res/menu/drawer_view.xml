@@ -1,21 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/menu_monuments_group">
         <item
             android:id="@+id/nav_monuments"
             android:icon="@drawable/ic_monuments"
-            android:title="@string/monuments" />
+            android:title="@string/monuments"
+            app:showAsAction="never" />
+    </group>
+    <group android:id="@+id/menu_rankings_group">
         <item
             android:id="@+id/nav_rankings"
             android:icon="@drawable/ic_rank"
-            android:title="@string/ranking" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings"
-            android:title="@string/settings" />
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="@string/logout" />
+            android:title="@string/ranking"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/day"
+                    android:title="@string/day"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/week"
+                    android:title="@string/week"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/month"
+                    android:title="@string/month"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/all_time"
+                    android:title="@string/all_time"
+                    app:showAsAction="never" />
+            </menu>
+        </item>
     </group>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/nav_logout"
+        android:icon="@drawable/ic_logout"
+        android:title="@string/logout"
+        app:showAsAction="never" />
 </menu>
