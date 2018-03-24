@@ -1,8 +1,10 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -29,12 +31,12 @@ public class CreateAccountActivity extends Activity {
         email = (EditText) findViewById(R.id.email);
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password1);
-        password.setTypeface(Typeface.DEFAULT);
         confirmPassword = (EditText) findViewById(R.id.password2);
+
+        password.setTypeface(Typeface.DEFAULT);
         confirmPassword.setTypeface(Typeface.DEFAULT);
     }
 
-    // TODO: All fields must be filled
     public void createAccount(View view) {
 
         String strFirstName = firstName.getText().toString();
@@ -44,18 +46,30 @@ public class CreateAccountActivity extends Activity {
         String strPassword = password.getText().toString();
         String strConfirmPassword = confirmPassword.getText().toString();
 
-        if (StringUtils.isBlank(strFirstName) || StringUtils.isBlank(strLastName) ||
-                StringUtils.isBlank(strEmail) || StringUtils.isBlank(strUsername) ||
-                StringUtils.isBlank(strPassword) || StringUtils.isBlank(strConfirmPassword)) {
-            // TODO: Do something
-        }
+        if (StringUtils.isBlank(strFirstName)) {firstName.setError("You must enter your first name");}
+        else if (findInitialSpace(strFirstName)) {firstName.setError("Remove space in beginning");}
 
-        if (strPassword.equals(strConfirmPassword)) {
-            // Algumas cenas
-            // Enviar o Username e Password para a activity anterior
+        //else if (StringUtils.isBlank(strLastName)) {lastName.setError("You must enter your last name");}
+        else if (findInitialSpace(strLastName)) {lastName.setError("Remove space in beginning");}
+
+        //else if (StringUtils.isBlank(strEmail)) {email.setError("You must enter your email");}
+        else if (findInitialSpace(strEmail)) {email.setError("Remove space in beginning");}
+
+        else if (StringUtils.isBlank(strUsername)) {username.setError("You must enter your username");}
+        else if (findInitialSpace(strUsername)) {username.setError("Remove space in beginning");}
+
+        else if (StringUtils.isBlank(strPassword)) {password.setError("You must enter your password");}
+        else if (!strPassword.equals(strConfirmPassword)) {confirmPassword.setError("Your passwords doesn't match");}
+
+        // TODO: Insert all fields in DB
+        else {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            loginIntent.putExtra("Username", strUsername);
+            loginIntent.putExtra("Password", strPassword);
+            startActivity(loginIntent);
             finish();
-        } else {
-            // Alert que as passwords não estão correctar
         }
     }
+
+    private boolean findInitialSpace(String string) { return !string.equals(string.trim()); }
 }
