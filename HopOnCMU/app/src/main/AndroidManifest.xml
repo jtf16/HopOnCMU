@@ -25,7 +25,6 @@
         <activity
             android:name=".activities.CreateAccountActivity"
             android:theme="@style/LoginTheme" />
-        <activity android:name=".activities.RankingActivity" />
     </application>
 
 </manifest>

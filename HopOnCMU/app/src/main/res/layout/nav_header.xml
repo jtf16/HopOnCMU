@@ -16,7 +16,7 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/profile_image"
         android:paddingTop="16dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/ic_user" />
 
     <TextView
         android:id="@+id/full_name"

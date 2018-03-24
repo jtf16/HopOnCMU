@@ -2,27 +2,22 @@
     <string name="app_name">HopOnCMU</string>
 
     <!-- LoginActivity and CreateAccountActivity strings -->
-    <string name="emailUsername">Email or Username</string>
+    <string name="email_username">Email or Username</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
-    <string name="passwordConfirm">Confirm Password</string>
+    <string name="password_confirm">Confirm Password</string>
     <string name="login">Login</string>
-    <string name="signUp">Sign Up for HopOnCMU</string>
-    <string name="createAccount">Create Account</string>
-    <string name="signUpBtn">Sign Up</string>
-    <string name="firstName">First Name</string>
-    <string name="lastName">Last Name</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_up_btn">Sign Up</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
     <string name="email">Email</string>
 
-    <!-- RankingActivity tabs -->
-    <string name="day">Day</string>
-    <string name="week">Week</string>
-    <string name="month">Month</string>
-    <string name="all_time">All time</string>
-
     <!-- Menu drawer options -->
-    <string name="ranking">Ranking</string>
     <string name="monuments">Monuments</string>
+    <string name="progress">Progress</string>
+    <string name="ranking">Ranking</string>
+    <string name="share">Share</string>
     <string name="settings">Settings</string>
     <string name="logout">Logout</string>
 
@@ -31,10 +26,15 @@
     <string name="sample_email">sample_email@email.com</string>
     <string name="profile_image">User Profile Image</string>
 
-    <!-- Action buttons titles -->
-    <string name="menu">Menu</string>
+    <!-- RankingFragment strings -->
+    <string name="username_search_hint">Search by username</string>
+    <string name="sample_user_ranking">#1</string>
+    <string name="sample_username">username123</string>
+    <string name="sample_score">123</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- MonumentsFragment strings -->
+    <string name="monument_search_hint">Search by monument</string>
+    <string name="sample_monument_name">Torre de Belem</string>
+    <string name="sample_monument_distance">3.5Km</string>
 
 </resources>

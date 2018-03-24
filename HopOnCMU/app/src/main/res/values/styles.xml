@@ -22,16 +22,9 @@
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
-    <style name="Base.Widget.Design.TabLayout" parent="android:Widget" tools:override="true">
-        <item name="tabBackground">@drawable/degrade_background_color</item>
-        <item name="tabTextColor">@color/colorAccent</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
-        <item name="tabIndicatorColor">@android:color/white</item>
-        <item name="tabIndicatorHeight">2dp</item>
-    </style>
-
     <style name="Base.V7.Widget.AppCompat.Toolbar" parent="android:Widget" tools:override="true">
         <item name="android:background">@drawable/degrade_background_color</item>
+        <item name="android:fitsSystemWindows">true</item>
     </style>
 
     <!-- This configures the styles for the title within the Toolbar  -->

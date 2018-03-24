@@ -5,8 +5,13 @@
     <color name="colorAccent">#C8C8C8</color>
 
     <!-- SignUp TextView possible colors -->
-    <color name="pressed_color">#ABABAB</color>
-    <color name="normal_color">#C8C8C8</color>
-    <color name="login_border">#C8C8C8</color>
+    <color name="colorPressed">#ABABAB</color>
+    <color name="colorNormal">#C8C8C8</color>
+
+    <!-- Ranking item possible backgrounds -->
+    <color name="colorGold">#FFD700</color>
+    <color name="colorSilver">#C0C0C0</color>
+    <color name="colorBronze">#CD7F32</color>
+    <color name="colorRanked">#d069c9f9</color>
 
 </resources>
