@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -46,20 +45,29 @@ public class CreateAccountActivity extends Activity {
         String strPassword = password.getText().toString();
         String strConfirmPassword = confirmPassword.getText().toString();
 
-        if (StringUtils.isBlank(strFirstName)) {firstName.setError("You must enter your first name");}
-        else if (findInitialSpace(strFirstName)) {firstName.setError("Remove space in beginning");}
+        if (StringUtils.isBlank(strFirstName)) {
+            firstName.setError("You must enter your first name");
+        } else if (findInitialSpace(strFirstName)) {
+            firstName.setError("Remove space in beginning");
+        }
 
         //else if (StringUtils.isBlank(strLastName)) {lastName.setError("You must enter your last name");}
-        else if (findInitialSpace(strLastName)) {lastName.setError("Remove space in beginning");}
+        else if (findInitialSpace(strLastName)) {
+            lastName.setError("Remove space in beginning");
+        }
 
         //else if (StringUtils.isBlank(strEmail)) {email.setError("You must enter your email");}
-        else if (findInitialSpace(strEmail)) {email.setError("Remove space in beginning");}
-
-        else if (StringUtils.isBlank(strUsername)) {username.setError("You must enter your username");}
-        else if (findInitialSpace(strUsername)) {username.setError("Remove space in beginning");}
-
-        else if (StringUtils.isBlank(strPassword)) {password.setError("You must enter your password");}
-        else if (!strPassword.equals(strConfirmPassword)) {confirmPassword.setError("Your passwords doesn't match");}
+        else if (findInitialSpace(strEmail)) {
+            email.setError("Remove space in beginning");
+        } else if (StringUtils.isBlank(strUsername)) {
+            username.setError("You must enter your username");
+        } else if (findInitialSpace(strUsername)) {
+            username.setError("Remove space in beginning");
+        } else if (StringUtils.isBlank(strPassword)) {
+            password.setError("You must enter your password");
+        } else if (!strPassword.equals(strConfirmPassword)) {
+            confirmPassword.setError("Your passwords doesn't match");
+        }
 
         // TODO: Insert all fields in DB
         else {
@@ -71,5 +79,7 @@ public class CreateAccountActivity extends Activity {
         }
     }
 
-    private boolean findInitialSpace(String string) { return !string.equals(string.trim()); }
+    private boolean findInitialSpace(String string) {
+        return !string.equals(string.trim());
+    }
 }

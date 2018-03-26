@@ -14,7 +14,7 @@ public class SplashActivity extends AppCompatActivity {
 
         // TODO: verify if login is done
         if (true) {
-            activityIntent = new Intent(this, LoginActivity.class);
+            activityIntent = new Intent(this, MainActivity.class);
         } else {
             activityIntent = new Intent(this, MainActivity.class);
         }

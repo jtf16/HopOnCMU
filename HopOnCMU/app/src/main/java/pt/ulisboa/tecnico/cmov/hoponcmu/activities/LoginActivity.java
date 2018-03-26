@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -50,9 +49,11 @@ public class LoginActivity extends Activity {
         strPassword = password.getText().toString();
 
         // TODO: Verify if login is valid (username and password == DB)
-        if (StringUtils.isBlank(strUsername)) {username.setError("You must enter your username");}
-        else if (StringUtils.isBlank(strPassword)) {password.setError("You must enter your password");}
-        else {
+        if (StringUtils.isBlank(strUsername)) {
+            username.setError("You must enter your username");
+        } else if (StringUtils.isBlank(strPassword)) {
+            password.setError("You must enter your password");
+        } else {
             Intent loginIntent = new Intent(this, MainActivity.class);
             startActivity(loginIntent);
             finish();

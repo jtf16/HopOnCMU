@@ -20,6 +20,18 @@
             app:navigationIcon="@drawable/ic_menu_white"
             app:titleTextAppearance="@style/Toolbar.TitleText">
 
+            <pt.ulisboa.tecnico.cmov.hoponcmu.views.SearchEditText
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_edittext_background"
+                android:drawableEnd="@drawable/ic_close"
+                android:drawableRight="@drawable/ic_close"
+                android:hint="@string/username_search_hint"
+                android:padding="10dp"
+                android:singleLine="true"
+                android:visibility="gone" />
+
         </android.support.v7.widget.Toolbar>
 
         <!-- The main content view where fragments are loaded -->

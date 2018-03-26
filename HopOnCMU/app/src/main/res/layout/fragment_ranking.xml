@@ -4,18 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/username_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/edittext_background"
-        android:drawableEnd="@drawable/ic_search"
-        android:drawableRight="@drawable/ic_search"
-        android:hint="@string/username_search_hint"
-        android:padding="10dp"
-        android:singleLine="true" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/users_list"
         android:layout_width="match_parent"
