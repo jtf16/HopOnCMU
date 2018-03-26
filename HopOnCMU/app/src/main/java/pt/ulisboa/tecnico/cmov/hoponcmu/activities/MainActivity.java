@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     SearchEditText mSearch;
 
     boolean areMenuOptionsVisible = true;
+    boolean isBackArrowVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Starting elements viewed on the MainActivity
         mToolbar.setTitle(this.getString(R.string.monuments));
+        setSupportActionBar(mToolbar);
         mSearch.setHint(R.string.monument_search_hint);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.flContent, MonumentsFragment.newInstance()).commit();
@@ -109,13 +111,22 @@ public class MainActivity extends AppCompatActivity {
         areMenuOptionsVisible = true;
         switch (item.getItemId()) {
             case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                mSearch.setVisibility(View.GONE);
+                if (isBackArrowVisible) {
+                    isBackArrowVisible = false;
+                    mToolbar.setNavigationIcon(R.drawable.ic_menu_white);
+                    setSupportActionBar(mToolbar);
+                    mSearch.setVisibility(View.GONE);
+                } else {
+                    mDrawerLayout.openDrawer(GravityCompat.START);
+                }
                 break;
             case R.id.action_search:
                 areMenuOptionsVisible = false;
+                isBackArrowVisible = true;
                 mSearch.setText("");
                 mSearch.setVisibility(View.VISIBLE);
+                mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
+                setSupportActionBar(mToolbar);
                 break;
         }
         invalidateOptionsMenu();

@@ -28,7 +28,7 @@
                 android:drawableEnd="@drawable/ic_close"
                 android:drawableRight="@drawable/ic_close"
                 android:hint="@string/username_search_hint"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:singleLine="true"
                 android:visibility="gone" />
 

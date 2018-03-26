@@ -37,7 +37,7 @@
     </style>
 
     <style name="NavigationButton" parent="Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="android:padding">10dp</item>
+        <item name="android:padding">12dp</item>
     </style>
 
 </resources>
