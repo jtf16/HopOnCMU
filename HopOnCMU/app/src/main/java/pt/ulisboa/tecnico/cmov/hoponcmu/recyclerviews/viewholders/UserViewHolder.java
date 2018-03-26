@@ -1,17 +1,17 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.User;
 
 public class UserViewHolder extends RecyclerView.ViewHolder {
-    LinearLayout userLayout;
+    CardView userLayout;
     private TextView ranking;
     private TextView username;
     private TextView score;
@@ -37,16 +37,16 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         this.user = user;
         switch (user.getRanking()) {
             case 1:
-                userLayout.setBackgroundColor(
-                        context.getResources().getColor(R.color.colorGold));
+                userLayout.setBackgroundResource(R.drawable.degrade_gold);
                 break;
             case 2:
-                userLayout.setBackgroundColor(
-                        context.getResources().getColor(R.color.colorSilver));
+                userLayout.setBackgroundResource(R.drawable.degrade_silver);
                 break;
             case 3:
-                userLayout.setBackgroundColor(
-                        context.getResources().getColor(R.color.colorBronze));
+                userLayout.setBackgroundResource(R.drawable.degrade_bronze);
+                break;
+            default:
+                userLayout.setBackgroundResource(R.drawable.degrade_ranked);
                 break;
         }
         ranking.setText(Integer.toString(user.getRanking()));

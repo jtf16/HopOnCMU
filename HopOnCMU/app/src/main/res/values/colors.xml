@@ -9,9 +9,17 @@
     <color name="colorNormal">#C8C8C8</color>
 
     <!-- Ranking item possible backgrounds -->
-    <color name="colorGold">#FFD700</color>
-    <color name="colorSilver">#C0C0C0</color>
-    <color name="colorBronze">#CD7F32</color>
-    <color name="colorRanked">#d069c9f9</color>
+    <color name="colorGoldStart">#695a0b</color>
+    <color name="colorGoldCenter">#FFD700</color>
+    <color name="colorGoldEnd">#a99112</color>
+    <color name="colorSilverStart">#393939</color>
+    <color name="colorSilverCenter">#C0C0C0</color>
+    <color name="colorSilverEnd">#9e9a9a</color>
+    <color name="colorBronzeStart">#45290e</color>
+    <color name="colorBronzeCenter">#CD7F32</color>
+    <color name="colorBronzeEnd">#9b5e22</color>
+    <color name="colorRankedStart">#00244d</color>
+    <color name="colorRankedCenter">#0077ff</color>
+    <color name="colorRankedEnd">#0b4486</color>
 
 </resources>

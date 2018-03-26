@@ -31,9 +31,12 @@
 
     <!-- RankingFragment strings -->
     <string name="username_search_hint">Search by username</string>
-    <string name="sample_user_ranking">#1</string>
+    <string name="sample_user_ranking">#12345</string>
     <string name="sample_username">username123</string>
     <string name="sample_score">123</string>
+    <string name="rank">Rank</string>
+    <string name="user">User</string>
+    <string name="score">Score</string>
 
     <!-- MonumentsFragment strings -->
     <string name="monument_search_hint">Search by monument</string>
