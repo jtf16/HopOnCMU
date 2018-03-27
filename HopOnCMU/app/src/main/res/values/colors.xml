@@ -9,17 +9,25 @@
     <color name="colorNormal">#C8C8C8</color>
 
     <!-- Ranking item possible backgrounds -->
-    <color name="colorGoldStart">#695a0b</color>
+    <color name="colorGoldStart">#f9e476</color>
     <color name="colorGoldCenter">#FFD700</color>
-    <color name="colorGoldEnd">#a99112</color>
-    <color name="colorSilverStart">#393939</color>
+    <color name="colorGoldEnd">#ead45e</color>
+    <color name="colorGoldStroke">#e7c301</color>
+    <color name="colorSilverStart">#e2e1e1</color>
     <color name="colorSilverCenter">#C0C0C0</color>
-    <color name="colorSilverEnd">#9e9a9a</color>
-    <color name="colorBronzeStart">#45290e</color>
+    <color name="colorSilverEnd">#ded8d8</color>
+    <color name="colorSilverStroke">#8b8a8a</color>
+    <color name="colorBronzeStart">#f1c79e</color>
     <color name="colorBronzeCenter">#CD7F32</color>
-    <color name="colorBronzeEnd">#9b5e22</color>
-    <color name="colorRankedStart">#00244d</color>
-    <color name="colorRankedCenter">#0077ff</color>
-    <color name="colorRankedEnd">#0b4486</color>
+    <color name="colorBronzeEnd">#ffbf81</color>
+    <color name="colorBronzeStroke">#8f5822</color>
+    <color name="colorRankedStartOdd">#acacac</color>
+    <color name="colorRankedCenterOdd">#afafaf</color>
+    <color name="colorRankedEndOdd">#cccccc</color>
+    <color name="colorRankedStrokeOdd">#8b8a8a</color>
+    <color name="colorRankedStartEven">#c2c2c2</color>
+    <color name="colorRankedCenterEven">#cacaca</color>
+    <color name="colorRankedEndEven">#e2e2e2</color>
+    <color name="colorRankedStrokeEven">#8b8a8a</color>
 
 </resources>

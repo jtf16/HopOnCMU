@@ -15,6 +15,7 @@
 
     <!-- Menu drawer options -->
     <string name="monuments">Monuments</string>
+    <string name="downloads">Downloaded Quizzes</string>
     <string name="progress">Progress</string>
     <string name="ranking">Ranking</string>
     <string name="share">Share</string>
@@ -31,7 +32,7 @@
 
     <!-- RankingFragment strings -->
     <string name="username_search_hint">Search by username</string>
-    <string name="sample_user_ranking">#12345</string>
+    <string name="sample_user_ranking">1.</string>
     <string name="sample_username">username123</string>
     <string name="sample_score">123</string>
     <string name="rank">Rank</string>
@@ -42,5 +43,8 @@
     <string name="monument_search_hint">Search by monument</string>
     <string name="sample_monument_name">Torre de Belem</string>
     <string name="sample_monument_distance">3.5Km</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

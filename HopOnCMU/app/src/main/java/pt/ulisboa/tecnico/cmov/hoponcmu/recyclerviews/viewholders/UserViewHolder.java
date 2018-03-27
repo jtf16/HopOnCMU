@@ -37,19 +37,26 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         this.user = user;
         switch (user.getRanking()) {
             case 1:
-                userLayout.setBackgroundResource(R.drawable.degrade_gold);
+                ranking.setBackgroundResource(R.drawable.degrade_gold);
                 break;
             case 2:
-                userLayout.setBackgroundResource(R.drawable.degrade_silver);
+                ranking.setBackgroundResource(R.drawable.degrade_silver);
                 break;
             case 3:
-                userLayout.setBackgroundResource(R.drawable.degrade_bronze);
+                ranking.setBackgroundResource(R.drawable.degrade_bronze);
                 break;
             default:
-                userLayout.setBackgroundResource(R.drawable.degrade_ranked);
                 break;
         }
-        ranking.setText(Integer.toString(user.getRanking()));
+        switch (user.getRanking() % 2) {
+            case 0:
+                userLayout.setBackgroundResource(R.drawable.degrade_ranked_even);
+                break;
+            default:
+                userLayout.setBackgroundResource(R.drawable.degrade_ranked_odd);
+                break;
+        }
+        ranking.setText(user.getRanking() + ".");
         username.setText(user.getUserName());
         score.setText(Integer.toString(user.getScore()));
     }
