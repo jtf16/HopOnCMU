@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.RankingFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.views.SearchEditText;
@@ -128,14 +129,18 @@ public class MainActivity extends AppCompatActivity {
                 mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
                 setSupportActionBar(mToolbar);
                 break;
+            case R.id.action_share:
+                // TODO: When share button clicked do something
+                break;
         }
         invalidateOptionsMenu();
         return super.onOptionsItemSelected(item);
     }
 
     private boolean selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment = null;
+        Fragment fragment;
         Class fragmentClass;
+        Intent intent;
         switch (menuItem.getItemId()) {
             case R.id.nav_monuments:
                 mToolbar.setTitle(this.getString(R.string.monuments));
@@ -147,16 +152,16 @@ public class MainActivity extends AppCompatActivity {
                 mSearch.setHint(R.string.username_search_hint);
                 fragmentClass = RankingFragment.class;
                 break;
-            case R.id.nav_share:
-                mToolbar.setTitle(this.getString(R.string.share));
-                fragmentClass = RankingFragment.class;
+            case R.id.nav_downloads:
+                mToolbar.setTitle(this.getString(R.string.downloads));
+                fragmentClass = DownloadsFragment.class;
                 break;
             case R.id.nav_settings:
-                mToolbar.setTitle(this.getString(R.string.settings));
-                fragmentClass = RankingFragment.class;
-                break;
+                intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.nav_logout:
-                Intent intent = new Intent(this, LoginActivity.class);
+                intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
                 return true;
@@ -166,13 +171,13 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         return true;
     }
 }
