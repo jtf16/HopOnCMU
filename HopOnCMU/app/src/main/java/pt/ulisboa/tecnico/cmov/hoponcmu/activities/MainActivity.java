@@ -40,12 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
         setmDrawerLayout();
 
-        // Starting elements viewed on the MainActivity
-        mToolbar.setTitle(this.getString(R.string.monuments));
-        setSupportActionBar(mToolbar);
-        mSearch.setHint(R.string.monument_search_hint);
-        getSupportFragmentManager().beginTransaction().replace(
-                R.id.flContent, MonumentsFragment.newInstance()).commit();
+        if (savedInstanceState == null) {
+            //Handle the initial fragment transaction
+            // Starting elements viewed on the MainActivity
+            mToolbar.setTitle(this.getString(R.string.monuments));
+            setSupportActionBar(mToolbar);
+            mSearch.setHint(R.string.monument_search_hint);
+            getSupportFragmentManager().beginTransaction().replace(
+                    R.id.flContent, MonumentsFragment.newInstance()).commit();
+        }
+
     }
 
     private void setmSearch() {
@@ -154,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.nav_downloads:
                 mToolbar.setTitle(this.getString(R.string.downloads));
+                mSearch.setHint(R.string.monument_search_hint);
                 fragmentClass = DownloadsFragment.class;
                 break;
             case R.id.nav_settings:

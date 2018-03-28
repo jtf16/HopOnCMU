@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters;
 
+
 import android.content.Context;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,71 +13,73 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Monument;
-import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.MonumentViewHolder;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.DownloadViewHolder;
 
-public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
+public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
 
-    private List<Monument> monuments;
+    private List<Quiz> quizzes;
     private LinearLayoutManager mLayoutManager;
+    private Context mContext;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MonumentAdapter(Context context, LinearLayoutManager mLayoutManager) {
+    public DownloadAdapter(Context context, LinearLayoutManager mLayoutManager) {
         this.mLayoutManager = mLayoutManager;
-        this.monuments = new ArrayList<>();
+        this.quizzes = new ArrayList<>();
+        this.mContext = context;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MonumentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DownloadViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_monument_item, parent, false);
+                .inflate(R.layout.list_downloads_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new MonumentViewHolder(v);
+        return new DownloadViewHolder(mContext, v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MonumentViewHolder holder, int position) {
+    public void onBindViewHolder(DownloadViewHolder holder, int position) {
         // - Get element from clients at this position
         // - Replace the contents of the view with that element
-        holder.setMonument(monuments.get(position));
+        holder.setQuiz(quizzes.get(position));
     }
 
     /**
-     * Scrolls to the top of the {@link List<Monument>}
+     * Scrolls to the top of the {@link List<Quiz>}
      */
     public void scrollToTop() {
         mLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 
     /**
-     * Use this method to update the {@link List<Monument>} to be shown to the user
+     * Use this method to update the {@link List<Quiz>} to be shown to the user
      *
-     * @param newMonuments
+     * @param newQuizzes
      */
-    public void setUsers(List<Monument> newMonuments) {
-        MonumentAdapter.MonumentsDiffUtil monumentsDiffUtil =
-                new MonumentAdapter.MonumentsDiffUtil(monuments, newMonuments);
+    public void setQuizzes(List<Quiz> newQuizzes) {
+        DownloadAdapter.DownloadsDiffUtil quizzesDiffUtil =
+                new DownloadAdapter.DownloadsDiffUtil(quizzes, newQuizzes);
         DiffUtil.DiffResult diffResult =
-                DiffUtil.calculateDiff(monumentsDiffUtil);
-        monuments.clear();
-        monuments.addAll(newMonuments);
+                DiffUtil.calculateDiff(quizzesDiffUtil);
+        quizzes.clear();
+        quizzes.addAll(newQuizzes);
         diffResult.dispatchUpdatesTo(this);
     }
 
-    // Return the size of your monuments list (invoked by the layout manager)
+    // Return the size of your quizzes list (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return monuments.size();
+        return quizzes.size();
     }
 
-    public class MonumentsDiffUtil extends DiffUtil.Callback {
+    public class DownloadsDiffUtil extends DiffUtil.Callback {
 
-        private List<Monument> oldList, newList;
+        private List<Quiz> oldList, newList;
 
-        public MonumentsDiffUtil(List<Monument> oldList, List<Monument> newList) {
+        public DownloadsDiffUtil(List<Quiz> oldList, List<Quiz> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }
