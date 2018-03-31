@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class UserViewHolder extends RecyclerView.ViewHolder {
     CardView userLayout;
@@ -33,7 +33,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         score = itemView.findViewById(R.id.user_score);
     }
 
-    public void setUser(Context context, User user) {
+    public void setUser(Context context, User user, int position) {
         this.user = user;
         switch (user.getRanking()) {
             case 1:
@@ -46,9 +46,10 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
                 ranking.setBackgroundResource(R.drawable.degrade_bronze);
                 break;
             default:
+                ranking.setBackgroundResource(android.R.color.transparent);
                 break;
         }
-        switch (user.getRanking() % 2) {
+        switch (position % 2) {
             case 0:
                 userLayout.setBackgroundResource(R.drawable.degrade_ranked_even);
                 break;
@@ -57,7 +58,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
                 break;
         }
         ranking.setText(user.getRanking() + ".");
-        username.setText(user.getUserName());
+        username.setText(user.getUsername());
         score.setText(Integer.toString(user.getScore()));
     }
 }

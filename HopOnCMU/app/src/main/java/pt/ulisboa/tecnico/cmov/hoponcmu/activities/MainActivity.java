@@ -3,19 +3,22 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.DatabaseCreator;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
+import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.RankingFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.views.SearchEditText;
@@ -31,10 +34,16 @@ public class MainActivity extends AppCompatActivity {
     boolean areMenuOptionsVisible = true;
     boolean isBackArrowVisible = false;
 
+    ManagerFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new DatabaseCreator(getApplicationContext(), 5, 5);
+
+        fragment = MonumentsFragment.newInstance();
 
         setmSearch();
 
@@ -47,13 +56,26 @@ public class MainActivity extends AppCompatActivity {
             setSupportActionBar(mToolbar);
             mSearch.setHint(R.string.monument_search_hint);
             getSupportFragmentManager().beginTransaction().replace(
-                    R.id.flContent, MonumentsFragment.newInstance()).commit();
+                    R.id.flContent, fragment).commit();
         }
-
     }
 
     private void setmSearch() {
         mSearch = (SearchEditText) findViewById(R.id.search_bar);
+        mSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                fragment.refreshSearch(s.toString());
+            }
+        });
         mSearch.setDrawableClickListener(new SearchEditText.DrawableClickListener() {
 
             public void onClick(DrawablePosition target) {
@@ -142,7 +164,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment;
         Class fragmentClass;
         Intent intent;
         switch (menuItem.getItemId()) {
@@ -175,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            fragment = (ManagerFragment) fragmentClass.newInstance();
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();

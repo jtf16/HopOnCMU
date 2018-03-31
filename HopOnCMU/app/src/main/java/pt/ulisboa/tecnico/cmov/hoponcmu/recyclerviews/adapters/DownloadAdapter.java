@@ -1,7 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters;
 
-
 import android.content.Context;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.DownloadViewHolder;
 
 public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
@@ -21,12 +21,14 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
     private List<Quiz> quizzes;
     private LinearLayoutManager mLayoutManager;
     private Context mContext;
+    private LoaderManager mLoader;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public DownloadAdapter(Context context, LinearLayoutManager mLayoutManager) {
+    public DownloadAdapter(Context context, LinearLayoutManager mLayoutManager, LoaderManager loader) {
         this.mLayoutManager = mLayoutManager;
         this.quizzes = new ArrayList<>();
         this.mContext = context;
+        this.mLoader = loader;
     }
 
     // Create new views (invoked by the layout manager)
@@ -36,7 +38,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_downloads_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new DownloadViewHolder(mContext, v);
+        return new DownloadViewHolder(mContext, v, mLoader);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

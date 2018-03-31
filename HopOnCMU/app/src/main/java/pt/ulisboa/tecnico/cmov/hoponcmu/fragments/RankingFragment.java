@@ -1,7 +1,8 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.UsersByPartUsernameLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.UserAdapter;
 
-public class RankingFragment extends Fragment {
+public class RankingFragment extends ManagerFragment
+        implements LoaderManager.LoaderCallbacks<List<User>> {
+
+    private static final int LOADER_USERS = 1;
 
     private RecyclerView mRecyclerView;
     private UserAdapter userAdapter;
     private LinearLayoutManager mLayoutManager;
+
+    private String search = "";
 
     public RankingFragment() {
         // Required empty public constructor
@@ -49,7 +56,7 @@ public class RankingFragment extends Fragment {
 
         setRecyclerView(rootView);
 
-        setBasicSample();
+        getLoaderManager().restartLoader(LOADER_USERS, null, this);
 
         return rootView;
     }
@@ -65,28 +72,38 @@ public class RankingFragment extends Fragment {
         mRecyclerView.setAdapter(userAdapter);
     }
 
-    private void setBasicSample() {
-        User user1 = new User();
-        user1.setRanking(1);
-        user1.setUserName("sample1");
-        user1.setScore(300);
-        User user2 = new User();
-        user2.setRanking(2);
-        user2.setUserName("sample2");
-        user2.setScore(200);
-        User user3 = new User();
-        user3.setRanking(3);
-        user3.setUserName("sample3");
-        user3.setScore(100);
-        User user4 = new User();
-        user4.setRanking(4);
-        user4.setUserName("sample4");
-        user4.setScore(50);
-        List<User> users = new ArrayList<>();
-        users.add(user1);
-        users.add(user2);
-        users.add(user3);
-        users.add(user4);
-        userAdapter.setUsers(users);
+    @Override
+    public void refreshSearch(String string) {
+        search = string;
+        getLoaderManager().restartLoader(LOADER_USERS, null, this);
+    }
+
+    @Override
+    public Loader<List<User>> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_USERS:
+                return new UsersByPartUsernameLoader(
+                        getActivity(), search);
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<User>> loader, List<User> data) {
+        switch (loader.getId()) {
+            case LOADER_USERS:
+                userAdapter.setUsers(data);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<User>> loader) {
+        switch (loader.getId()) {
+            case LOADER_USERS:
+                userAdapter.setUsers(new ArrayList<User>());
+                break;
+        }
     }
 }

@@ -1,8 +1,6 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,16 +10,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 
 public class QuizActivity extends AppCompatActivity {
 
-    public static final String ARG_QUIZ = "quiz";
+    public static final String ARG_QUESTIONS = "questions";
     Toolbar mToolbar;
-    private Quiz quiz;
-    private TextView totalQuestions;
+    private List<Question> questions;
+    private int totalQuestions;
     private EditText questionNumber;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
@@ -33,14 +33,15 @@ public class QuizActivity extends AppCompatActivity {
 
         setmToolbar();
 
-        quiz = (Quiz) getIntent().getSerializableExtra(ARG_QUIZ);
-        (totalQuestions = (TextView) findViewById(R.id.total_question_numbers))
-                .setText(Integer.toString(quiz.getNumberOfQuestions()));
+        questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
+        totalQuestions = questions.size();
+        ((TextView) findViewById(R.id.total_question_numbers))
+                .setText(Integer.toString(totalQuestions));
         questionNumber = (EditText) findViewById(R.id.question_number);
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new QuizPagerAdapter(
-                getSupportFragmentManager(), quiz.getNumberOfQuestions());
+                getSupportFragmentManager(), totalQuestions, questions);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -54,8 +55,7 @@ public class QuizActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                NavUtils.navigateUpTo(this, new Intent(
-                        this, MainActivity.class));
+                finish();
                 return true;
         }
 
@@ -79,7 +79,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     public void goRight(View view) {
-        if (mPager.getCurrentItem() < quiz.getNumberOfQuestions()) {
+        if (mPager.getCurrentItem() < totalQuestions) {
             questionNumber.setText(Integer.toString(mPager.getCurrentItem() + 1));
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);
         }

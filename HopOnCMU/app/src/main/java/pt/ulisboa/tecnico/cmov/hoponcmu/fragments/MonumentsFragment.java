@@ -1,7 +1,8 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Monument;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.MonumentByPartNameLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.MonumentAdapter;
 
-public class MonumentsFragment extends Fragment {
+public class MonumentsFragment extends ManagerFragment
+        implements LoaderManager.LoaderCallbacks<List<Monument>> {
+
+    private static final int LOADER_MONUMENTS = 1;
 
     private RecyclerView mRecyclerView;
     private MonumentAdapter monumentAdapter;
     private LinearLayoutManager mLayoutManager;
+
+    private String search = "";
 
     public MonumentsFragment() {
         // Required empty public constructor
@@ -47,9 +54,9 @@ public class MonumentsFragment extends Fragment {
         View rootView = inflater.inflate(
                 R.layout.fragment_monuments, container, false);
 
-        setRecyclerView(rootView);
+        getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
 
-        setBasicSample();
+        setRecyclerView(rootView);
 
         return rootView;
     }
@@ -65,24 +72,38 @@ public class MonumentsFragment extends Fragment {
         mRecyclerView.setAdapter(monumentAdapter);
     }
 
-    private void setBasicSample() {
-        Monument monument1 = new Monument();
-        monument1.setName("Ponte 25 de Abril");
-        monument1.setDistance(4000);
-        Monument monument2 = new Monument();
-        monument2.setName("Torre de Belem");
-        monument2.setDistance(530);
-        Monument monument3 = new Monument();
-        monument3.setName("Palácio da Pena");
-        monument3.setDistance(10750);
-        Monument monument4 = new Monument();
-        monument4.setName("Ponte 25 de Abril");
-        monument4.setDistance(100);
-        List<Monument> monuments = new ArrayList<>();
-        monuments.add(monument1);
-        monuments.add(monument2);
-        monuments.add(monument3);
-        monuments.add(monument4);
-        monumentAdapter.setUsers(monuments);
+    @Override
+    public Loader<List<Monument>> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_MONUMENTS:
+                return new MonumentByPartNameLoader(
+                        getActivity(), search);
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Monument>> loader, List<Monument> data) {
+        switch (loader.getId()) {
+            case LOADER_MONUMENTS:
+                monumentAdapter.setMonuments(data);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Monument>> loader) {
+        switch (loader.getId()) {
+            case LOADER_MONUMENTS:
+                monumentAdapter.setMonuments(new ArrayList<Monument>());
+                break;
+        }
+    }
+
+    @Override
+    public void refreshSearch(String string) {
+        search = string;
+        getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
     }
 }

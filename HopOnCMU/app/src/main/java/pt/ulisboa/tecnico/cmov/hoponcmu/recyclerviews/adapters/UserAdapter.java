@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.UserViewHolder;
 
 public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
@@ -43,7 +43,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
     public void onBindViewHolder(UserViewHolder holder, int position) {
         // - Get element from clients at this position
         // - Replace the contents of the view with that element
-        holder.setUser(mContext, users.get(position));
+        holder.setUser(mContext, users.get(position), position);
     }
 
     /**
@@ -95,7 +95,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
         @Override
         public boolean areItemsTheSame(int i, int i1) {
-            return oldList.get(i).getUserName().equals(newList.get(i1).getUserName());
+            return oldList.get(i).getUsername().equals(newList.get(i1).getUsername());
         }
 
         @Override

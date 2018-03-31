@@ -1,7 +1,8 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizByPartMonumentNameLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.DownloadAdapter;
 
-public class DownloadsFragment extends Fragment {
+public class DownloadsFragment extends ManagerFragment
+        implements LoaderManager.LoaderCallbacks<List<Quiz>> {
+
+    private static final int LOADER_QUIZZES = 1;
 
     private RecyclerView mRecyclerView;
     private DownloadAdapter downloadAdapter;
     private LinearLayoutManager mLayoutManager;
+
+    private String search = "";
 
     public DownloadsFragment() {
         // Required empty public constructor
@@ -49,7 +56,7 @@ public class DownloadsFragment extends Fragment {
 
         setRecyclerView(rootView);
 
-        setBasicSample();
+        getLoaderManager().restartLoader(LOADER_QUIZZES, null, this);
 
         return rootView;
     }
@@ -61,24 +68,42 @@ public class DownloadsFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter (see also next example)
-        downloadAdapter = new DownloadAdapter(getActivity(), mLayoutManager);
+        downloadAdapter = new DownloadAdapter(getActivity(), mLayoutManager, getLoaderManager());
         mRecyclerView.setAdapter(downloadAdapter);
     }
 
-    private void setBasicSample() {
-        Quiz quiz1 = new Quiz();
-        quiz1.setName("Ponte 25 de Abril");
-        quiz1.setNumberOfQuestions(20);
-        Quiz quiz2 = new Quiz();
-        quiz2.setName("Torre de Belem");
-        quiz2.setNumberOfQuestions(30);
-        Quiz quiz3 = new Quiz();
-        quiz3.setName("Palácio da Pena");
-        quiz3.setNumberOfQuestions(7);
-        List<Quiz> quizzes = new ArrayList<>();
-        quizzes.add(quiz1);
-        quizzes.add(quiz2);
-        quizzes.add(quiz3);
-        downloadAdapter.setQuizzes(quizzes);
+    @Override
+    public void refreshSearch(String string) {
+        search = string;
+        getLoaderManager().restartLoader(LOADER_QUIZZES, null, this);
+    }
+
+    @Override
+    public Loader<List<Quiz>> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_QUIZZES:
+                return new QuizByPartMonumentNameLoader(
+                        getActivity(), search);
+            default:
+                throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Quiz>> loader, List<Quiz> data) {
+        switch (loader.getId()) {
+            case LOADER_QUIZZES:
+                downloadAdapter.setQuizzes(data);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Quiz>> loader) {
+        switch (loader.getId()) {
+            case LOADER_QUIZZES:
+                downloadAdapter.setQuizzes(new ArrayList<Quiz>());
+                break;
+        }
     }
 }

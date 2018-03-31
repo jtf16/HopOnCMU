@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Monument;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.MonumentViewHolder;
 
 public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
@@ -56,7 +56,7 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
      *
      * @param newMonuments
      */
-    public void setUsers(List<Monument> newMonuments) {
+    public void setMonuments(List<Monument> newMonuments) {
         MonumentAdapter.MonumentsDiffUtil monumentsDiffUtil =
                 new MonumentAdapter.MonumentsDiffUtil(monuments, newMonuments);
         DiffUtil.DiffResult diffResult =

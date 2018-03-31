@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.Monument;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 
 public class MonumentViewHolder extends RecyclerView.ViewHolder {
     private TextView name;
