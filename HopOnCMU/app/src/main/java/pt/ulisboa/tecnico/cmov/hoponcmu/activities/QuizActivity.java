@@ -3,7 +3,6 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,9 +13,10 @@ import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 
-public class QuizActivity extends AppCompatActivity {
+public class QuizActivity extends ManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
     Toolbar mToolbar;
@@ -83,5 +83,10 @@ public class QuizActivity extends AppCompatActivity {
             questionNumber.setText(Integer.toString(mPager.getCurrentItem() + 1));
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);
         }
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+
     }
 }

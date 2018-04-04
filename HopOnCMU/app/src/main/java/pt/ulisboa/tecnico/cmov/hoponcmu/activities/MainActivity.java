@@ -6,7 +6,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.DatabaseCreator;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
@@ -23,7 +23,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.RankingFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.views.SearchEditText;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends ManagerActivity {
 
     DrawerLayout mDrawerLayout;
     Toolbar mToolbar;
@@ -205,5 +205,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+
     }
 }

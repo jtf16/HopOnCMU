@@ -1,3 +1,15 @@
-Swiping Between Tabs - https://developer.android.com/design/patterns/swipe-views.html
-TabHost - https://stackoverflow.com/questions/11622539/how-do-i-use-tabhost-for-android
-          http://abhiandroid.com/ui/tabhost
+# Mobile and Ubiquitous Computing (2017-2018)
+
+### Contributors
+- [@jtf16](https://github.com/jtf16) - João Freitas
+- [@joaocarlos95](https://github.com/joaocarlos95) - João Costa
+
+### About
+TODO
+
+### How to run the server:
+- Open a terminal in the the project directory and run the following three commands:
+  - `cd server/bin`
+  - `javac -d ./ ../src/pt/ulisboa/tecnico/cmov/hoponcmu/communication/**/*.java`
+  - `java pt.ulisboa.tecnico.cmov.hoponcmu.communication.server.Server`
+  

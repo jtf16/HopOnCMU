@@ -2,9 +2,10 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
-public class SplashActivity extends AppCompatActivity {
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+
+public class SplashActivity extends ManagerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,12 +15,17 @@ public class SplashActivity extends AppCompatActivity {
 
         // TODO: verify if login is done
         if (true) {
-            activityIntent = new Intent(this, MainActivity.class);
+            activityIntent = new Intent(this, LoginActivity.class);
         } else {
             activityIntent = new Intent(this, MainActivity.class);
         }
 
         startActivity(activityIntent);
         finish();
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+
     }
 }

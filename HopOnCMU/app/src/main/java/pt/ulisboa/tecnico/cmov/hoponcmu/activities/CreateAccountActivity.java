@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,8 +9,11 @@ import android.widget.EditText;
 import org.apache.commons.lang3.StringUtils;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.HelloCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 
-public class CreateAccountActivity extends Activity {
+public class CreateAccountActivity extends ManagerActivity {
 
     EditText firstName;
     EditText lastName;
@@ -71,15 +73,25 @@ public class CreateAccountActivity extends Activity {
 
         // TODO: Insert all fields in DB
         else {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            loginIntent.putExtra("Username", strUsername);
-            loginIntent.putExtra("Password", strPassword);
-            startActivity(loginIntent);
-            finish();
+            // TODO: Change the command
+            HelloCommand suc = new HelloCommand(strPassword);
+            new CommunicationTask(this, suc).execute();
         }
     }
 
     private boolean findInitialSpace(String string) {
         return !string.equals(string.trim());
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+        // TODO: Retrieve username and password from response
+        String strUsername = "";
+        String strPassword = "";
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        loginIntent.putExtra("Username", strUsername);
+        loginIntent.putExtra("Password", strPassword);
+        startActivity(loginIntent);
+        finish();
     }
 }

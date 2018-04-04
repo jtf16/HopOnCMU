@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,8 +9,11 @@ import android.widget.EditText;
 import org.apache.commons.lang3.StringUtils;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.HelloCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends ManagerActivity {
 
     EditText username;
     EditText password;
@@ -54,9 +56,16 @@ public class LoginActivity extends Activity {
         } else if (StringUtils.isBlank(strPassword)) {
             password.setError("You must enter your password");
         } else {
-            Intent loginIntent = new Intent(this, MainActivity.class);
-            startActivity(loginIntent);
-            finish();
+            // TODO: Change the command
+            HelloCommand suc = new HelloCommand(strPassword);
+            new CommunicationTask(this, suc).execute();
         }
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+        Intent loginIntent = new Intent(this, MainActivity.class);
+        startActivity(loginIntent);
+        finish();
     }
 }
