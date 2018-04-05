@@ -2,10 +2,14 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.communication.server;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.CommandHandler;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.HelloCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.LoginCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SignUpCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.LoginResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SignUpResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class CommandHandlerImpl implements CommandHandler {
 
@@ -20,11 +24,9 @@ public class CommandHandlerImpl implements CommandHandler {
 		boolean isSignUpValid = true;
 		boolean isUsernameValid = true;
 		boolean isPasswordValid = true;
-		System.out.println("Received: " + suc.getUser().getUsername());
 		if (Server.getUsers().get(suc.getUser().getUsername()) != null) {
 			isSignUpValid = false;
 			isUsernameValid = false;
-			System.out.println("Already in use!");	
 		}
 		if (!Server.getPasswords().contains(suc.getUser().getPassword())) {
 			isSignUpValid = false;
@@ -35,5 +37,24 @@ public class CommandHandlerImpl implements CommandHandler {
 			Server.addUser(suc.getUser());
 		}
 		return new SignUpResponse(suc.getUser(), isSignUpValid, isUsernameValid, isPasswordValid);
+	}
+
+	@Override
+	public Response handle(LoginCommand lc) {
+		boolean isLoginValid = true;
+		boolean isUsernameValid = true;
+		boolean isPasswordValid = true;
+		System.out.println("Received: " + lc.getUser().getUsername());
+		User user = Server.getUsers().get(lc.getUser().getUsername());
+		if (user == null) {
+			isLoginValid = false;
+			isUsernameValid = false;
+			System.out.println("No such username!");	
+		}
+		else if (!user.getPassword().equals(lc.getUser().getPassword())) {
+			isLoginValid = false;
+			isPasswordValid = false;
+		}
+		return new LoginResponse(user, isLoginValid, isUsernameValid, isPasswordValid);
 	}
 }

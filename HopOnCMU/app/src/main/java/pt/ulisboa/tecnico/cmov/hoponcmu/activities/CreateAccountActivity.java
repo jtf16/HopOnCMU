@@ -71,10 +71,7 @@ public class CreateAccountActivity extends ManagerActivity {
             password.setError("You must enter your password");
         } else if (!strPassword.equals(strConfirmPassword)) {
             confirmPassword.setError("Your passwords doesn't match");
-        }
-
-        // TODO: Insert all fields in DB
-        else {
+        } else {
             User user = new User();
             user.setFirstName(strFirstName);
             user.setLastName(strLastName);

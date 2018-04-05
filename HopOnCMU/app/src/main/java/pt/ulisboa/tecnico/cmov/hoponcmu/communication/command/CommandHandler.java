@@ -6,4 +6,6 @@ public interface CommandHandler {
     public Response handle(HelloCommand helloCommand);
 
     public Response handle(SignUpCommand signUpCommand);
+
+    public Response handle(LoginCommand loginCommand);
 }
