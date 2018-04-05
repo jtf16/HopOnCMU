@@ -16,7 +16,6 @@ import android.view.View;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.DatabaseCreator;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
@@ -40,8 +39,6 @@ public class MainActivity extends ManagerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        new DatabaseCreator(getApplicationContext(), 5, 5);
 
         fragment = MonumentsFragment.newInstance();
 

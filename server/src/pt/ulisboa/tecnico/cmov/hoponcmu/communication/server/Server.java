@@ -25,7 +25,11 @@ public class Server {
 	private static String EXPRESSION = "^(?<deg>[-+0-9]+)[^0-9]+(?<min>[0-9]+)[^0-9]+(?<sec>[0-9.,]+)[^0-9.,ENSW]+(?<pos>[ENSW]*)$";
 
 	public static HashMap<String, User> users = new HashMap<String, User>();
-	public static List<String> passwords = new ArrayList<String>(Arrays.asList("a", "b", "c", "d", "e", "f"));
+	static
+	{
+		users.put("a", new User("a", "a", "a", "a", "a", 1, 0));
+	}
+	public static List<String> passwords = new ArrayList<String>(Arrays.asList("b", "c", "d", "e", "f"));
 	public static final HashMap<String, Monument> monuments;
 	static
     {
@@ -129,6 +133,10 @@ public class Server {
 
 	public static void removePassword(String password) {
 		passwords.remove(password);
+	}
+
+	public static HashMap<String, Monument> getMonuments() {
+		return monuments;
 	}
 
 	public static double parseLatLonValue(String value) {

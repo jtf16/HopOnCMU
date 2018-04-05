@@ -60,8 +60,8 @@ public class LoginActivity extends ManagerActivity {
             User user = new User();
             user.setUsername(strUsername);
             user.setPassword(strPassword);
-            LoginCommand suc = new LoginCommand(user);
-            new CommunicationTask(this, suc).execute();
+            LoginCommand lc = new LoginCommand(user);
+            new CommunicationTask(this, lc).execute();
         }
     }
 
