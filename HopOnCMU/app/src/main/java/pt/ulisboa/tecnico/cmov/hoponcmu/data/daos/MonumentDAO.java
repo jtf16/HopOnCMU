@@ -28,7 +28,7 @@ public abstract class MonumentDAO {
     public abstract int countMonuments();
 
     @Query("SELECT * FROM " + Monument.TABLE_NAME + " WHERE " + Monument.COLUMN_NAME +
-            " LIKE '%' || :partName || '%' ORDER BY " + Monument.COLUMN_DISTANCE + " ASC")
+            " LIKE '%' || :partName || '%' ORDER BY " + Monument.COLUMN_LATITUDE + " ASC")
     public abstract List<Monument> loadAllMonuments(String partName);
 
     @Query("SELECT * FROM " + Monument.TABLE_NAME + " WHERE " + Monument.COLUMN_ID + " = :id")

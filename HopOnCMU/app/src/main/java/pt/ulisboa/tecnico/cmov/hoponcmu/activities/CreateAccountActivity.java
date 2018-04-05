@@ -10,8 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.HelloCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SignUpCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SignUpResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class CreateAccountActivity extends ManagerActivity {
 
@@ -73,8 +75,15 @@ public class CreateAccountActivity extends ManagerActivity {
 
         // TODO: Insert all fields in DB
         else {
-            // TODO: Change the command
-            HelloCommand suc = new HelloCommand(strPassword);
+            User user = new User();
+            user.setFirstName(strFirstName);
+            user.setLastName(strLastName);
+            user.setEmail(strEmail);
+            user.setUsername(strUsername);
+            user.setPassword(strPassword);
+            user.setScore(0);
+
+            SignUpCommand suc = new SignUpCommand(user);
             new CommunicationTask(this, suc).execute();
         }
     }
@@ -85,13 +94,19 @@ public class CreateAccountActivity extends ManagerActivity {
 
     @Override
     public void updateInterface(Response response) {
-        // TODO: Retrieve username and password from response
-        String strUsername = "";
-        String strPassword = "";
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        loginIntent.putExtra("Username", strUsername);
-        loginIntent.putExtra("Password", strPassword);
-        startActivity(loginIntent);
-        finish();
+        SignUpResponse signUpResponse = (SignUpResponse) response;
+        if (!signUpResponse.getErrors()[1]) {
+            username.setError("Name already in use");
+        }
+        if (!signUpResponse.getErrors()[2]) {
+            password.setError("Not a valid code");
+        }
+        if (signUpResponse.getErrors()[0]) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            loginIntent.putExtra("Username", signUpResponse.getUser().getUsername());
+            loginIntent.putExtra("Password", signUpResponse.getUser().getPassword());
+            startActivity(loginIntent);
+            finish();
+        }
     }
 }

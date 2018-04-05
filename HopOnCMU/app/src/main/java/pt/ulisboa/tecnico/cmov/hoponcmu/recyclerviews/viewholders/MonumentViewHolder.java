@@ -30,7 +30,7 @@ public class MonumentViewHolder extends RecyclerView.ViewHolder {
     public void setMonument(Monument monument) {
         this.monument = monument;
         name.setText(monument.getName());
-        float floatDistance = (float) monument.getDistance();
+        double floatDistance = (double) monument.getLatitude();
         if (floatDistance >= 1000) {
             distance.setText(String.format("%.1fKm", floatDistance / 1000));
         } else {

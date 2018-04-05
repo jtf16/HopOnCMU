@@ -86,7 +86,7 @@ public class DatabaseCreator {
         for (int i = 0; i < numMonuments; i++) {
             tempMonument = new Monument();
             tempMonument.setName(monumentNames[random.nextInt(monumentsRange)]);
-            tempMonument.setDistance(50 * random.nextInt(100));
+            tempMonument.setLatitude(50 * random.nextInt(100));
             monumentRepository.insertMonument(tempMonument);
         }
     }
@@ -101,7 +101,7 @@ public class DatabaseCreator {
         for (int i = 0; i < numMonuments; i++) {
             tempMonument = new Monument();
             tempMonument.setName(monumentNames[random.nextInt(monumentsRange)]);
-            tempMonument.setDistance(50 * random.nextInt(100));
+            tempMonument.setLatitude(50 * random.nextInt(100));
             Quiz[] quizzes = new Quiz[4];
             int numberOfQuizzes = random.nextInt(4);
             for (int j = 0; j < numberOfQuizzes; j++) {

@@ -24,7 +24,6 @@ public class Question implements Serializable {
      * The name of the Question table.
      */
     public static final String TABLE_NAME = "questions";
-
     /**
      * The name of the ID column.
      */
@@ -53,7 +52,7 @@ public class Question implements Serializable {
      * The name of the option d column.
      */
     public static final String COLUMN_OPTION_D = "option_d";
-
+    private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the question.
      */

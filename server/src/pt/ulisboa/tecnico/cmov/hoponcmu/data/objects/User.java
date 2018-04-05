@@ -1,80 +1,18 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.data.objects;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-import android.provider.BaseColumns;
-
 import java.io.Serializable;
 
-@Entity(tableName = User.TABLE_NAME,
-        indices = {@Index(value = {User.COLUMN_USERNAME}, unique = true)})
 public class User implements Serializable {
-
-    /**
-     * The name of the User table.
-     */
-    public static final String TABLE_NAME = "users";
-    /**
-     * The name of the ID column.
-     */
-    public static final String COLUMN_ID = BaseColumns._ID;
-    /**
-     * The name of the username column.
-     */
-    public static final String COLUMN_USERNAME = "username";
-    /**
-     * The name of the first name column.
-     */
-    public static final String COLUMN_FIRST_NAME = "first_name";
-    /**
-     * The name of the last name column.
-     */
-    public static final String COLUMN_LAST_NAME = "last_name";
-    /**
-     * The name of the email column.
-     */
-    public static final String COLUMN_EMAIL = "email";
-    /**
-     * The name of the password column.
-     */
-    public static final String COLUMN_PASSWORD = "password";
-    /**
-     * The name of the ranking column.
-     */
-    public static final String COLUMN_RANKING = "ranking";
-    /**
-     * The name of the score column.
-     */
-    public static final String COLUMN_SCORE = "score";
+    
     private static final long serialVersionUID = -8807331723807741905L;
-    /**
-     * The unique ID of the user.
-     */
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(index = true, name = COLUMN_ID)
+
     public long id;
-
-    @ColumnInfo(name = COLUMN_USERNAME)
     private String username;
-
-    @ColumnInfo(name = COLUMN_FIRST_NAME)
     private String firstName;
-
-    @ColumnInfo(name = COLUMN_LAST_NAME)
     private String lastName;
-
-    @ColumnInfo(name = COLUMN_EMAIL)
     private String email;
-
-    @ColumnInfo(name = COLUMN_PASSWORD)
     private String password;
-
-    @ColumnInfo(name = COLUMN_RANKING)
     private int ranking;
-
-    @ColumnInfo(name = COLUMN_SCORE)
     private int score;
 
     public User() {

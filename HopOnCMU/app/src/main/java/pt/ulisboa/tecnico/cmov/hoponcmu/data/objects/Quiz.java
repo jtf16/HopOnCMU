@@ -23,7 +23,6 @@ public class Quiz implements Serializable {
      * The name of the Quiz table.
      */
     public static final String TABLE_NAME = "quizzes";
-
     /**
      * The name of the ID column.
      */
@@ -36,7 +35,7 @@ public class Quiz implements Serializable {
      * The name of the name column.
      */
     public static final String COLUMN_NAME = "name";
-
+    private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the user.
      */
