@@ -324,8 +324,6 @@ public class MainActivity extends ManagerActivity implements
     @Override
     public void onTaskCompleted(Location location) {
         mLastLocation = location;
-        // TODO: Remove Toast, only used to check location
-        /*Toast.makeText(this, "Lat: " + location.getLatitude() +
-                " Long: " + location.getLongitude(), Toast.LENGTH_SHORT).show();*/
+        fragment.refreshMonuments();
     }
 }

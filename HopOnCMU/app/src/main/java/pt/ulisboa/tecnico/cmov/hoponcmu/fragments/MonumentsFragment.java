@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.MainActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.MonumentByPartNameLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.MonumentAdapter;
@@ -77,7 +78,7 @@ public class MonumentsFragment extends ManagerFragment
         switch (id) {
             case LOADER_MONUMENTS:
                 return new MonumentByPartNameLoader(
-                        getActivity(), search);
+                        getActivity(), search, MainActivity.getmLastLocation());
             default:
                 throw new IllegalArgumentException();
         }
@@ -104,6 +105,11 @@ public class MonumentsFragment extends ManagerFragment
     @Override
     public void refreshSearch(String string) {
         search = string;
+        getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
+    }
+
+    @Override
+    public void refreshMonuments() {
         getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
     }
 }

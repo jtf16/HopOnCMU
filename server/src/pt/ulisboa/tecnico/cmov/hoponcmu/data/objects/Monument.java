@@ -10,6 +10,10 @@ public class Monument implements Serializable {
     private String name;
     private double latitude;
     private double longitude;
+    private double sinLatitude;
+    private double sinLongitude;
+    private double cosLatitude;
+    private double cosLongitude;
 
     public Monument() {
     }
@@ -18,6 +22,18 @@ public class Monument implements Serializable {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Monument(String name, double latitude, double longitude,
+                    double sinLatitude, double sinLongitude,
+                    double cosLatitude, double cosLongitude) {
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.sinLatitude = sinLatitude;
+        this.sinLongitude = sinLongitude;
+        this.cosLatitude = cosLatitude;
+        this.cosLongitude = cosLongitude;
     }
 
     public long getId() {
@@ -50,5 +66,37 @@ public class Monument implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public double getSinLatitude() {
+        return sinLatitude;
+    }
+
+    public void setSinLatitude(double sinLatitude) {
+        this.sinLatitude = sinLatitude;
+    }
+
+    public double getSinLongitude() {
+        return sinLongitude;
+    }
+
+    public void setSinLongitude(double sinLongitude) {
+        this.sinLongitude = sinLongitude;
+    }
+
+    public double getCosLatitude() {
+        return cosLatitude;
+    }
+
+    public void setCosLatitude(double cosLatitude) {
+        this.cosLatitude = cosLatitude;
+    }
+
+    public double getCosLongitude() {
+        return cosLongitude;
+    }
+
+    public void setCosLongitude(double cosLongitude) {
+        this.cosLongitude = cosLongitude;
     }
 }

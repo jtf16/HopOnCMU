@@ -35,51 +35,143 @@ public class Server {
     {
         monuments = new HashMap<String, Monument>();
         monuments.put("Mosteiro dos Jerónimos", new Monument("Mosteiro dos Jerónimos", 
-        	parseLatLonValue("38º41'50.79\"N"), parseLatLonValue("9º12'20.97\"W")));
+        	parseLatLonValue("38º41'50.79\"N"), parseLatLonValue("9º12'20.97\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º41'50.79\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9º12'20.97\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º41'50.79\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9º12'20.97\"W")))));
         monuments.put("Mosteiro da Batalha", new Monument("Mosteiro da Batalha", 
-        	parseLatLonValue("39º39'36.41\"N"), parseLatLonValue("8º49'31.60\"W")));
+        	parseLatLonValue("39º39'36.41\"N"), parseLatLonValue("8º49'31.60\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("39º39'36.41\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8º49'31.60\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("39º39'36.41\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8º49'31.60\"W")))));
         monuments.put("Torre de Belém", new Monument("Torre de Belém", 
-        	parseLatLonValue("38°41'17.39\"N"), parseLatLonValue("9°12'34.20\"W")));
+        	parseLatLonValue("38°41'17.39\"N"), parseLatLonValue("9°12'34.20\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38°41'17.39\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9°12'34.20\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38°41'17.39\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9°12'34.20\"W")))));
         monuments.put("Igreja de São Francisco", new Monument("Igreja de São Francisco", 
-        	parseLatLonValue("38°34'8.40\"N"), parseLatLonValue("7°54'32.40\"W")));
+        	parseLatLonValue("38°34'8.40\"N"), parseLatLonValue("7°54'32.40\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38°34'8.40\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("7°54'32.40\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38°34'8.40\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("7°54'32.40\"W")))));
         monuments.put("Palácio Nacional de Queluz", new Monument("Palácio Nacional de Queluz", 
-        	parseLatLonValue("38º45'01.81\"N"), parseLatLonValue("9º15'28.55\"W")));
+        	parseLatLonValue("38º45'01.81\"N"), parseLatLonValue("9º15'28.55\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º45'01.81\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9º15'28.55\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º45'01.81\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9º15'28.55\"W")))));
         monuments.put("Panteão Nacional", new Monument("Panteão Nacional", 
-        	parseLatLonValue("38º42'53.12\"N"), parseLatLonValue("9º07'30.55\"W")));
+        	parseLatLonValue("38º42'53.12\"N"), parseLatLonValue("9º07'30.55\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º42'53.12\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9º07'30.55\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º42'53.12\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9º07'30.55\"W")))));
         monuments.put("Padrão dos Descobrimentos", new Monument("Padrão dos Descobrimentos", 
-        	parseLatLonValue("38º41'37.69\"N"), parseLatLonValue("9º12'20.95\"W")));
+        	parseLatLonValue("38º41'37.69\"N"), parseLatLonValue("9º12'20.95\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º41'37.69\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9º12'20.95\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º41'37.69\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9º12'20.95\"W")))));
         monuments.put("Basílica da Estrela", new Monument("Basílica da Estrela", 
-        	parseLatLonValue("38º42'48.7\"N"), parseLatLonValue("9º09'38.21\"W")));
+        	parseLatLonValue("38º42'48.7\"N"), parseLatLonValue("9º09'38.21\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º42'48.7\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9º09'38.21\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º42'48.7\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9º09'38.21\"W")))));
         monuments.put("Cristo Rei", new Monument("Cristo Rei", 
-        	parseLatLonValue("38°40'25.79\"N"), parseLatLonValue("9°10'10.20\"W")));
+        	parseLatLonValue("38°40'25.79\"N"), parseLatLonValue("9°10'10.20\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º40'25.79\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9°10'10.20\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º40'25.79\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9°10'10.20\"W")))));
         monuments.put("Menir de São Paio de Antas", new Monument("Menir de São Paio de Antas", 
-        	parseLatLonValue("41°33'21\"N"), parseLatLonValue("8°45'42\"W")));
+        	parseLatLonValue("41°33'21\"N"), parseLatLonValue("8°45'42\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("41°33'21\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8°45'42\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("41°33'21\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8°45'42\"W")))));
         monuments.put("Fonte Mourisca", new Monument("Fonte Mourisca", 
-        	parseLatLonValue("40°47'16\"N"), parseLatLonValue("7°30'24\"W")));
+        	parseLatLonValue("40°47'16\"N"), parseLatLonValue("7°30'24\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("40°47'16\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("7°30'24\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("40°47'16\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("7°30'24\"W")))));
         monuments.put("Castelo de Vinhais", new Monument("Castelo de Vinhais", 
-        	parseLatLonValue("41°50'8\"N"), parseLatLonValue("7°0'5\"W")));
+        	parseLatLonValue("41°50'8\"N"), parseLatLonValue("7°0'5\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("41°50'8\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("7°0'5\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("41°50'8\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("7°0'5\"W")))));
         monuments.put("Santuário de Panóias", new Monument("Santuário de Panóias", 
-        	parseLatLonValue("41°16'59.1\"N"), parseLatLonValue("7°40'57.6\"W")));
+        	parseLatLonValue("41°16'59.1\"N"), parseLatLonValue("7°40'57.6\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("41°16'59.1\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("7°40'57.6\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("41°16'59.1\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("7°40'57.6\"W")))));
         monuments.put("Monumento aos Combatentes do Ultramar", new Monument("Monumento aos Combatentes do Ultramar", 
-        	parseLatLonValue("38°41'32.21\"N"), parseLatLonValue("9°12'54.59\"W")));
+        	parseLatLonValue("38°41'32.21\"N"), parseLatLonValue("9°12'54.59\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38°41'32.21\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9°12'54.59\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38°41'32.21\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9°12'54.59\"W")))));
         monuments.put("Muralha Primitiva", new Monument("Muralha Primitiva", 
-        	parseLatLonValue("41°8'34.8\"N"), parseLatLonValue("8°36'32.7\"W")));
+        	parseLatLonValue("41°8'34.8\"N"), parseLatLonValue("8°36'32.7\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("41°8'34.8\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8°36'32.7\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("41°8'34.8\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8°36'32.7\"W")))));
         monuments.put("Feitoria Inglesa", new Monument("Feitoria Inglesa", 
-        	parseLatLonValue("41°8'29.2\"N"), parseLatLonValue("8°36'49.4\"W")));
+        	parseLatLonValue("41°8'29.2\"N"), parseLatLonValue("8°36'49.4\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("41°8'29.2\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8°36'49.4\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("41°8'29.2\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8°36'49.4\"W")))));
         monuments.put("Forte de São Pedro do Estoril", new Monument("Forte de São Pedro do Estoril", 
-        	parseLatLonValue("38°42'15\"N"), parseLatLonValue("9°23'44\"W")));
+        	parseLatLonValue("38°42'15\"N"), parseLatLonValue("9°23'44\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38°42'15\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("9°23'44\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38°42'15\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("9°23'44\"W")))));
         monuments.put("Teatro Nacional São João", new Monument("Teatro Nacional São João", 
-        	parseLatLonValue("41°08'51\"N"), parseLatLonValue("8°36'34\"W")));
+        	parseLatLonValue("41°08'51\"N"), parseLatLonValue("8°36'34\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("41°08'51\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8°36'34\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("41°08'51\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8°36'34\"W")))));
         monuments.put("Castelo do Sabugal", new Monument("Castelo do Sabugal", 
-        	parseLatLonValue("40°21'7\"N"), parseLatLonValue("7°5'22\"W")));
+        	parseLatLonValue("40°21'7\"N"), parseLatLonValue("7°5'22\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("40°21'7\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("7°5'22\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("40°21'7\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("7°5'22\"W")))));
         monuments.put("Ponte da Ribeira de Cobres", new Monument("Ponte da Ribeira de Cobres", 
-        	parseLatLonValue("37°30'42.1\"N"), parseLatLonValue("8°3'17.6\"W")));
+        	parseLatLonValue("37°30'42.1\"N"), parseLatLonValue("8°3'17.6\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("37°30'42.1\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8°3'17.6\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("37°30'42.1\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8°3'17.6\"W")))));
         monuments.put("Capelas Imperfeitas", new Monument("Capelas Imperfeitas", 
-        	parseLatLonValue("39º39'36.41\"N"), parseLatLonValue("8º49'31.60\"W")));
+        	parseLatLonValue("39º39'36.41\"N"), parseLatLonValue("8º49'31.60\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("39º39'36.41\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8º49'31.60\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("39º39'36.41\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8º49'31.60\"W")))));
         monuments.put("Monumento aos Mortos da Grande Guerra", new Monument("Monumento aos Mortos da Grande Guerra", 
-        	parseLatLonValue("39º45'04.449\"N"), parseLatLonValue("8º55'48.782\"W")));
+        	parseLatLonValue("39º45'04.449\"N"), parseLatLonValue("8º55'48.782\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("39º45'04.449\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("8º55'48.782\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("39º45'04.449\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("8º55'48.782\"W")))));
         monuments.put("Capela dos Ossos", new Monument("Capela dos Ossos", 
-        	parseLatLonValue("38º34'08.03\"N"), parseLatLonValue("7º54'29.31\"W")));
+        	parseLatLonValue("38º34'08.03\"N"), parseLatLonValue("7º54'29.31\"W"),
+        Math.sin(Math.toRadians(parseLatLonValue("38º34'08.03\"N"))),
+        Math.sin(Math.toRadians(parseLatLonValue("7º54'29.31\"W"))),
+        Math.cos(Math.toRadians(parseLatLonValue("38º34'08.03\"N"))),
+        Math.cos(Math.toRadians(parseLatLonValue("7º54'29.31\"W")))));
     }
 
 	public static void main(String[] args) throws Exception {

@@ -79,6 +79,11 @@ public class RankingFragment extends ManagerFragment
     }
 
     @Override
+    public void refreshMonuments() {
+
+    }
+
+    @Override
     public Loader<List<User>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_USERS:

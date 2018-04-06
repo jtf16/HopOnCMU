@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.List;
@@ -17,17 +18,27 @@ public class MonumentByPartNameLoader extends
     private AppDatabase appDatabase;
 
     private String query;
+    private Location location;
 
-    public MonumentByPartNameLoader(Context context, String query) {
+    public MonumentByPartNameLoader(Context context, String query, Location location) {
         super(context);
         appDatabase = AppDatabase.getAppDatabase(context);
         this.query = query;
+        this.location = location;
     }
 
     @Override
     public List<Monument> loadInBackground() {
         // Retrieve all known users based on query.
-        return appDatabase.monumentDAO().loadAllMonuments(query);
+        if (location != null) {
+            return appDatabase.monumentDAO().loadMonumentsOrderByDistance(query,
+                    Math.sin(Math.toRadians(location.getLatitude())),
+                    Math.cos(Math.toRadians(location.getLatitude())),
+                    Math.sin(Math.toRadians(location.getLongitude())),
+                    Math.cos(Math.toRadians(location.getLongitude())));
+        } else {
+            return appDatabase.monumentDAO().loadMonumentsOrderByName(query);
+        }
     }
 
     @Override

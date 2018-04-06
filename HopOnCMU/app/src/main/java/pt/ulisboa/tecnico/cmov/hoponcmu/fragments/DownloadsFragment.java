@@ -106,4 +106,9 @@ public class DownloadsFragment extends ManagerFragment
                 break;
         }
     }
+
+    @Override
+    public void refreshMonuments() {
+
+    }
 }
