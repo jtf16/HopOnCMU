@@ -8,4 +8,6 @@ public interface ResponseHandler {
     public void handle(LoginResponse loginResponse);
 
     public void handle(MonumentResponse monumentResponse);
+
+    public void handle(DownloadQuizResponse downloadQuizResponse);
 }

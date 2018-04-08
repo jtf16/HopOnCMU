@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
@@ -56,9 +57,10 @@ public class Monument implements Serializable {
     /**
      * The unique ID of the monument.
      */
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(index = true, name = COLUMN_ID)
-    public long id;
+    public String id;
 
     @ColumnInfo(name = COLUMN_NAME)
     private String name;
@@ -105,11 +107,11 @@ public class Monument implements Serializable {
         this.cosLongitude = cosLongitude;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

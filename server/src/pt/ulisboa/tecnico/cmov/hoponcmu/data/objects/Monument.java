@@ -6,7 +6,7 @@ public class Monument implements Serializable {
 
     private static final long serialVersionUID = -8807331723807741905L;
 
-    public long id;
+    private String id;
     private String name;
     private double latitude;
     private double longitude;
@@ -24,9 +24,10 @@ public class Monument implements Serializable {
         this.longitude = longitude;
     }
 
-    public Monument(String name, double latitude, double longitude,
+    public Monument(String id, String name, double latitude, double longitude,
                     double sinLatitude, double sinLongitude,
                     double cosLatitude, double cosLongitude) {
+        this.id = id;
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -36,11 +37,11 @@ public class Monument implements Serializable {
         this.cosLongitude = cosLongitude;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

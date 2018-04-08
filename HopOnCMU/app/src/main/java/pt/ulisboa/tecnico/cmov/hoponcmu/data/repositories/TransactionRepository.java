@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.AppDatabase;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 
@@ -16,32 +15,8 @@ public class TransactionRepository {
         appDatabase = AppDatabase.getAppDatabase(context);
     }
 
-    public void insertMonumentAndQuizzes(Monument monument, Quiz... quizzes) {
-        new InsertMonumentAndQuizzesTask(monument).execute(quizzes);
-    }
-
     public void insertQuizAndQuestions(Quiz quiz, Question... questions) {
         new InsertQuizAndQuestionsTask(quiz).execute(questions);
-    }
-
-    private static class InsertMonumentAndQuizzesTask extends AsyncTask<Quiz, Void, Void> {
-
-        private Monument monument;
-
-        InsertMonumentAndQuizzesTask(Monument monument) {
-            this.monument = monument;
-        }
-
-        @Override
-        protected Void doInBackground(Quiz... quizzes) {
-            appDatabase.transactionDAO().insertMonumentAndQuizzes(monument, quizzes);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
     }
 
     private static class InsertQuizAndQuestionsTask extends AsyncTask<Question, Void, Void> {

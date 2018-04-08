@@ -7,4 +7,5 @@ public interface CommandHandler {
     public Response handle(SignUpCommand signUpCommand);
     public Response handle(LoginCommand loginCommand);
     public Response handle(MonumentCommand monumentCommand);
+    public Response handle(DownloadQuizCommand downloadQuizCommand);
 }

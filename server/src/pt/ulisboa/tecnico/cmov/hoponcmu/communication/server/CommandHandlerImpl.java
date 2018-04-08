@@ -1,18 +1,12 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.communication.server;
 
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.CommandHandler;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.HelloCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.LoginCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.MonumentCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SignUpCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.LoginResponse;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.MonumentResponse;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SignUpResponse;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import java.util.ArrayList;
+import java.util.List;
 
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.*;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.*;
+
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.*;
 
 public class CommandHandlerImpl implements CommandHandler {
 
@@ -64,5 +58,22 @@ public class CommandHandlerImpl implements CommandHandler {
 	@Override
 	public Response handle(MonumentCommand mc) {
 		return new MonumentResponse(Server.getMonuments().values().toArray(new Monument[Server.getMonuments().size()]));
+	}
+
+	@Override
+	public Response handle(DownloadQuizCommand dqc) {
+		List<Quiz> quizzes = Server.getQuizzes().get(dqc.getMonument().getId());
+		if (quizzes != null && quizzes.size() > 0) {
+			// TODO: if needed select the quiz by id instead of always 0
+			Quiz quiz = quizzes.get(0);
+			List<Question> questions = Server.getQuestions().get(quiz.getId());
+			if (questions != null && questions.size() > 0) {
+				return new DownloadQuizResponse(quiz, questions.toArray(new Question[questions.size()]));
+			}
+			else {
+				// TODO: QUIZ UNAVAILABLE
+			}
+		}
+		return new HelloResponse("Hi from Server!");
 	}
 }

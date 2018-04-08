@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +27,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.DownloadQuizResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.TransactionRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
@@ -51,6 +55,7 @@ public class MainActivity extends ManagerActivity implements
     private boolean mRequestingLocationUpdates = true;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
+    private TransactionRepository transactionRepository;
 
     public static Location getmLastLocation() {
         return mLastLocation;
@@ -60,6 +65,8 @@ public class MainActivity extends ManagerActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        transactionRepository = new TransactionRepository(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(
                 this);
@@ -318,7 +325,13 @@ public class MainActivity extends ManagerActivity implements
 
     @Override
     public void updateInterface(Response response) {
-
+        if (response instanceof HelloResponse) {
+            Log.d("HelloResponse", ((HelloResponse) response).getMessage());
+        } else if (response instanceof DownloadQuizResponse) {
+            DownloadQuizResponse downloadQuizResponse = (DownloadQuizResponse) response;
+            transactionRepository.insertQuizAndQuestions(
+                    downloadQuizResponse.getQuiz(), downloadQuizResponse.getQuestions());
+        }
     }
 
     @Override

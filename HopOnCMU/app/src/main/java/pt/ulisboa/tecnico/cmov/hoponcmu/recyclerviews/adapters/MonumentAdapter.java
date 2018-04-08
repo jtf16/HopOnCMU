@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.MonumentViewHolder;
 
@@ -19,9 +20,11 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
 
     private List<Monument> monuments;
     private LinearLayoutManager mLayoutManager;
+    private Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public MonumentAdapter(Context context, LinearLayoutManager mLayoutManager) {
+        this.context = context;
         this.mLayoutManager = mLayoutManager;
         this.monuments = new ArrayList<>();
     }
@@ -41,7 +44,7 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
     public void onBindViewHolder(MonumentViewHolder holder, int position) {
         // - Get element from clients at this position
         // - Replace the contents of the view with that element
-        holder.setMonument(monuments.get(position));
+        holder.setMonument((ManagerActivity) context, monuments.get(position));
     }
 
     /**

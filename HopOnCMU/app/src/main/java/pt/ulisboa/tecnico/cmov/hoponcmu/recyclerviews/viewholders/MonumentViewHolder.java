@@ -6,12 +6,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.DownloadQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 
 public class MonumentViewHolder extends RecyclerView.ViewHolder {
     private TextView name;
     private TextView distance;
     private Monument monument;
+    private ManagerActivity activity;
 
     public MonumentViewHolder(View itemView) {
         super(itemView);
@@ -19,6 +23,8 @@ public class MonumentViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DownloadQuizCommand dqc = new DownloadQuizCommand(monument);
+                new CommunicationTask(activity, dqc).execute();
                 Log.d(MonumentViewHolder.class.getName(),
                         "Element " + getAdapterPosition() + " clicked.");
             }
@@ -27,7 +33,8 @@ public class MonumentViewHolder extends RecyclerView.ViewHolder {
         distance = itemView.findViewById(R.id.monument_distance);
     }
 
-    public void setMonument(Monument monument) {
+    public void setMonument(ManagerActivity managerActivity, Monument monument) {
+        this.activity = managerActivity;
         this.monument = monument;
         name.setText(monument.getName());
         double floatDistance = (double) monument.getCosDistance();

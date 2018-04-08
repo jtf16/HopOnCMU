@@ -15,7 +15,6 @@ import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.DatabaseCreator;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuestionsByQuizIdLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
@@ -42,13 +41,6 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
             public void onClick(View v) {
                 Log.d(DownloadViewHolder.class.getName(),
                         "Element " + getAdapterPosition() + " clicked.");
-
-                // TODO: Remove this sample when ready
-                Question[] questions = DatabaseCreator.questions;
-                for (Question question : questions) {
-                    question.setQuizID(quiz.getId());
-                }
-                questionRepository.insertQuestion(questions);
 
                 loader.restartLoader(LOADER_QUESTIONS, null, mLoader);
             }

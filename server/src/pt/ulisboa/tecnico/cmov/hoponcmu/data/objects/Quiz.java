@@ -7,13 +7,19 @@ public class Quiz implements Serializable {
     private static final long serialVersionUID = -8807331723807741905L;
 
     public long id;
-    public long monumentID;
+    public String monumentID;
     private String name;
 
     public Quiz() {
     }
 
-    public Quiz(long monumentID, String name) {
+    public Quiz(String monumentID, String name) {
+        this.monumentID = monumentID;
+        this.name = name;
+    }
+
+    public Quiz(long id, String monumentID, String name) {
+        this.id = id;
         this.monumentID = monumentID;
         this.name = name;
     }
@@ -26,11 +32,11 @@ public class Quiz implements Serializable {
         this.id = id;
     }
 
-    public long getMonumentID() {
+    public String getMonumentID() {
         return monumentID;
     }
 
-    public void setMonumentID(long monumentID) {
+    public void setMonumentID(String monumentID) {
         this.monumentID = monumentID;
     }
 

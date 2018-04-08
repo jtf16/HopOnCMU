@@ -44,7 +44,7 @@ public class Quiz implements Serializable {
     public long id;
 
     @ColumnInfo(name = COLUMN_MONUMENT_ID)
-    public long monumentID;
+    public String monumentID;
 
     @ColumnInfo(name = COLUMN_NAME)
     private String name;
@@ -52,7 +52,7 @@ public class Quiz implements Serializable {
     public Quiz() {
     }
 
-    public Quiz(long monumentID, String name) {
+    public Quiz(String monumentID, String name) {
         this.monumentID = monumentID;
         this.name = name;
     }
@@ -65,11 +65,11 @@ public class Quiz implements Serializable {
         this.id = id;
     }
 
-    public long getMonumentID() {
+    public String getMonumentID() {
         return monumentID;
     }
 
-    public void setMonumentID(long monumentID) {
+    public void setMonumentID(String monumentID) {
         this.monumentID = monumentID;
     }
 

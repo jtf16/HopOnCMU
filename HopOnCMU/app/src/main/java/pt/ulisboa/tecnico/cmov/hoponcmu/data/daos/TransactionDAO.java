@@ -11,16 +11,9 @@ import java.util.List;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 @Dao
 public abstract class TransactionDAO {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract void insertUsers(User... users);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public abstract long[] insertMonuments(Monument... monuments);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long[] insertQuizzes(Quiz... quizzes);
@@ -57,22 +50,6 @@ public abstract class TransactionDAO {
             Quiz.TABLE_NAME + "." + Quiz.COLUMN_ID + " WHERE " + Quiz.TABLE_NAME +
             "." + Quiz.COLUMN_ID + " = :id")
     public abstract List<Question> loadQuestionsByQuizId(long id);
-
-    @Transaction
-    public void insertMonumentAndQuizzes(Monument monument, Quiz... quizzes) {
-        // Anything inside this method runs in a single transaction.
-        if (monument != null) {
-            long id = insertMonuments(monument)[0];
-            if (quizzes != null) {
-                for (Quiz quiz : quizzes) {
-                    if (quiz != null) {
-                        quiz.setMonumentID(id);
-                        insertQuizzes(quiz);
-                    }
-                }
-            }
-        }
-    }
 
     @Transaction
     public void insertQuizAndQuestions(Quiz quiz, Question... questions) {
