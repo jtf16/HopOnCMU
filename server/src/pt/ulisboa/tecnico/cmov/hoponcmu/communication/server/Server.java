@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.*;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.Command;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
@@ -25,7 +26,9 @@ public class Server {
 	private static String EXPRESSION = "^(?<deg>[-+0-9]+)[^0-9]+(?<min>[0-9]+)[^0-9]+(?<sec>[0-9.,]+)[^0-9.,ENSW]+(?<pos>[ENSW]*)$";
 
 	// USERS
-	static User user1 = new User("a", "a", "a", "a", "a", 1, 0);
+	static User user1 = new User("a", "a", "a", "a", "a", 3, 0);
+	static User user2 = new User("b", "b", "b", "b", "b", 1, 10);
+	static User user3 = new User("c", "c", "c", "c", "c", 1, 10);
 
 	// MONUMENTS
     static Monument m1 = new Monument("M1", "Mosteiro dos Jerónimos", 
@@ -205,12 +208,18 @@ public class Server {
 			"Who was the King when the construction was initiated?",
 			"John II", "Afonso V", "John III", "Manuel I");
 
-	public static List<String> passwords = new ArrayList<String>(Arrays.asList("b", "c", "d", "e", "f"));
-	public static HashMap<String, User> users = new HashMap<String, User>();
+	public static List<String> passwords = new ArrayList<String>(Arrays.asList("d", "e", "f"));
+	public static List<User> users = new ArrayList<User>(){{
+			add(user1);
+			add(user2);
+			add(user3);
+		}};
+
+	/*public static HashMap<String, User> users = new HashMap<String, User>();
 	static
 	{
 		users.put(user1.getUsername(), user1);
-	}
+	}*/
 	public static final HashMap<String, Monument> monuments;
 	static
     {
@@ -318,12 +327,37 @@ public class Server {
 		}
 	}
 
-	public static HashMap<String, User> getUsers() {
+	public static List<User> getUsers() {
+		sortUsers();
 		return users;
 	}
 
+	public static User getUser(String name) {
+		for (User user : users){
+			if (user.getUsername().equals(name)) {
+				return user;
+			}
+		}
+		return null;
+	}
+
 	public static void addUser(User user) {
-		users.put(user.getUsername(), user);
+		users.add(user);
+	}
+
+	public static void sortUsers() {
+		users.sort(Comparator.comparingInt(User::getScore).reversed());
+		int previousRank = 1, rank = 1, previousScore = -1;
+		for (User user : users){
+			if (user.getScore() == previousScore) {
+				user.setRanking(previousRank);
+			} else {
+				user.setRanking(rank);
+				previousScore = user.getScore();
+				previousRank = rank;
+			}
+			rank++;
+		}
 	}
 
 	public static List<String> getPasswords() {

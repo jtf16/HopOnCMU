@@ -21,7 +21,7 @@ public class CommandHandlerImpl implements CommandHandler {
 		boolean isSignUpValid = true;
 		boolean isUsernameValid = true;
 		boolean isPasswordValid = true;
-		if (Server.getUsers().get(suc.getUser().getUsername()) != null) {
+		if (Server.getUser(suc.getUser().getUsername()) != null) {
 			isSignUpValid = false;
 			isUsernameValid = false;
 		}
@@ -42,7 +42,7 @@ public class CommandHandlerImpl implements CommandHandler {
 		boolean isUsernameValid = true;
 		boolean isPasswordValid = true;
 		System.out.println("Received: " + lc.getUser().getUsername());
-		User user = Server.getUsers().get(lc.getUser().getUsername());
+		User user = Server.getUser(lc.getUser().getUsername());
 		if (user == null) {
 			isLoginValid = false;
 			isUsernameValid = false;
@@ -70,10 +70,12 @@ public class CommandHandlerImpl implements CommandHandler {
 			if (questions != null && questions.size() > 0) {
 				return new DownloadQuizResponse(quiz, questions.toArray(new Question[questions.size()]));
 			}
-			else {
-				// TODO: QUIZ UNAVAILABLE
-			}
 		}
 		return new HelloResponse("Hi from Server!");
+	}
+
+	@Override
+	public Response handle(RankingCommand rc) {
+		return new RankingResponse(Server.getUsers().toArray(new User[Server.getUsers().size()]));
 	}
 }
