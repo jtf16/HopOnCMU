@@ -35,20 +35,26 @@ public class QuizActivity extends ManagerActivity {
 
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         totalQuestions = questions.size();
-        ((TextView) findViewById(R.id.total_question_numbers))
-                .setText(Integer.toString(totalQuestions));
-        questionNumber = (EditText) findViewById(R.id.question_number);
 
-        mPager = (ViewPager) findViewById(R.id.pager);
+        // ((TextView) findViewById(R.id.total_question_numbers)).setText(Integer.toString(totalQuestions));
+        // questionNumber = (EditText) findViewById(R.id.question_number);
+
+
+
+        mPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new QuizPagerAdapter(
                 getSupportFragmentManager(), totalQuestions, questions);
         mPager.setAdapter(mPagerAdapter);
         mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
             @Override
             public void onPageSelected(int position) {
-                questionNumber.setText(Integer.toString(position + 1));
+                //questionNumber.setText(Integer.toString(position + 1));
             }
         });
+
+        TextView quizName = (TextView) findViewById(R.id.quiz_name);
+        quizName.setText("TextName");
     }
 
     @Override
@@ -73,14 +79,14 @@ public class QuizActivity extends ManagerActivity {
 
     public void goLeft(View view) {
         if (mPager.getCurrentItem() > 0) {
-            questionNumber.setText(Integer.toString(mPager.getCurrentItem() - 1));
+            // questionNumber.setText(Integer.toString(mPager.getCurrentItem() - 1));
             mPager.setCurrentItem(mPager.getCurrentItem() - 1);
         }
     }
 
     public void goRight(View view) {
         if (mPager.getCurrentItem() < totalQuestions) {
-            questionNumber.setText(Integer.toString(mPager.getCurrentItem() + 1));
+            // questionNumber.setText(Integer.toString(mPager.getCurrentItem() + 1));
             mPager.setCurrentItem(mPager.getCurrentItem() + 1);
         }
     }
