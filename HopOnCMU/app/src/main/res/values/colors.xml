@@ -30,4 +30,8 @@
     <color name="colorRankedEndEven">#e2e2e2</color>
     <color name="colorRankedStrokeEven">#8b8a8a</color>
 
+    <!-- Pagination -->
+    <color name="colorPaginationAnswered">#2F4F4F</color>
+    <color name="colorPagination">#A9A9A9</color>
+
 </resources>
