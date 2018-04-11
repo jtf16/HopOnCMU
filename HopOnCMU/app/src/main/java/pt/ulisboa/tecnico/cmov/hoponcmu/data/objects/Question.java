@@ -52,6 +52,10 @@ public class Question implements Serializable {
      * The name of the option d column.
      */
     public static final String COLUMN_OPTION_D = "option_d";
+    /**
+     * The name of the answer column.
+     */
+    public static final String COLUMN_ANSWER = "answer";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the question.
@@ -78,6 +82,9 @@ public class Question implements Serializable {
     @ColumnInfo(name = COLUMN_OPTION_D)
     private String optionD;
 
+    @ColumnInfo(name = COLUMN_ANSWER)
+    private String answer;
+
     public Question() {
     }
 
@@ -87,6 +94,15 @@ public class Question implements Serializable {
         this.optionB = optionB;
         this.optionC = optionC;
         this.optionD = optionD;
+    }
+
+    public Question(String question, String optionA, String optionB, String optionC, String optionD, String answer) {
+        this.question = question;
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.optionD = optionD;
+        this.answer = answer;
     }
 
     public long getId() {
@@ -143,5 +159,13 @@ public class Question implements Serializable {
 
     public void setOptionD(String optionD) {
         this.optionD = optionD;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

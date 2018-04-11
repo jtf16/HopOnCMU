@@ -13,16 +13,26 @@ public class Question implements Serializable {
     private String optionB;
     private String optionC;
     private String optionD;
+    private String answer;
 
     public Question() {
     }
 
-    public Question(String question, String optionA, String optionB, String optionC, String optionD) {
+   public Question(String question, String optionA, String optionB, String optionC, String optionD) {
         this.question = question;
         this.optionA = optionA;
         this.optionB = optionB;
         this.optionC = optionC;
         this.optionD = optionD;
+    }
+
+    public Question(String question, String optionA, String optionB, String optionC, String optionD, String answer) {
+        this.question = question;
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.optionD = optionD;
+        this.answer = answer;
     }
 
     public long getId() {
@@ -79,5 +89,13 @@ public class Question implements Serializable {
 
     public void setOptionD(String optionD) {
         this.optionD = optionD;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

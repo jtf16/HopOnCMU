@@ -7,6 +7,7 @@
     <!-- SignUp TextView possible colors -->
     <color name="colorPressed">#ABABAB</color>
     <color name="colorNormal">#C8C8C8</color>
+    <color name="colorBright">#eeeeee</color>
 
     <!-- Ranking item possible backgrounds -->
     <color name="colorGoldStart">#f9e476</color>

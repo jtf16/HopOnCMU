@@ -29,5 +29,5 @@ public abstract class QuestionDAO {
     public abstract Cursor loadAllQuestions();
 
     @Query("SELECT * FROM " + Question.TABLE_NAME + " WHERE " + Question.COLUMN_ID + " = :id")
-    public abstract Cursor loadQuestionById(long id);
+    public abstract Question loadQuestionById(long id);
 }
