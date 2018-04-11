@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
@@ -22,9 +25,10 @@ public class QuizActivity extends ManagerActivity {
     Toolbar mToolbar;
     private List<Question> questions;
     private int totalQuestions;
-    private EditText questionNumber;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+
+    List<TextView> pagination = new ArrayList<TextView>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,23 +37,30 @@ public class QuizActivity extends ManagerActivity {
 
         setmToolbar();
 
+        pagination.add((TextView) findViewById(R.id.pagination1));
+        pagination.add((TextView) findViewById(R.id.pagination2));
+        pagination.add((TextView) findViewById(R.id.pagination3));
+        pagination.add((TextView) findViewById(R.id.pagination4));
+        pagination.add((TextView) findViewById(R.id.pagination5));
+        pagination.add((TextView) findViewById(R.id.pagination6));
+        pagination.add((TextView) findViewById(R.id.pagination7));
+
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
+        questions.addAll(questions);
         totalQuestions = questions.size();
-
-        // ((TextView) findViewById(R.id.total_question_numbers)).setText(Integer.toString(totalQuestions));
-        // questionNumber = (EditText) findViewById(R.id.question_number);
-
-
 
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new QuizPagerAdapter(
                 getSupportFragmentManager(), totalQuestions, questions);
         mPager.setAdapter(mPagerAdapter);
+
         mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
-                //questionNumber.setText(Integer.toString(position + 1));
+
+                int diffPages = Integer.valueOf(pagination.get(3).getText().toString()) - position - 1;
+                updatePagination(-diffPages);
             }
         });
 
@@ -78,21 +89,39 @@ public class QuizActivity extends ManagerActivity {
     }
 
     public void goLeft(View view) {
-        if (mPager.getCurrentItem() > 0) {
-            // questionNumber.setText(Integer.toString(mPager.getCurrentItem() - 1));
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+        mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+
     }
 
     public void goRight(View view) {
-        if (mPager.getCurrentItem() < totalQuestions) {
-            // questionNumber.setText(Integer.toString(mPager.getCurrentItem() + 1));
-            mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-        }
+        mPager.setCurrentItem(mPager.getCurrentItem() + 1);
     }
 
     @Override
     public void updateInterface(Response response) {
 
+    }
+
+    public void jumpPages(View view) {
+
+        TextView page = (TextView) view;
+
+        int diffPages = Integer.valueOf(pagination.get(3).getText().toString()) - Integer.valueOf(page.getText().toString());
+
+        mPager.setCurrentItem(mPager.getCurrentItem() - diffPages);
+    }
+
+    public void updatePagination(int hops) {
+
+        for (TextView textView: pagination) {
+            int pageValue = Integer.valueOf(textView.getText().toString()) + hops;
+
+            if (pageValue >= 1 && pageValue <= totalQuestions) {
+                textView.setVisibility(View.VISIBLE);
+            }
+            else { textView.setVisibility(View.INVISIBLE); }
+
+            textView.setText(pageValue + "");
+        }
     }
 }
