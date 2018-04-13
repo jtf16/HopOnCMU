@@ -1,34 +1,37 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SubmitQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class QuizActivity extends ManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
     Toolbar mToolbar;
+    List<TextView> pagination = new ArrayList<TextView>();
     private List<Question> questions;
     private int totalQuestions;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-
-    List<TextView> pagination = new ArrayList<TextView>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +88,13 @@ public class QuizActivity extends ManagerActivity {
     }
 
     public void submit(View view) {
-        // TODO: Submit quiz when button clicked
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        User user = gson.fromJson(json, User.class);
+        SubmitQuizCommand sqc = new SubmitQuizCommand(user.getUsername(), questions);
+        new CommunicationTask(this, sqc).execute();
     }
 
     public void goLeft(View view) {
@@ -95,11 +104,6 @@ public class QuizActivity extends ManagerActivity {
 
     public void goRight(View view) {
         mPager.setCurrentItem(mPager.getCurrentItem() + 1);
-    }
-
-    @Override
-    public void updateInterface(Response response) {
-
     }
 
     public void jumpPages(View view) {
@@ -113,15 +117,21 @@ public class QuizActivity extends ManagerActivity {
 
     public void updatePagination(int hops) {
 
-        for (TextView textView: pagination) {
+        for (TextView textView : pagination) {
             int pageValue = Integer.valueOf(textView.getText().toString()) + hops;
 
             if (pageValue >= 1 && pageValue <= totalQuestions) {
                 textView.setVisibility(View.VISIBLE);
+            } else {
+                textView.setVisibility(View.INVISIBLE);
             }
-            else { textView.setVisibility(View.INVISIBLE); }
 
             textView.setText(pageValue + "");
         }
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+
     }
 }

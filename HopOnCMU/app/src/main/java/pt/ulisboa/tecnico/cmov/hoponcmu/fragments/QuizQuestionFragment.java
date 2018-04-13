@@ -1,38 +1,35 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.List;
-
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuestionsByIDLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.AnswerOption;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuestionRepository;
 
-public class QuizQuestionFragment extends Fragment implements LoaderManager.LoaderCallbacks<Question>{
-
-    private static final int LOADER_QUESTION = 1;
+public class QuizQuestionFragment extends Fragment
+        implements View.OnClickListener {
 
     public static final String ARG_PAGE = "page";
     public static final String ARG_QUESTION = "question";
-
+    Drawable btn_default_drawable;
+    int btn_default_text_color;
     private int mPageNumber;
     private Question question;
-
+    private QuestionRepository questionRepository;
     private TextView textQuestion;
     private Button btnOptionA;
     private Button btnOptionB;
     private Button btnOptionC;
     private Button btnOptionD;
+    private Button currentAnswer = null;
 
     public QuizQuestionFragment() {
         // Required empty public constructor
@@ -51,12 +48,12 @@ public class QuizQuestionFragment extends Fragment implements LoaderManager.Load
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        questionRepository = new QuestionRepository(getActivity());
+
         if (getArguments() != null) {
             mPageNumber = getArguments().getInt(ARG_PAGE);
             question = (Question) getArguments().getSerializable(ARG_QUESTION);
         }
-
-        getLoaderManager().restartLoader(LOADER_QUESTION, null, this);
     }
 
     @Override
@@ -68,6 +65,8 @@ public class QuizQuestionFragment extends Fragment implements LoaderManager.Load
 
         setQuestionAndOptions(rootView);
 
+        setAnswer();
+
         return rootView;
     }
 
@@ -75,49 +74,73 @@ public class QuizQuestionFragment extends Fragment implements LoaderManager.Load
         textQuestion = view.findViewById(R.id.question);
         textQuestion.setText(question.getQuestion());
         btnOptionA = view.findViewById(R.id.option_A);
+        btn_default_text_color = btnOptionA.getCurrentTextColor();
+        btn_default_drawable = btnOptionA.getBackground();
         btnOptionA.setText(question.getOptionA());
+        btnOptionA.setOnClickListener(this);
         btnOptionB = view.findViewById(R.id.option_B);
         btnOptionB.setText(question.getOptionB());
+        btnOptionB.setOnClickListener(this);
         btnOptionC = view.findViewById(R.id.option_C);
         btnOptionC.setText(question.getOptionC());
+        btnOptionC.setOnClickListener(this);
         btnOptionD = view.findViewById(R.id.option_D);
         btnOptionD.setText(question.getOptionD());
+        btnOptionD.setOnClickListener(this);
+    }
+
+    private void setAnswer() {
+        AnswerOption answer = question.getAnswer();
+
+        if (answer != null) {
+            switch (answer) {
+                case OPTION_A:
+                    setSelectedAnswer(btnOptionA);
+                    break;
+                case OPTION_B:
+                    setSelectedAnswer(btnOptionB);
+                    break;
+                case OPTION_C:
+                    setSelectedAnswer(btnOptionC);
+                    break;
+                case OPTION_D:
+                    setSelectedAnswer(btnOptionD);
+                    break;
+            }
+        }
+    }
+
+    private void setSelectedAnswer(Button button) {
+        currentAnswer = button;
+        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        button.setTextColor(getResources().getColor(R.color.colorBright));
     }
 
     public int getmPageNumber() {
         return mPageNumber;
     }
 
-    public void setAnswer(View view) {
-
-        Button button = (Button) view;
-
-        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        button.setTextColor(getResources().getColor(R.color.colorBright));
-    }
-
     @Override
-    public Loader<Question> onCreateLoader(int id, Bundle args) {
-        switch (id) {
-            case LOADER_QUESTION:
-                return new QuestionsByIDLoader(
-                        getActivity(), question.getId());
-            default:
-                throw new IllegalArgumentException();
+    public void onClick(View view) {
+        if (currentAnswer != null) {
+            currentAnswer.setBackgroundDrawable(btn_default_drawable);
+            currentAnswer.setTextColor(btn_default_text_color);
         }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Question> loader, Question data) {
-        switch (loader.getId()) {
-            case LOADER_QUESTION:
-                // TODO: change button color
+        setSelectedAnswer((Button) view);
+        switch (view.getId()) {
+            case R.id.option_A:
+                question.setAnswer(AnswerOption.OPTION_A);
+                break;
+            case R.id.option_B:
+                question.setAnswer(AnswerOption.OPTION_B);
+                break;
+            case R.id.option_C:
+                question.setAnswer(AnswerOption.OPTION_C);
+                break;
+            case R.id.option_D:
+                question.setAnswer(AnswerOption.OPTION_D);
                 break;
         }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Question> loader) {
-
+        questionRepository.updateQuestion(question);
     }
 }

@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.data;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.support.annotation.VisibleForTesting;
 
@@ -17,6 +18,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 @Database(version = 1, entities = {User.class, Monument.class, Quiz.class, Question.class})
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     public static final String DATABASE_NAME = "Server";

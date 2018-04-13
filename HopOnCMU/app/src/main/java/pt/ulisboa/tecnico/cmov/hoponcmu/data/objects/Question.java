@@ -83,7 +83,7 @@ public class Question implements Serializable {
     private String optionD;
 
     @ColumnInfo(name = COLUMN_ANSWER)
-    private String answer;
+    private AnswerOption answer;
 
     public Question() {
     }
@@ -96,7 +96,7 @@ public class Question implements Serializable {
         this.optionD = optionD;
     }
 
-    public Question(String question, String optionA, String optionB, String optionC, String optionD, String answer) {
+    public Question(String question, String optionA, String optionB, String optionC, String optionD, AnswerOption answer) {
         this.question = question;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -161,11 +161,11 @@ public class Question implements Serializable {
         this.optionD = optionD;
     }
 
-    public String getAnswer() {
+    public AnswerOption getAnswer() {
         return answer;
     }
 
-    public void setAnswer(String answer) {
+    public void setAnswer(AnswerOption answer) {
         this.answer = answer;
     }
 }

@@ -18,15 +18,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:textColor="#FFF"/>
+            android:textColor="#FFF" />
 
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="70dp"
+        android:gravity="center_horizontal">
 
         <ImageButton
             android:id="@+id/arrow_left"
@@ -37,8 +37,8 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:onClick="goLeft"
-            android:src="@drawable/ic_keyboard_arrow_left"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:src="@drawable/ic_keyboard_arrow_left" />
 
         <TextView
             android:id="@+id/pagination1"
@@ -46,93 +46,99 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/pagination2"
             android:layout_toStartOf="@id/pagination2"
+            android:gravity="center"
+            android:onClick="jumpPages"
             android:paddingRight="2dp"
             android:paddingTop="3dp"
+            android:text="-2"
             android:textColor="@color/colorPagination"
             android:textSize="17sp"
-            android:gravity="center"
-            android:visibility="invisible"
-            android:onClick="jumpPages"
-            android:text="-2"/>
+            android:visibility="invisible" />
+
         <TextView
             android:id="@+id/pagination2"
             android:layout_width="23dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/pagination3"
             android:layout_toStartOf="@id/pagination3"
+            android:gravity="center"
+            android:onClick="jumpPages"
             android:paddingHorizontal="2dp"
             android:paddingTop="3dp"
+            android:text="-1"
             android:textColor="@color/colorPagination"
             android:textSize="17sp"
-            android:gravity="center"
-            android:visibility="invisible"
-            android:onClick="jumpPages"
-            android:text="-1"/>
+            android:visibility="invisible" />
+
         <TextView
             android:id="@+id/pagination3"
             android:layout_width="23dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/pagination4"
             android:layout_toStartOf="@id/pagination4"
+            android:gravity="center"
+            android:onClick="jumpPages"
             android:paddingHorizontal="2dp"
             android:paddingTop="3dp"
+            android:text="0"
             android:textColor="@color/colorPagination"
             android:textSize="17sp"
-            android:gravity="center"
-            android:visibility="invisible"
-            android:onClick="jumpPages"
-            android:text="0"/>
+            android:visibility="invisible" />
+
         <TextView
             android:id="@+id/pagination4"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/pagination5"
             android:layout_toStartOf="@id/pagination5"
+            android:gravity="center"
             android:paddingHorizontal="4dp"
-            android:textStyle="bold"
+            android:text="1"
             android:textColor="@color/colorPagination"
             android:textSize="20sp"
-            android:gravity="center"
-            android:text="1"/>
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/pagination5"
             android:layout_width="23dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/pagination6"
             android:layout_toStartOf="@id/pagination6"
+            android:gravity="center"
+            android:onClick="jumpPages"
             android:paddingHorizontal="2dp"
             android:paddingTop="3dp"
-            android:gravity="center"
+            android:text="2"
             android:textColor="@color/colorPagination"
-            android:textSize="17sp"
-            android:onClick="jumpPages"
-            android:text="2"/>
+            android:textSize="17sp" />
+
         <TextView
             android:id="@+id/pagination6"
             android:layout_width="23dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/pagination7"
             android:layout_toStartOf="@id/pagination7"
+            android:gravity="center"
+            android:onClick="jumpPages"
             android:paddingHorizontal="2dp"
             android:paddingTop="3dp"
-            android:gravity="center"
+            android:text="3"
             android:textColor="@color/colorPagination"
-            android:textSize="17sp"
-            android:onClick="jumpPages"
-            android:text="3"/>
+            android:textSize="17sp" />
+
         <TextView
             android:id="@+id/pagination7"
             android:layout_width="23dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/arrow_right"
             android:layout_toStartOf="@id/arrow_right"
+            android:gravity="center"
+            android:onClick="jumpPages"
             android:paddingLeft="2dp"
             android:paddingTop="3dp"
-            android:gravity="center"
+            android:text="4"
             android:textColor="@color/colorPagination"
-            android:textSize="17sp"
-            android:onClick="jumpPages"
-            android:text="4"/>
+            android:textSize="17sp" />
 
         <ImageButton
             android:id="@+id/arrow_right"
@@ -143,8 +149,8 @@
             android:background="@android:color/transparent"
             android:gravity="center"
             android:onClick="goRight"
-            android:src="@drawable/ic_keyboard_arrow_right"
-            android:paddingTop="5dp"/>
+            android:paddingTop="5dp"
+            android:src="@drawable/ic_keyboard_arrow_right" />
 
     </RelativeLayout>
 

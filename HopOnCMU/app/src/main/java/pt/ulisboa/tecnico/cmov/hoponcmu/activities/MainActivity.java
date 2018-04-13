@@ -2,9 +2,11 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -61,6 +63,7 @@ public class MainActivity extends ManagerActivity implements
     private LocationCallback mLocationCallback;
     private TransactionRepository transactionRepository;
     private UserRepository userRepository;
+    private SharedPreferences.Editor edit;
 
     public static Location getmLastLocation() {
         return mLastLocation;
@@ -70,6 +73,10 @@ public class MainActivity extends ManagerActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        edit = pref.edit();
 
         transactionRepository = new TransactionRepository(this);
         userRepository = new UserRepository(this);
@@ -269,6 +276,8 @@ public class MainActivity extends ManagerActivity implements
                 startActivity(intent);
                 return true;
             case R.id.nav_logout:
+                edit.remove(LoginActivity.USER);
+                edit.apply();
                 intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -341,7 +350,7 @@ public class MainActivity extends ManagerActivity implements
                     downloadQuizResponse.getQuiz(), downloadQuizResponse.getQuestions());
         } else if (response instanceof RankingResponse) {
             RankingResponse rankingResponse = (RankingResponse) response;
-            userRepository.insertUser( rankingResponse.getUsers());
+            userRepository.insertUser(rankingResponse.getUsers());
         }
     }
 

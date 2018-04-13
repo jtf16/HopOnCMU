@@ -1,10 +1,14 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
+
+import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -17,6 +21,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class LoginActivity extends ManagerActivity {
 
+    public static final String USER = "user";
     EditText username;
     EditText password;
     String strUsername;
@@ -75,6 +80,14 @@ public class LoginActivity extends ManagerActivity {
             password.setError("Incorrect password");
         }
         if (loginResponse.getErrors()[0]) {
+            SharedPreferences pref =
+                    PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor edit = pref.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(loginResponse.getUser());
+            edit.putString(USER, json);
+            edit.apply();
+
             Intent loginIntent = new Intent(this, MainActivity.class);
             startActivity(loginIntent);
             finish();

@@ -66,8 +66,15 @@ public class CommandHandlerImpl implements CommandHandler {
 		if (quizzes != null && quizzes.size() > 0) {
 			// TODO: if needed select the quiz by id instead of always 0
 			Quiz quiz = quizzes.get(0);
-			List<Question> questions = Server.getQuestions().get(quiz.getId());
-			if (questions != null && questions.size() > 0) {
+			//List<Question> questions = Server.getQuestions().get(quiz.getId());
+			List<Question> questions = new ArrayList<Question>();
+			if (Server.getQuestions().get(quiz.getId()) != null) {
+				for (Question q : Server.getQuestions().get(quiz.getId())) {
+					Question question = new Question(q.getQuestion(), q.getOptionA(), q.getOptionB(), q.getOptionC(), q.getOptionD());
+					questions.add(question);
+				}
+			}
+			if (questions.size() > 0) {
 				return new DownloadQuizResponse(quiz, questions.toArray(new Question[questions.size()]));
 			}
 		}
@@ -77,5 +84,24 @@ public class CommandHandlerImpl implements CommandHandler {
 	@Override
 	public Response handle(RankingCommand rc) {
 		return new RankingResponse(Server.getUsers().toArray(new User[Server.getUsers().size()]));
+	}
+
+	@Override
+	public Response handle(SubmitQuizCommand sqc) {
+		List<Question> serverQuestions = Server.getQuestions().get(sqc.getQuestions().get(0).getQuizID());
+		User user = Server.getUser(sqc.getUsername());
+		if (serverQuestions != null && user != null) {
+			int i = 0;
+			int rightAnswers = 0;
+			for (Question q : serverQuestions) {
+				if (q.getAnswer().equals(sqc.getQuestions().get(i).getAnswer())) {
+					rightAnswers++;
+				}
+				i++;
+			}
+			user.setScore(user.getScore() + rightAnswers);
+		}
+		System.out.println("Received: " + user.getScore());
+		return new HelloResponse("Hi from Server!");
 	}
 }

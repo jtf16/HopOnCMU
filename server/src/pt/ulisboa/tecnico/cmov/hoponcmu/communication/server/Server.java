@@ -19,6 +19,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.AnswerOption;
 
 public class Server {
 	
@@ -197,16 +198,16 @@ public class Server {
 	// Torre de belem
 	static Question q7question1 = new Question(
 			"In what year was the beginning of it's construction?",
-			"1511", "1512", "1514", "1517");
+			"1511", "1512", "1514", "1517", AnswerOption.OPTION_C);
 	static Question q7question2 = new Question(
 			"In what year was the end of it's construction?",
-			"1519", "1522", "1523", "1525");
+			"1519", "1522", "1523", "1525", AnswerOption.OPTION_A);
 	static Question q7question3 = new Question(
 			"Which King ordered the \"making of a strong fort\"?",
-			"John II", "Afonso V", "John III", "Manuel I");
+			"John II", "Afonso V", "John III", "Manuel I", AnswerOption.OPTION_A);
 	static Question q7question4 = new Question(
 			"Who was the King when the construction was initiated?",
-			"John II", "Afonso V", "John III", "Manuel I");
+			"John II", "Afonso V", "John III", "Manuel I", AnswerOption.OPTION_D);
 
 	public static List<String> passwords = new ArrayList<String>(Arrays.asList("d", "e", "f"));
 	public static List<User> users = new ArrayList<User>(){{
@@ -215,11 +216,6 @@ public class Server {
 			add(user3);
 		}};
 
-	/*public static HashMap<String, User> users = new HashMap<String, User>();
-	static
-	{
-		users.put(user1.getUsername(), user1);
-	}*/
 	public static final HashMap<String, Monument> monuments;
 	static
     {

@@ -14,4 +14,6 @@ public interface CommandHandler {
     public Response handle(DownloadQuizCommand downloadQuizCommand);
 
     public Response handle(RankingCommand rankingCommand);
+
+    public Response handle(SubmitQuizCommand submitQuizCommand);
 }

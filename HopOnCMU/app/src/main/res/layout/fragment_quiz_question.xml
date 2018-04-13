@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:lines="3"
-            android:onClick="setAnswer"
             android:text="@string/option_a" />
 
         <Button
@@ -33,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:lines="3"
-            android:onClick="setAnswer"
             android:text="@string/option_b" />
 
     </LinearLayout>
@@ -48,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:lines="3"
-            android:onClick="setAnswer"
             android:text="@string/option_c" />
 
         <Button
@@ -57,7 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:lines="3"
-            android:onClick="setAnswer"
             android:text="@string/option_d" />
 
     </LinearLayout>
