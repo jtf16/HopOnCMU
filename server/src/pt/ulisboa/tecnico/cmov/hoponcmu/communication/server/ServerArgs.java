@@ -284,6 +284,7 @@ public class ServerArgs {
 			add(q7question4);
 		}});
 	}
+    public static final HashMap<Long, List<String>> usersAnswers = new HashMap<Long, List<String>>();
 
 	public static List<User> getUsers() {
 		return users;
@@ -336,6 +337,28 @@ public class ServerArgs {
 	public static HashMap<Long, List<Question>> getQuestions() {
 		return questions;
 	}
+
+    public static HashMap<Long, List<String>> getUsersAnswers() {
+        return usersAnswers;
+    }
+
+    public static boolean isUserInQuizAnswers(Long id, String username) {
+        if (usersAnswers.get(id) == null) {
+            return false;
+        } else if (usersAnswers.get(id).contains(username)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void addUsersAnswers(Long id, String username) {
+        if (usersAnswers.get(id) == null) {
+            usersAnswers.put(id, new ArrayList<String>(){{add(username);}});
+        } else {
+            usersAnswers.get(id).add(username);
+        }
+    }
 
 	public static double parseLatLonValue(String value) {
 		double result = Double.NaN;

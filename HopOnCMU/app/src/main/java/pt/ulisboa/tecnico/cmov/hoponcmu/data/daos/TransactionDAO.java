@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Transaction;
+import android.util.Log;
 
 import java.util.List;
 
@@ -15,10 +16,10 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 @Dao
 public abstract class TransactionDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract long[] insertQuizzes(Quiz... quizzes);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void insertQuestions(Question... questions);
 
     /**
@@ -56,7 +57,7 @@ public abstract class TransactionDAO {
         // Anything inside this method runs in a single transaction.
         if (quiz != null) {
             long id = insertQuizzes(quiz)[0];
-            if (questions != null) {
+            if (id != -1 && questions != null) {
                 for (Question question : questions) {
                     if (question != null) {
                         question.setQuizID(id);

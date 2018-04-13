@@ -23,9 +23,11 @@
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
+        android:id="@+id/pages"
         android:layout_width="wrap_content"
         android:layout_height="25dp"
-        android:layout_marginTop="70dp"
+        android:layout_below="@id/my_toolbar"
+        android:layout_marginTop="10dp"
         android:gravity="center_horizontal">
 
         <ImageButton
@@ -154,16 +156,35 @@
 
     </RelativeLayout>
 
-    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/view_pager"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/submit_btn"
-        android:layout_below="@id/my_toolbar"
-        android:layout_marginTop="35dp">
+        android:layout_below="@id/pages"
+        android:layout_marginTop="10dp">
 
-    </android.support.v4.view.ViewPager>
+        <TextView
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:background="@drawable/circle_edittext_background"
+            android:gravity="end"
+            android:padding="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="20sp"
+            android:textColor="@android:color/black"
+            android:text="@string/time" />
 
+        <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/submit_btn"

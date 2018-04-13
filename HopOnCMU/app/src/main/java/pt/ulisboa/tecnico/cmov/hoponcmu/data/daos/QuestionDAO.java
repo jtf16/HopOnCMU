@@ -13,7 +13,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 @Dao
 public abstract class QuestionDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract long[] insertQuestions(Question... questions);
 
     @Update

@@ -92,6 +92,9 @@ public class CommandHandlerImpl implements CommandHandler {
 		List<Question> serverQuestions = ServerArgs.getQuestions().get(sqc.getQuestions().get(0).getQuizID());
 		User user = ServerArgs.getUser(sqc.getUsername());
 		if (serverQuestions != null && user != null) {
+			if (ServerArgs.isUserInQuizAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername())) {
+				return new HelloResponse("Already answered this quiz");
+			}
 			int i = 0;
 			int rightAnswers = 0;
 			for (Question q : serverQuestions) {
@@ -102,6 +105,7 @@ public class CommandHandlerImpl implements CommandHandler {
 			}
 			user.setScore(user.getScore() + rightAnswers);
 		}
+		ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername());
 		ServerArgs.sortUsers();
 		System.out.println("Received: " + user.getScore());
 		return new HelloResponse("Hi from Server!");

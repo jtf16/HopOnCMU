@@ -15,7 +15,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 @Dao
 public abstract class QuizDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract long[] insertQuizzes(Quiz... quizzes);
 
     @Update

@@ -14,7 +14,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 @Dao
 public abstract class MonumentDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void insertMonuments(Monument... monuments);
 
     @Update

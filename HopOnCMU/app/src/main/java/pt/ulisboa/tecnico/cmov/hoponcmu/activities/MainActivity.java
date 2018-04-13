@@ -53,6 +53,7 @@ public class MainActivity extends ManagerActivity implements
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "tracking_location";
     private static Location mLastLocation = null;
+    public User mUser;
     DrawerLayout mDrawerLayout;
     Toolbar mToolbar;
     NavigationView mNavigationView;
@@ -60,7 +61,6 @@ public class MainActivity extends ManagerActivity implements
     boolean areMenuOptionsVisible = true;
     boolean isBackArrowVisible = false;
     ManagerFragment fragment;
-    public User mUser;
     // Location classes
     private boolean mRequestingLocationUpdates = true;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -248,9 +248,9 @@ public class MainActivity extends ManagerActivity implements
     }
 
     private void setmNavigationHeader() {
-        View headerView =  mNavigationView.getHeaderView(0);
-        TextView navFullName = (TextView)headerView.findViewById(R.id.full_name);
-        TextView navEmail = (TextView)headerView.findViewById(R.id.email);
+        View headerView = mNavigationView.getHeaderView(0);
+        TextView navFullName = (TextView) headerView.findViewById(R.id.full_name);
+        TextView navEmail = (TextView) headerView.findViewById(R.id.email);
         if (mUser.getLastName() == null) {
             navFullName.setText(mUser.getFirstName());
         } else {
