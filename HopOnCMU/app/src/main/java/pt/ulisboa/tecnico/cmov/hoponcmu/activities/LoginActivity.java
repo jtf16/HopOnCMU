@@ -15,9 +15,12 @@ import org.apache.commons.lang3.StringUtils;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.LoginCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.LoginResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 
 public class LoginActivity extends ManagerActivity {
 
@@ -65,32 +68,38 @@ public class LoginActivity extends ManagerActivity {
             User user = new User();
             user.setUsername(strUsername);
             user.setPassword(strPassword);
-            LoginCommand lc = new LoginCommand(user);
-            new CommunicationTask(this, lc).execute();
+            new CommunicationTask(this, new LoginCommand(user)).execute();
         }
     }
 
     @Override
     public void updateInterface(Response response) {
-        LoginResponse loginResponse = (LoginResponse) response;
-        if (!loginResponse.getErrors()[1]) {
-            username.setError("No such username!");
-        }
-        if (!loginResponse.getErrors()[2]) {
-            password.setError("Incorrect password");
-        }
-        if (loginResponse.getErrors()[0]) {
-            SharedPreferences pref =
-                    PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor edit = pref.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(loginResponse.getUser());
-            edit.putString(USER, json);
-            edit.apply();
+        if (response instanceof LoginResponse) {
+            LoginResponse loginResponse = (LoginResponse) response;
+            if (!loginResponse.getErrors()[1]) {
+                username.setError("No such username!");
+            }
+            if (!loginResponse.getErrors()[2]) {
+                password.setError("Incorrect password");
+            }
+            if (loginResponse.getErrors()[0]) {
+                new CommunicationTask(this, new RankingCommand()).execute();
+                SharedPreferences pref =
+                        PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor edit = pref.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(loginResponse.getUser());
+                edit.putString(USER, json);
+                edit.apply();
 
-            Intent loginIntent = new Intent(this, MainActivity.class);
-            startActivity(loginIntent);
-            finish();
+                Intent loginIntent = new Intent(this, MainActivity.class);
+                startActivity(loginIntent);
+                finish();
+            }
+        } else if (response instanceof RankingResponse) {
+            UserRepository userRepository = new UserRepository(this);
+            userRepository.insertUser(((RankingResponse) response).getUsers());
         }
+
     }
 }

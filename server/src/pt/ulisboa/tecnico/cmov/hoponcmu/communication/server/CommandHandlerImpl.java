@@ -21,17 +21,18 @@ public class CommandHandlerImpl implements CommandHandler {
 		boolean isSignUpValid = true;
 		boolean isUsernameValid = true;
 		boolean isPasswordValid = true;
-		if (Server.getUser(suc.getUser().getUsername()) != null) {
+		if (ServerArgs.getUser(suc.getUser().getUsername()) != null) {
 			isSignUpValid = false;
 			isUsernameValid = false;
 		}
-		if (!Server.getPasswords().contains(suc.getUser().getPassword())) {
+		if (!ServerArgs.getPasswords().contains(suc.getUser().getPassword())) {
 			isSignUpValid = false;
 			isPasswordValid = false;
 		}
 		if (isSignUpValid) {
-			Server.removePassword(suc.getUser().getPassword());
-			Server.addUser(suc.getUser());
+			ServerArgs.removePassword(suc.getUser().getPassword());
+			ServerArgs.addUser(suc.getUser());
+			ServerArgs.sortUsers();
 		}
 		return new SignUpResponse(suc.getUser(), isSignUpValid, isUsernameValid, isPasswordValid);
 	}
@@ -42,7 +43,7 @@ public class CommandHandlerImpl implements CommandHandler {
 		boolean isUsernameValid = true;
 		boolean isPasswordValid = true;
 		System.out.println("Received: " + lc.getUser().getUsername());
-		User user = Server.getUser(lc.getUser().getUsername());
+		User user = ServerArgs.getUser(lc.getUser().getUsername());
 		if (user == null) {
 			isLoginValid = false;
 			isUsernameValid = false;
@@ -57,19 +58,19 @@ public class CommandHandlerImpl implements CommandHandler {
 
 	@Override
 	public Response handle(MonumentCommand mc) {
-		return new MonumentResponse(Server.getMonuments().values().toArray(new Monument[Server.getMonuments().size()]));
+		return new MonumentResponse(ServerArgs.getMonuments().values().toArray(new Monument[ServerArgs.getMonuments().size()]));
 	}
 
 	@Override
 	public Response handle(DownloadQuizCommand dqc) {
-		List<Quiz> quizzes = Server.getQuizzes().get(dqc.getMonument().getId());
+		List<Quiz> quizzes = ServerArgs.getQuizzes().get(dqc.getMonument().getId());
 		if (quizzes != null && quizzes.size() > 0) {
 			// TODO: if needed select the quiz by id instead of always 0
 			Quiz quiz = quizzes.get(0);
-			//List<Question> questions = Server.getQuestions().get(quiz.getId());
+			//List<Question> questions = ServerArgs.getQuestions().get(quiz.getId());
 			List<Question> questions = new ArrayList<Question>();
-			if (Server.getQuestions().get(quiz.getId()) != null) {
-				for (Question q : Server.getQuestions().get(quiz.getId())) {
+			if (ServerArgs.getQuestions().get(quiz.getId()) != null) {
+				for (Question q : ServerArgs.getQuestions().get(quiz.getId())) {
 					Question question = new Question(q.getQuestion(), q.getOptionA(), q.getOptionB(), q.getOptionC(), q.getOptionD());
 					questions.add(question);
 				}
@@ -83,13 +84,13 @@ public class CommandHandlerImpl implements CommandHandler {
 
 	@Override
 	public Response handle(RankingCommand rc) {
-		return new RankingResponse(Server.getUsers().toArray(new User[Server.getUsers().size()]));
+		return new RankingResponse(ServerArgs.getUsers().toArray(new User[ServerArgs.getUsers().size()]));
 	}
 
 	@Override
 	public Response handle(SubmitQuizCommand sqc) {
-		List<Question> serverQuestions = Server.getQuestions().get(sqc.getQuestions().get(0).getQuizID());
-		User user = Server.getUser(sqc.getUsername());
+		List<Question> serverQuestions = ServerArgs.getQuestions().get(sqc.getQuestions().get(0).getQuizID());
+		User user = ServerArgs.getUser(sqc.getUsername());
 		if (serverQuestions != null && user != null) {
 			int i = 0;
 			int rightAnswers = 0;
@@ -101,6 +102,7 @@ public class CommandHandlerImpl implements CommandHandler {
 			}
 			user.setScore(user.getScore() + rightAnswers);
 		}
+		ServerArgs.sortUsers();
 		System.out.println("Received: " + user.getScore());
 		return new HelloResponse("Hi from Server!");
 	}

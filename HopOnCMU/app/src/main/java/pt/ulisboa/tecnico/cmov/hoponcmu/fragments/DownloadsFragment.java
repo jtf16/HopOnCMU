@@ -111,4 +111,9 @@ public class DownloadsFragment extends ManagerFragment
     public void refreshMonuments() {
 
     }
+
+    @Override
+    public void refreshRanking() {
+
+    }
 }

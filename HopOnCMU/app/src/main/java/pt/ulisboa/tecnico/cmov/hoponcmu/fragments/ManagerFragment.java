@@ -7,4 +7,6 @@ public abstract class ManagerFragment extends Fragment {
     public abstract void refreshSearch(String string);
 
     public abstract void refreshMonuments();
+
+    public abstract void refreshRanking();
 }

@@ -89,6 +89,11 @@ public class RankingFragment extends ManagerFragment
     }
 
     @Override
+    public void refreshRanking() {
+        getLoaderManager().restartLoader(LOADER_USERS, null, this);
+    }
+
+    @Override
     public Loader<List<User>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_USERS:

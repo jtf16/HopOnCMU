@@ -78,7 +78,6 @@ public class CreateAccountActivity extends ManagerActivity {
             user.setEmail(strEmail);
             user.setUsername(strUsername);
             user.setPassword(strPassword);
-            user.setScore(0);
 
             SignUpCommand suc = new SignUpCommand(user);
             new CommunicationTask(this, suc).execute();

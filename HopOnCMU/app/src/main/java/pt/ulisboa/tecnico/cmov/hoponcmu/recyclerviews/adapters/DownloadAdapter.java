@@ -1,7 +1,9 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,15 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.MonumentByIDLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.DownloadViewHolder;
 
-public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
+public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder>
+        implements LoaderManager.LoaderCallbacks<Monument> {
 
+    public static final String ARG_QUIZ = "quiz";
     private List<Quiz> quizzes;
     private LinearLayoutManager mLayoutManager;
     private Context mContext;
     private LoaderManager mLoader;
+    private DownloadViewHolder downloadViewHolder;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public DownloadAdapter(Context context, LinearLayoutManager mLayoutManager, LoaderManager loader) {
@@ -46,6 +53,10 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
     public void onBindViewHolder(DownloadViewHolder holder, int position) {
         // - Get element from clients at this position
         // - Replace the contents of the view with that element
+        downloadViewHolder = holder;
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_QUIZ, quizzes.get(position));
+        mLoader.restartLoader(0, args, this);
         holder.setQuiz(quizzes.get(position));
     }
 
@@ -75,6 +86,22 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder> {
     @Override
     public int getItemCount() {
         return quizzes.size();
+    }
+
+    @Override
+    public Loader<Monument> onCreateLoader(int id, Bundle args) {
+        Quiz quiz = (Quiz) args.getSerializable(ARG_QUIZ);
+        return new MonumentByIDLoader(mContext, quiz.getMonumentID());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Monument> loader, Monument data) {
+        downloadViewHolder.setMonumentName(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Monument> loader) {
+
     }
 
     public class DownloadsDiffUtil extends DiffUtil.Callback {

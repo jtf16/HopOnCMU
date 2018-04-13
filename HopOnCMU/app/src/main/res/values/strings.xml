@@ -44,6 +44,9 @@
     <string name="sample_monument_name">Torre de Belem</string>
     <string name="sample_monument_distance">3.5Km</string>
 
+    <!-- DownloadsFragment strings -->
+    <string name="sample_quiz_name">Quiz 1</string>
+
     <!-- QuizActivity strings -->
     <string name="quiz_submit_btn">Submit quiz</string>
 

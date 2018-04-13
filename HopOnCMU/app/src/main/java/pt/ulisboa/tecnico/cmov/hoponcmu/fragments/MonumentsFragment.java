@@ -21,7 +21,8 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.MonumentAdapter;
 public class MonumentsFragment extends ManagerFragment
         implements LoaderManager.LoaderCallbacks<List<Monument>> {
 
-    private static final int LOADER_MONUMENTS = 1;
+    private static final int LOADER_MONUMENTS_SEARCH = 1;
+    private static final int LOADER_MONUMENTS_LOCATION = 2;
 
     private RecyclerView mRecyclerView;
     private MonumentAdapter monumentAdapter;
@@ -55,7 +56,7 @@ public class MonumentsFragment extends ManagerFragment
         View rootView = inflater.inflate(
                 R.layout.fragment_monuments, container, false);
 
-        getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
+        getLoaderManager().restartLoader(LOADER_MONUMENTS_SEARCH, null, this);
 
         setRecyclerView(rootView);
 
@@ -76,7 +77,8 @@ public class MonumentsFragment extends ManagerFragment
     @Override
     public Loader<List<Monument>> onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case LOADER_MONUMENTS:
+            case LOADER_MONUMENTS_SEARCH:
+            case LOADER_MONUMENTS_LOCATION:
                 return new MonumentByPartNameLoader(
                         getActivity(), search, MainActivity.getmLastLocation());
             default:
@@ -87,7 +89,9 @@ public class MonumentsFragment extends ManagerFragment
     @Override
     public void onLoadFinished(Loader<List<Monument>> loader, List<Monument> data) {
         switch (loader.getId()) {
-            case LOADER_MONUMENTS:
+            case LOADER_MONUMENTS_SEARCH:
+                monumentAdapter.scrollToTop();
+            case LOADER_MONUMENTS_LOCATION:
                 monumentAdapter.setMonuments(data);
                 break;
         }
@@ -96,7 +100,8 @@ public class MonumentsFragment extends ManagerFragment
     @Override
     public void onLoaderReset(Loader<List<Monument>> loader) {
         switch (loader.getId()) {
-            case LOADER_MONUMENTS:
+            case LOADER_MONUMENTS_SEARCH:
+            case LOADER_MONUMENTS_LOCATION:
                 monumentAdapter.setMonuments(new ArrayList<Monument>());
                 break;
         }
@@ -105,11 +110,16 @@ public class MonumentsFragment extends ManagerFragment
     @Override
     public void refreshSearch(String string) {
         search = string;
-        getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
+        getLoaderManager().restartLoader(LOADER_MONUMENTS_SEARCH, null, this);
     }
 
     @Override
     public void refreshMonuments() {
-        getLoaderManager().restartLoader(LOADER_MONUMENTS, null, this);
+        getLoaderManager().restartLoader(LOADER_MONUMENTS_LOCATION, null, this);
+    }
+
+    @Override
+    public void refreshRanking() {
+
     }
 }

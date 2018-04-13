@@ -21,12 +21,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
@@ -35,6 +37,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.DownloadQuizRespo
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.TransactionRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
@@ -57,6 +60,7 @@ public class MainActivity extends ManagerActivity implements
     boolean areMenuOptionsVisible = true;
     boolean isBackArrowVisible = false;
     ManagerFragment fragment;
+    public User mUser;
     // Location classes
     private boolean mRequestingLocationUpdates = true;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -77,6 +81,9 @@ public class MainActivity extends ManagerActivity implements
         SharedPreferences pref =
                 PreferenceManager.getDefaultSharedPreferences(this);
         edit = pref.edit();
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        mUser = gson.fromJson(json, User.class);
 
         transactionRepository = new TransactionRepository(this);
         userRepository = new UserRepository(this);
@@ -223,6 +230,7 @@ public class MainActivity extends ManagerActivity implements
 
     private void setmNavigationView() {
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        setmNavigationHeader();
         mNavigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -237,6 +245,23 @@ public class MainActivity extends ManagerActivity implements
                         return selectDrawerItem(menuItem);
                     }
                 });
+    }
+
+    private void setmNavigationHeader() {
+        View headerView =  mNavigationView.getHeaderView(0);
+        TextView navFullName = (TextView)headerView.findViewById(R.id.full_name);
+        TextView navEmail = (TextView)headerView.findViewById(R.id.email);
+        if (mUser.getLastName() == null) {
+            navFullName.setText(mUser.getFirstName());
+        } else {
+            navFullName.setText(mUser.getFirstName() + " " + mUser.getLastName());
+        }
+        if (mUser.getEmail() != null) {
+            navEmail.setText(mUser.getEmail());
+            navEmail.setVisibility(View.VISIBLE);
+        } else {
+            navEmail.setVisibility(View.GONE);
+        }
     }
 
     private void setmLocationCallback() {
@@ -260,8 +285,7 @@ public class MainActivity extends ManagerActivity implements
                 fragmentClass = MonumentsFragment.class;
                 break;
             case R.id.nav_rankings:
-                RankingCommand rc = new RankingCommand();
-                new CommunicationTask(this, rc).execute();
+                new CommunicationTask(this, new RankingCommand()).execute();
                 mToolbar.setTitle(this.getString(R.string.ranking));
                 mSearch.setHint(R.string.username_search_hint);
                 fragmentClass = RankingFragment.class;
@@ -351,6 +375,7 @@ public class MainActivity extends ManagerActivity implements
         } else if (response instanceof RankingResponse) {
             RankingResponse rankingResponse = (RankingResponse) response;
             userRepository.insertUser(rankingResponse.getUsers());
+            fragment.refreshRanking();
         }
     }
 

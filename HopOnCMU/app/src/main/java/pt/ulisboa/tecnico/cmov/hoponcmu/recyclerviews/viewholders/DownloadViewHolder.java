@@ -16,25 +16,24 @@ import java.util.List;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuestionsByQuizIdLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuestionRepository;
 
 public class DownloadViewHolder extends RecyclerView.ViewHolder
         implements LoaderManager.LoaderCallbacks<List<Question>> {
 
     public static final String ARG_QUESTIONS = "questions";
     private static final int LOADER_QUESTIONS = 1;
+    private TextView monumentName;
     private TextView name;
     private Quiz quiz;
     private Context mContext;
     private DownloadViewHolder mLoader = this;
-    private QuestionRepository questionRepository;
 
     public DownloadViewHolder(final Context context, View itemView, final LoaderManager loader) {
         super(itemView);
         mContext = context;
-        questionRepository = new QuestionRepository(context);
         // Define click listener for the ViewHolder's View.
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,12 +44,17 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                 loader.restartLoader(LOADER_QUESTIONS, null, mLoader);
             }
         });
+        monumentName = itemView.findViewById(R.id.monument_name);
         name = itemView.findViewById(R.id.download_name);
     }
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
         name.setText(quiz.getName());
+    }
+
+    public void setMonumentName(Monument monument) {
+        monumentName.setText(monument.getName());
     }
 
     @Override
