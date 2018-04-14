@@ -8,6 +8,8 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 import android.database.Cursor;
 
+import java.util.List;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 
 @Dao
@@ -26,7 +28,7 @@ public abstract class QuestionDAO {
     public abstract int countQuestions();
 
     @Query("SELECT * FROM " + Question.TABLE_NAME + " ORDER BY " + Question.COLUMN_ID + " DESC")
-    public abstract Cursor loadAllQuestions();
+    public abstract List<Question> loadAllQuestions();
 
     @Query("SELECT * FROM " + Question.TABLE_NAME + " WHERE " + Question.COLUMN_ID + " = :id")
     public abstract Question loadQuestionById(long id);

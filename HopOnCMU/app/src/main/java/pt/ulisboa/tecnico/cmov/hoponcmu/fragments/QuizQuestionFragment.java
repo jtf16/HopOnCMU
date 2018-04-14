@@ -10,8 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.AnswerOption;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.AnswerRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuestionRepository;
 
 public class QuizQuestionFragment extends Fragment
@@ -24,6 +27,7 @@ public class QuizQuestionFragment extends Fragment
     private int mPageNumber;
     private Question question;
     private QuestionRepository questionRepository;
+    private AnswerRepository answerRepository;
     private TextView textQuestion;
     private Button btnOptionA;
     private Button btnOptionB;
@@ -48,6 +52,7 @@ public class QuizQuestionFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        answerRepository = new AnswerRepository(getActivity());
         questionRepository = new QuestionRepository(getActivity());
 
         if (getArguments() != null) {
@@ -127,20 +132,27 @@ public class QuizQuestionFragment extends Fragment
             currentAnswer.setTextColor(btn_default_text_color);
         }
         setSelectedAnswer((Button) view);
+        Answer answer = new Answer(((QuizActivity) getActivity()).user.getUsername(),
+                question.getQuizID(), question.getId());
         switch (view.getId()) {
             case R.id.option_A:
+                answer.setAnswer(AnswerOption.OPTION_A);
                 question.setAnswer(AnswerOption.OPTION_A);
                 break;
             case R.id.option_B:
+                answer.setAnswer(AnswerOption.OPTION_B);
                 question.setAnswer(AnswerOption.OPTION_B);
                 break;
             case R.id.option_C:
+                answer.setAnswer(AnswerOption.OPTION_C);
                 question.setAnswer(AnswerOption.OPTION_C);
                 break;
             case R.id.option_D:
+                answer.setAnswer(AnswerOption.OPTION_D);
                 question.setAnswer(AnswerOption.OPTION_D);
                 break;
         }
-        questionRepository.updateQuestion(question);
+        answerRepository.insertAnswer(answer);
+        //questionRepository.updateQuestion(question);
     }
 }

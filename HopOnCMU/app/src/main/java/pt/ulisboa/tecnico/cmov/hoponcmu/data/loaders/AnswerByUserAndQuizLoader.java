@@ -5,28 +5,31 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.List;
 
+import pt.ulisboa.tecnico.cmov.hoponcmu.InterestingConfigChanges;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.AppDatabase;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 
-public class QuestionsByQuizIdLoader extends
+public class AnswerByUserAndQuizLoader extends
         AsyncTaskLoader<List> {
 
+    final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
     private List mData;
-
     private AppDatabase appDatabase;
 
-    private long id;
+    private String username;
+    private long quizID;
 
-    public QuestionsByQuizIdLoader(Context context, long id) {
+    public AnswerByUserAndQuizLoader(Context context, String username, long quizID) {
         super(context);
         appDatabase = AppDatabase.getAppDatabase(context);
-        this.id = id;
+        this.username = username;
+        this.quizID = quizID;
     }
 
     @Override
     public List loadInBackground() {
-        // Retrieve all known quizzes based on query.
-        return appDatabase.transactionDAO().loadQuestionsByQuizId(id);
+        // Retrieve all known users based on query.
+        return appDatabase.answerDAO().loadAnswersByUserAndQuiz(username, quizID);
     }
 
     @Override
@@ -54,7 +57,9 @@ public class QuestionsByQuizIdLoader extends
             deliverResult(mData);
         }
 
-        if (takeContentChanged() || mData == null) {
+        boolean configChange = mLastConfig.applyNewConfig(getContext().getResources());
+
+        if (takeContentChanged() || mData == null || configChange) {
             forceLoad();
         }
     }

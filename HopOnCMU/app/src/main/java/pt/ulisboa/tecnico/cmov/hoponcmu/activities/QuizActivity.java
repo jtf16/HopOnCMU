@@ -32,11 +32,18 @@ public class QuizActivity extends ManagerActivity {
     private int totalQuestions;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        user = gson.fromJson(json, User.class);
 
         setmToolbar();
 
@@ -88,11 +95,6 @@ public class QuizActivity extends ManagerActivity {
     }
 
     public void submit(View view) {
-        SharedPreferences pref =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        Gson gson = new Gson();
-        String json = pref.getString(LoginActivity.USER, "");
-        User user = gson.fromJson(json, User.class);
         SubmitQuizCommand sqc = new SubmitQuizCommand(user.getUsername(), questions);
         new CommunicationTask(this, sqc).execute();
     }

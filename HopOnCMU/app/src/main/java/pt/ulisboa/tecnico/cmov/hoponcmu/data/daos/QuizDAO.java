@@ -31,5 +31,5 @@ public abstract class QuizDAO {
     public abstract List<Quiz> loadAllQuizzes();
 
     @Query("SELECT * FROM " + Quiz.TABLE_NAME + " WHERE " + Quiz.COLUMN_ID + " = :id")
-    public abstract Cursor loadQuizById(long id);
+    public abstract Quiz loadQuizById(long id);
 }
