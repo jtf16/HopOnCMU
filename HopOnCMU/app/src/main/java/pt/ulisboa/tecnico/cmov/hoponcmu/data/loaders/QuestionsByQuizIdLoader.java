@@ -6,7 +6,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.AppDatabase;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 
 public class QuestionsByQuizIdLoader extends
         AsyncTaskLoader<List> {

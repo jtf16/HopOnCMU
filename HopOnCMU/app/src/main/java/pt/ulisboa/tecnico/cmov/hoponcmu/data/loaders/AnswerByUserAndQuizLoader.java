@@ -7,7 +7,6 @@ import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.InterestingConfigChanges;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.AppDatabase;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 
 public class AnswerByUserAndQuizLoader extends
         AsyncTaskLoader<List> {

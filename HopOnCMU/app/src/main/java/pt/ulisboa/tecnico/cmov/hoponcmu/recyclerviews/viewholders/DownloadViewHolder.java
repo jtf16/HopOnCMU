@@ -34,6 +34,7 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
     public static final String ARG_QUESTIONS = "questions";
     private static final int LOADER_QUESTIONS = 1;
     private static final int LOADER_ANSWERS = 2;
+    LoaderManager loaderManager;
     private TextView monumentName;
     private TextView name;
     private Quiz quiz;
@@ -41,7 +42,6 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
     private DownloadViewHolder mLoader = this;
     private User user;
     private List<Question> questions;
-    LoaderManager loaderManager;
 
     public DownloadViewHolder(final Context context, View itemView, final LoaderManager loader) {
         super(itemView);

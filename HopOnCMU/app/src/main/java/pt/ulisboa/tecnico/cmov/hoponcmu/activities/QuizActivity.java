@@ -7,14 +7,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -29,16 +25,16 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
-public class QuizActivity extends ManagerActivity implements View.OnTouchListener {
+public class QuizActivity extends ManagerActivity implements View.OnClickListener {
 
     public static final String ARG_QUESTIONS = "questions";
+    public static User user;
     Toolbar mToolbar;
     List<TextView> pagination = new ArrayList<TextView>();
     private List<Question> questions;
     private int totalQuestions;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    public static User user;
     private Button submitButton;
 
     @Override
@@ -63,7 +59,7 @@ public class QuizActivity extends ManagerActivity implements View.OnTouchListene
         pagination.add((TextView) findViewById(R.id.pagination7));
 
         submitButton = findViewById(R.id.submit_btn);
-        submitButton.setOnTouchListener(this);
+        submitButton.setOnClickListener(this);
 
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         totalQuestions = questions.size();
@@ -105,34 +101,21 @@ public class QuizActivity extends ManagerActivity implements View.OnTouchListene
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent event) {
+    public void onClick(View view) {
+        Snackbar snackbar = Snackbar.make(view, R.string.quiz_submited, Snackbar.LENGTH_SHORT);
+        View snackbarView = (View) snackbar.getView();
+        snackbarView.setBackgroundColor(getResources().getColor(R.color.colorSnackbar));
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorUndoText));
+        snackbar.setAction(R.string.quiz_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Doesn't submit the quiz
+            }
+        });
+        snackbar.show();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                view.setBackgroundResource(R.drawable.button_submit_pressed);
-                break;
-            case MotionEvent.ACTION_UP:
-                view.setBackgroundResource(R.drawable.button_submit);
-
-                Snackbar snackbar = Snackbar.make(view, R.string.quiz_submited, Snackbar.LENGTH_SHORT);
-                View snackbarView = (View) snackbar.getView();
-                snackbarView.setBackgroundColor(getResources().getColor(R.color.colorSnackbar));
-                snackbar.setActionTextColor(getResources().getColor(R.color.colorUndoText));
-                snackbar.setAction(R.string.quiz_undo, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        // TODO: Doesn't submit the quiz
-                    }
-                });
-                snackbar.show();
-
-                SubmitQuizCommand sqc = new SubmitQuizCommand(user.getUsername(), questions);
-                new CommunicationTask(this, sqc).execute();
-
-                break;
-        }
-        return true;
+        SubmitQuizCommand sqc = new SubmitQuizCommand(user.getUsername(), questions);
+        new CommunicationTask(this, sqc).execute();
     }
 
     public void goLeft(View view) {
@@ -158,16 +141,18 @@ public class QuizActivity extends ManagerActivity implements View.OnTouchListene
         for (TextView textView : pagination) {
             int pageValue = Integer.valueOf(textView.getText().toString()) + hops;
 
-            if (pageValue >= 1 && pageValue <= totalQuestions) { textView.setVisibility(View.VISIBLE); }
-            else { textView.setVisibility(View.INVISIBLE); }
+            if (pageValue >= 1 && pageValue <= totalQuestions) {
+                textView.setVisibility(View.VISIBLE);
+            } else {
+                textView.setVisibility(View.INVISIBLE);
+            }
 
             textView.setText(pageValue + "");
 
             int questionNumber = Integer.valueOf(textView.getText().toString()) - 1;
             if (questionNumber >= 0 && questionNumber < totalQuestions && questions.get(questionNumber).getAnswer() != null) {
                 textView.setTextColor(getResources().getColor(R.color.colorPrimary));
-            }
-            else {
+            } else {
                 textView.setTextColor(getResources().getColor(R.color.colorPagination));
             }
         }
