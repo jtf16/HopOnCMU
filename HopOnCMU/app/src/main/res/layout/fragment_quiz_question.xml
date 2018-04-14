@@ -23,16 +23,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:lines="3"
-            android:text="@string/option_a" />
+            android:text="@string/option_a"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/button_unselected" />
 
         <Button
             android:id="@+id/option_B"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:lines="3"
-            android:text="@string/option_b" />
+            android:text="@string/option_b"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/button_unselected" />
 
     </LinearLayout>
 
@@ -45,16 +51,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:lines="3"
-            android:text="@string/option_c" />
+            android:text="@string/option_c"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/button_unselected" />
 
         <Button
             android:id="@+id/option_D"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="5dp"
             android:lines="3"
-            android:text="@string/option_d" />
+            android:text="@string/option_d"
+            android:textColor="@color/colorPrimary"
+            android:background="@drawable/button_unselected" />
 
     </LinearLayout>
 

@@ -1,13 +1,18 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
-import android.graphics.drawable.Drawable;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
@@ -18,12 +23,10 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.AnswerRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuestionRepository;
 
 public class QuizQuestionFragment extends Fragment
-        implements View.OnClickListener {
+        implements View.OnTouchListener {
 
     public static final String ARG_PAGE = "page";
     public static final String ARG_QUESTION = "question";
-    Drawable btn_default_drawable;
-    int btn_default_text_color;
     private int mPageNumber;
     private Question question;
     private QuestionRepository questionRepository;
@@ -76,25 +79,27 @@ public class QuizQuestionFragment extends Fragment
     }
 
     private void setQuestionAndOptions(View view) {
+
         textQuestion = view.findViewById(R.id.question);
         textQuestion.setText(question.getQuestion());
+
         btnOptionA = view.findViewById(R.id.option_A);
-        btn_default_text_color = btnOptionA.getCurrentTextColor();
-        btn_default_drawable = btnOptionA.getBackground();
-        btnOptionA.setText(question.getOptionA());
-        btnOptionA.setOnClickListener(this);
         btnOptionB = view.findViewById(R.id.option_B);
-        btnOptionB.setText(question.getOptionB());
-        btnOptionB.setOnClickListener(this);
         btnOptionC = view.findViewById(R.id.option_C);
-        btnOptionC.setText(question.getOptionC());
-        btnOptionC.setOnClickListener(this);
         btnOptionD = view.findViewById(R.id.option_D);
+
+        btnOptionA.setText(question.getOptionA());
+        btnOptionA.setOnTouchListener(this);
+        btnOptionB.setText(question.getOptionB());
+        btnOptionB.setOnTouchListener(this);
+        btnOptionC.setText(question.getOptionC());
+        btnOptionC.setOnTouchListener(this);
         btnOptionD.setText(question.getOptionD());
-        btnOptionD.setOnClickListener(this);
+        btnOptionD.setOnTouchListener(this);
     }
 
     private void setAnswer() {
+
         AnswerOption answer = question.getAnswer();
 
         if (answer != null) {
@@ -116,8 +121,12 @@ public class QuizQuestionFragment extends Fragment
     }
 
     private void setSelectedAnswer(Button button) {
+
+        TextView currentPageNumber = (TextView) getActivity().findViewById(R.id.pagination4);
+        currentPageNumber.setTextColor(getResources().getColor(R.color.colorPrimary));
+
         currentAnswer = button;
-        button.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        button.setBackgroundResource(R.drawable.button_selected);
         button.setTextColor(getResources().getColor(R.color.colorBright));
     }
 
@@ -126,33 +135,70 @@ public class QuizQuestionFragment extends Fragment
     }
 
     @Override
-    public void onClick(View view) {
+    public boolean onTouch(View view, MotionEvent event) {
+
         if (currentAnswer != null) {
-            currentAnswer.setBackgroundDrawable(btn_default_drawable);
-            currentAnswer.setTextColor(btn_default_text_color);
+            currentAnswer.setBackgroundResource(R.drawable.button_unselected);
+            currentAnswer.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
+
         setSelectedAnswer((Button) view);
         Answer answer = new Answer(((QuizActivity) getActivity()).user.getUsername(),
                 question.getQuizID(), question.getId());
+
         switch (view.getId()) {
             case R.id.option_A:
-                answer.setAnswer(AnswerOption.OPTION_A);
-                question.setAnswer(AnswerOption.OPTION_A);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        answer.setAnswer(AnswerOption.OPTION_A);
+                        question.setAnswer(AnswerOption.OPTION_A);
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected);
+                        break;
+                }
                 break;
             case R.id.option_B:
-                answer.setAnswer(AnswerOption.OPTION_B);
-                question.setAnswer(AnswerOption.OPTION_B);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        answer.setAnswer(AnswerOption.OPTION_B);
+                        question.setAnswer(AnswerOption.OPTION_B);
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected);
+                        break;
+                }
                 break;
             case R.id.option_C:
-                answer.setAnswer(AnswerOption.OPTION_C);
-                question.setAnswer(AnswerOption.OPTION_C);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        answer.setAnswer(AnswerOption.OPTION_C);
+                        question.setAnswer(AnswerOption.OPTION_C);
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected);
+                        break;
+                }
                 break;
             case R.id.option_D:
-                answer.setAnswer(AnswerOption.OPTION_D);
-                question.setAnswer(AnswerOption.OPTION_D);
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected_pressed);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        answer.setAnswer(AnswerOption.OPTION_D);
+                        question.setAnswer(AnswerOption.OPTION_D);
+                        currentAnswer.setBackgroundResource(R.drawable.button_selected);
+                        break;
+                }
                 break;
         }
+
         answerRepository.insertAnswer(answer);
         //questionRepository.updateQuestion(question);
+        return true;
     }
 }

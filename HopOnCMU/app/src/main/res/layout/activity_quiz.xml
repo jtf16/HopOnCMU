@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_quiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,6 +20,17 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:textColor="#FFF" />
+
+        <TextView
+            android:id="@+id/clock"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            android:textSize="20sp"
+            android:textColor="@color/colorBright"
+            android:text="@string/time" />
 
     </android.support.v7.widget.Toolbar>
 
@@ -160,22 +172,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/submit_btn"
-        android:layout_below="@id/pages"
-        android:layout_marginTop="10dp">
-
-        <TextView
-            android:id="@+id/clock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:background="@drawable/circle_edittext_background"
-            android:gravity="end"
-            android:padding="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:text="@string/time" />
+        android:layout_below="@id/pages">
 
         <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/view_pager"
@@ -192,7 +189,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:onClick="submit"
-        android:text="@string/quiz_submit_btn" />
+        android:text="@string/quiz_submit_btn"
+        android:textColor="@color/colorPrimary"
+        android:background="@drawable/button_submit" />
 
 </RelativeLayout>

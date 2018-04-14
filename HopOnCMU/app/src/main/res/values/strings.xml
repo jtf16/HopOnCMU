@@ -49,6 +49,8 @@
 
     <!-- QuizActivity strings -->
     <string name="quiz_submit_btn">Submit quiz</string>
+    <string name="quiz_submited">Quiz submited!</string>
+    <string name="quiz_undo">UNDO</string>
 
     <!-- QuizQuestionFragment strings -->
     <string name="option_a">Option A</string>

@@ -35,4 +35,8 @@
     <color name="colorPaginationAnswered">#2F4F4F</color>
     <color name="colorPagination">#A9A9A9</color>
 
+    <!-- Undo text -->
+    <color name="colorUndoText">#dda900</color>
+    <color name="colorSnackbar">#364d61</color>
+
 </resources>
