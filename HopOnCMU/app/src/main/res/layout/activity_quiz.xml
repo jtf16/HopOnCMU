@@ -190,6 +190,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:background="@drawable/button_submit"
+        android:onClick="submit"
         android:text="@string/quiz_submit_btn"
         android:textColor="@color/colorPrimary" />
 

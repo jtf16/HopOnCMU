@@ -25,6 +25,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 public class LoginActivity extends ManagerActivity {
 
     public static final String USER = "user";
+    public static final String SESSION_ID = "session_id";
     EditText username;
     EditText password;
     String strUsername;
@@ -90,6 +91,7 @@ public class LoginActivity extends ManagerActivity {
                 Gson gson = new Gson();
                 String json = gson.toJson(loginResponse.getUser());
                 edit.putString(USER, json);
+                edit.putLong(SESSION_ID, loginResponse.getSessionId());
                 edit.apply();
 
                 Intent loginIntent = new Intent(this, MainActivity.class);

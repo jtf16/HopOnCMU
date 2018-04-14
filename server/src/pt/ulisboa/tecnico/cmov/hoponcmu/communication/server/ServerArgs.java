@@ -285,6 +285,8 @@ public class ServerArgs {
 		}});
 	}
     public static final HashMap<Long, List<String>> usersAnswers = new HashMap<Long, List<String>>();
+    public static long sessionId = 0;
+    public static HashMap<String, Long> sessionIds = new HashMap<String, Long>();
 
 	public static List<User> getUsers() {
 		return users;
@@ -340,6 +342,19 @@ public class ServerArgs {
 
     public static HashMap<Long, List<String>> getUsersAnswers() {
         return usersAnswers;
+    }
+
+    public static HashMap<String, Long> getSessionIds() {
+        return sessionIds;
+    }
+
+    public static boolean isCorrectSessionID(String username, long sessionId) {
+        return sessionIds.get(username) == sessionId;
+    }
+
+    public static Long addSessionId(String username) {
+        sessionIds.put(username, ++sessionId);
+        return sessionId;
     }
 
     public static boolean isUserInQuizAnswers(Long id, String username) {

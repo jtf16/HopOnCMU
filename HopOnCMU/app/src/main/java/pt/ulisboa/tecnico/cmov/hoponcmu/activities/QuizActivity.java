@@ -9,7 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -25,7 +24,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
-public class QuizActivity extends ManagerActivity implements View.OnClickListener {
+public class QuizActivity extends ManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
     public static User user;
@@ -35,15 +34,14 @@ public class QuizActivity extends ManagerActivity implements View.OnClickListene
     private int totalQuestions;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
-    private Button submitButton;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        SharedPreferences pref =
-                PreferenceManager.getDefaultSharedPreferences(this);
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String json = pref.getString(LoginActivity.USER, "");
         user = gson.fromJson(json, User.class);
@@ -57,9 +55,6 @@ public class QuizActivity extends ManagerActivity implements View.OnClickListene
         pagination.add((TextView) findViewById(R.id.pagination5));
         pagination.add((TextView) findViewById(R.id.pagination6));
         pagination.add((TextView) findViewById(R.id.pagination7));
-
-        submitButton = findViewById(R.id.submit_btn);
-        submitButton.setOnClickListener(this);
 
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         totalQuestions = questions.size();
@@ -100,8 +95,7 @@ public class QuizActivity extends ManagerActivity implements View.OnClickListene
         setSupportActionBar(mToolbar);
     }
 
-    @Override
-    public void onClick(View view) {
+    public void submit(View view) {
         Snackbar snackbar = Snackbar.make(view, R.string.quiz_submited, Snackbar.LENGTH_SHORT);
         View snackbarView = (View) snackbar.getView();
         snackbarView.setBackgroundColor(getResources().getColor(R.color.colorSnackbar));
@@ -114,7 +108,9 @@ public class QuizActivity extends ManagerActivity implements View.OnClickListene
         });
         snackbar.show();
 
-        SubmitQuizCommand sqc = new SubmitQuizCommand(user.getUsername(), questions);
+        long sessionId = pref.getLong(LoginActivity.SESSION_ID, -1);
+        SubmitQuizCommand sqc = new SubmitQuizCommand(
+                user.getUsername(), sessionId, questions);
         new CommunicationTask(this, sqc).execute();
     }
 

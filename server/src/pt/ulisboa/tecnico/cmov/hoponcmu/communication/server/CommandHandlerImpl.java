@@ -42,6 +42,7 @@ public class CommandHandlerImpl implements CommandHandler {
 		boolean isLoginValid = true;
 		boolean isUsernameValid = true;
 		boolean isPasswordValid = true;
+		long sessionId = -1;
 		System.out.println("Received: " + lc.getUser().getUsername());
 		User user = ServerArgs.getUser(lc.getUser().getUsername());
 		if (user == null) {
@@ -53,7 +54,12 @@ public class CommandHandlerImpl implements CommandHandler {
 			isLoginValid = false;
 			isPasswordValid = false;
 		}
-		return new LoginResponse(user, isLoginValid, isUsernameValid, isPasswordValid);
+		else {
+			sessionId = ServerArgs.addSessionId(user.getUsername());
+		}
+		boolean[] errors = new boolean[]{isLoginValid, isUsernameValid, isPasswordValid};
+		System.out.println(sessionId + "");
+		return new LoginResponse(user, sessionId, errors);
 	}
 
 	@Override
@@ -91,7 +97,8 @@ public class CommandHandlerImpl implements CommandHandler {
 	public Response handle(SubmitQuizCommand sqc) {
 		List<Question> serverQuestions = ServerArgs.getQuestions().get(sqc.getQuestions().get(0).getQuizID());
 		User user = ServerArgs.getUser(sqc.getUsername());
-		if (serverQuestions != null && user != null) {
+		if (serverQuestions != null && user != null && 
+			ServerArgs.isCorrectSessionID(sqc.getUsername(), sqc.getSessionID())) {
 			if (ServerArgs.isUserInQuizAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername())) {
 				return new HelloResponse("Already answered this quiz");
 			}
@@ -104,10 +111,10 @@ public class CommandHandlerImpl implements CommandHandler {
 				i++;
 			}
 			user.setScore(user.getScore() + rightAnswers);
+			ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername());
+			ServerArgs.sortUsers();
+			System.out.println("Received: " + user.getScore());
 		}
-		ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername());
-		ServerArgs.sortUsers();
-		System.out.println("Received: " + user.getScore());
 		return new HelloResponse("Hi from Server!");
 	}
 }
