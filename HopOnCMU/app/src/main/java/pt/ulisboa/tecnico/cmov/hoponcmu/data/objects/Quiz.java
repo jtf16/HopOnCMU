@@ -8,6 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -35,6 +36,10 @@ public class Quiz implements Serializable {
      * The name of the name column.
      */
     public static final String COLUMN_NAME = "name";
+    /**
+     * The name of the open time column.
+     */
+    public static final String COLUMN_OPEN_TIME = "open_time";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the user.
@@ -48,6 +53,9 @@ public class Quiz implements Serializable {
 
     @ColumnInfo(name = COLUMN_NAME)
     private String name;
+
+    @ColumnInfo(name = COLUMN_OPEN_TIME)
+    private Date openTime;
 
     public Quiz() {
     }
@@ -79,5 +87,13 @@ public class Quiz implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Date openTime) {
+        this.openTime = openTime;
     }
 }

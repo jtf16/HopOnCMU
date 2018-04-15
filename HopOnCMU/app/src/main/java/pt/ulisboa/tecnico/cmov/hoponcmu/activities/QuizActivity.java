@@ -2,20 +2,22 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
@@ -24,20 +26,23 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SubmitQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class QuizActivity extends ManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
-    public static final String ARG_TITLE = "title";
+    public static final String ARG_QUIZ = "quiz";
     public static User user;
     Toolbar mToolbar;
     List<TextView> pagination = new ArrayList<TextView>();
     private List<Question> questions;
+    private Quiz quiz;
     private int totalQuestions;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private SharedPreferences pref;
+    private Chronometer chronometer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,11 @@ public class QuizActivity extends ManagerActivity {
         String json = pref.getString(LoginActivity.USER, "");
         user = gson.fromJson(json, User.class);
 
+        questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
+        quiz = (Quiz) getIntent().getSerializableExtra(ARG_QUIZ);
+
         setmToolbar();
+        setClock();
 
         pagination.add((TextView) findViewById(R.id.pagination1));
         pagination.add((TextView) findViewById(R.id.pagination2));
@@ -59,7 +68,6 @@ public class QuizActivity extends ManagerActivity {
         pagination.add((TextView) findViewById(R.id.pagination6));
         pagination.add((TextView) findViewById(R.id.pagination7));
 
-        questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         totalQuestions = questions.size();
 
         mPager = (ViewPager) findViewById(R.id.view_pager);
@@ -92,10 +100,17 @@ public class QuizActivity extends ManagerActivity {
     }
 
     private void setmToolbar() {
-
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(getIntent().getStringExtra(ARG_TITLE));
+        getSupportActionBar().setTitle(quiz.getName());
+    }
+
+    private void setClock() {
+        chronometer = (Chronometer) findViewById(R.id.clock);
+        long startingTime =
+                Calendar.getInstance().getTime().getTime() - quiz.getOpenTime().getTime();
+        chronometer.setBase(SystemClock.elapsedRealtime() - startingTime);
+        chronometer.start();
     }
 
     public void submit(View view) {

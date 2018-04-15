@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.data.objects;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Quiz implements Serializable {
 
@@ -9,6 +10,7 @@ public class Quiz implements Serializable {
     public long id;
     public String monumentID;
     private String name;
+    private Date openTime;
 
     public Quiz() {
     }
@@ -46,5 +48,13 @@ public class Quiz implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Date openTime) {
+        this.openTime = openTime;
     }
 }
