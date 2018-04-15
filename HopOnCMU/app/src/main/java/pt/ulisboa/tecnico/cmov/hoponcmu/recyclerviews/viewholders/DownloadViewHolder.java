@@ -32,6 +32,7 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
         implements LoaderManager.LoaderCallbacks<List> {
 
     public static final String ARG_QUESTIONS = "questions";
+    public static final String ARG_TITLE = "title";
     private static final int LOADER_QUESTIONS = 1;
     private static final int LOADER_ANSWERS = 2;
     LoaderManager loaderManager;
@@ -109,6 +110,7 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                 }
                 Intent intent = new Intent(mContext, QuizActivity.class);
                 intent.putExtra(ARG_QUESTIONS, (Serializable) questions);
+                intent.putExtra(ARG_TITLE, quiz.getName());
                 mContext.startActivity(intent);
                 break;
         }

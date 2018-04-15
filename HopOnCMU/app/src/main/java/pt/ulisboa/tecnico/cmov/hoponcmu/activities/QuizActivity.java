@@ -6,7 +6,9 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 public class QuizActivity extends ManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
+    public static final String ARG_TITLE = "title";
     public static User user;
     Toolbar mToolbar;
     List<TextView> pagination = new ArrayList<TextView>();
@@ -74,8 +77,6 @@ public class QuizActivity extends ManagerActivity {
             }
         });
 
-        TextView quizName = (TextView) findViewById(R.id.quiz_name);
-        quizName.setText("TextName");
         updatePagination(0);
     }
 
@@ -91,8 +92,10 @@ public class QuizActivity extends ManagerActivity {
     }
 
     private void setmToolbar() {
+
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle(getIntent().getStringExtra(ARG_TITLE));
     }
 
     public void submit(View view) {
