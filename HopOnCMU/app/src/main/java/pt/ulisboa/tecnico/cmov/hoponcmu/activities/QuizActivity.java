@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Chronometer;
@@ -126,15 +125,15 @@ public class QuizActivity extends ManagerActivity {
         });
         snackbar.show();
 
+        quiz.setSubmitTime(Calendar.getInstance().getTime());
         long sessionId = pref.getLong(LoginActivity.SESSION_ID, -1);
         SubmitQuizCommand sqc = new SubmitQuizCommand(
-                user.getUsername(), sessionId, questions);
+                user.getUsername(), sessionId, quiz, questions);
         new CommunicationTask(this, sqc).execute();
     }
 
     public void goLeft(View view) {
         mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-
     }
 
     public void goRight(View view) {

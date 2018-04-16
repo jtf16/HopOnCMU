@@ -40,6 +40,10 @@ public class Quiz implements Serializable {
      * The name of the open time column.
      */
     public static final String COLUMN_OPEN_TIME = "open_time";
+    /**
+     * The name of the submit time column.
+     */
+    public static final String COLUMN_SUBMIT_TIME = "submit_time";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the user.
@@ -56,6 +60,9 @@ public class Quiz implements Serializable {
 
     @ColumnInfo(name = COLUMN_OPEN_TIME)
     private Date openTime;
+
+    @ColumnInfo(name = COLUMN_SUBMIT_TIME)
+    private Date submitTime;
 
     public Quiz() {
     }
@@ -95,5 +102,13 @@ public class Quiz implements Serializable {
 
     public void setOpenTime(Date openTime) {
         this.openTime = openTime;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
     }
 }

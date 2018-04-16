@@ -7,6 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
@@ -15,6 +20,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
     private TextView ranking;
     private TextView username;
     private TextView score;
+    private TextView time;
     private User user;
 
     public UserViewHolder(View itemView) {
@@ -31,6 +37,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         ranking = itemView.findViewById(R.id.user_ranking);
         username = itemView.findViewById(R.id.username);
         score = itemView.findViewById(R.id.user_score);
+        time = itemView.findViewById(R.id.user_time);
     }
 
     public void setUser(Context context, User user, int position) {
@@ -60,5 +67,11 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         ranking.setText(user.getRanking() + ".");
         username.setText(user.getUsername());
         score.setText(Integer.toString(user.getScore()));
+        time.setText(String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(user.getTime()),
+                TimeUnit.MILLISECONDS.toMinutes(user.getTime()) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(user.getTime())),
+                TimeUnit.MILLISECONDS.toSeconds(user.getTime()) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(user.getTime()))));
     }
 }

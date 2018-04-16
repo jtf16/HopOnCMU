@@ -14,18 +14,19 @@ public class User implements Serializable {
     private String password;
     private int ranking;
     private int score;
+    private long time;
 
     public User() {
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, int ranking, int score) {
+    public User(String username, String firstName, String lastName, String email, String password, int score, long time) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.ranking = ranking;
         this.score = score;
+        this.time = time;
     }
 
     public long getId() {
@@ -90,5 +91,13 @@ public class User implements Serializable {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

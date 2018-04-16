@@ -26,9 +26,9 @@ public class ServerArgs {
 	private static String EXPRESSION = "^(?<deg>[-+0-9]+)[^0-9]+(?<min>[0-9]+)[^0-9]+(?<sec>[0-9.,]+)[^0-9.,ENSW]+(?<pos>[ENSW]*)$";
 
 	// USERS
-	static User user1 = new User("a", "a", "a", "a", "a", 3, 0);
-	static User user2 = new User("b", "b", "b", "b", "b", 1, 10);
-	static User user3 = new User("c", "c", "c", "c", "c", 1, 10);
+	static User user1 = new User("a", "a", "a", "a", "a", 10, 10000);
+	static User user2 = new User("b", "b", "b", "b", "b", 0, 0);
+	static User user3 = new User("c", "c", "c", "c", "c", 0, 0);
 
 	// MONUMENTS
     static Monument m1 = new Monument("M1", "Mosteiro dos Jerónimos", 
@@ -306,14 +306,17 @@ public class ServerArgs {
 	}
 
 	public static void sortUsers() {
-		users.sort(Comparator.comparingInt(User::getScore).reversed());
+        //users.sort(Comparator.comparingInt(User::getScore).thenComparing(User::getTime).reversed());
+        users.sort(Comparator.comparingInt(User::getScore).reversed().thenComparing(User::getTime));
 		int previousRank = 1, rank = 1, previousScore = -1;
+        long previousTime = -1;
 		for (User user : users){
-			if (user.getScore() == previousScore) {
+			if (user.getScore() == previousScore && user.getTime() == previousTime) {
 				user.setRanking(previousRank);
 			} else {
 				user.setRanking(rank);
 				previousScore = user.getScore();
+                previousTime = user.getTime();
 				previousRank = rank;
 			}
 			rank++;

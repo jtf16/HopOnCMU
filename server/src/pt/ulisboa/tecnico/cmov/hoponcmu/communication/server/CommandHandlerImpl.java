@@ -90,6 +90,7 @@ public class CommandHandlerImpl implements CommandHandler {
 
 	@Override
 	public Response handle(RankingCommand rc) {
+		ServerArgs.sortUsers();
 		return new RankingResponse(ServerArgs.getUsers().toArray(new User[ServerArgs.getUsers().size()]));
 	}
 
@@ -111,6 +112,7 @@ public class CommandHandlerImpl implements CommandHandler {
 				i++;
 			}
 			user.setScore(user.getScore() + rightAnswers);
+			user.setTime(user.getTime() + (sqc.getQuiz().getSubmitTime().getTime() - sqc.getQuiz().getOpenTime().getTime()));
 			ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername());
 			ServerArgs.sortUsers();
 			System.out.println("Received: " + user.getScore());

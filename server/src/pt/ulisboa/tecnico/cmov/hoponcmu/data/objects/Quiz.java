@@ -11,6 +11,7 @@ public class Quiz implements Serializable {
     public String monumentID;
     private String name;
     private Date openTime;
+    private Date submitTime;
 
     public Quiz() {
     }
@@ -56,5 +57,13 @@ public class Quiz implements Serializable {
 
     public void setOpenTime(Date openTime) {
         this.openTime = openTime;
+    }
+
+    public Date getSubmitTime() {
+        return submitTime;
+    }
+
+    public void setSubmitTime(Date submitTime) {
+        this.submitTime = submitTime;
     }
 }

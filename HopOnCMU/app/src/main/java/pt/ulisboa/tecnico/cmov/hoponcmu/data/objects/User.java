@@ -48,6 +48,10 @@ public class User implements Serializable {
      * The name of the score column.
      */
     public static final String COLUMN_SCORE = "score";
+    /**
+     * The name of the time column.
+     */
+    public static final String COLUMN_TIME = "time";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the user.
@@ -77,17 +81,20 @@ public class User implements Serializable {
     @ColumnInfo(name = COLUMN_SCORE)
     private int score;
 
+    @ColumnInfo(name = COLUMN_TIME)
+    private long time;
+
     public User() {
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, int ranking, int score) {
+    public User(String username, String firstName, String lastName, String email, String password, int score, long time) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.ranking = ranking;
         this.score = score;
+        this.time = time;
     }
 
     public long getId() {
@@ -152,5 +159,13 @@ public class User implements Serializable {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }
