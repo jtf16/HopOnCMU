@@ -42,7 +42,8 @@ public abstract class TransactionDAO {
     @Query("SELECT " + Quiz.TABLE_NAME + ".* FROM " + Quiz.TABLE_NAME + " INNER JOIN " +
             Monument.TABLE_NAME + " ON " + Quiz.TABLE_NAME + "." + Quiz.COLUMN_MONUMENT_ID + " = " +
             Monument.TABLE_NAME + "." + Monument.COLUMN_ID + " WHERE " + Monument.TABLE_NAME +
-            "." + Monument.COLUMN_NAME + " LIKE '%' || :name || '%'")
+            "." + Monument.COLUMN_NAME + " LIKE '%' || :name || '%' OR " + Quiz.TABLE_NAME + "." +
+            Quiz.COLUMN_NAME + " LIKE '%' || :name || '%'")
     public abstract List<Quiz> loadQuizzesByMonumentName(String name);
 
     @Query("SELECT " + Question.TABLE_NAME + ".* FROM " + Question.TABLE_NAME + " INNER JOIN " +

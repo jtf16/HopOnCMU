@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +14,9 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.AnswerOption;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.AnswerRepository;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuizRepository;
 
 public class QuizQuestionFragment extends Fragment
         implements View.OnClickListener {
@@ -36,11 +39,14 @@ public class QuizQuestionFragment extends Fragment
     }
 
     public static QuizQuestionFragment newInstance(int pageNumber, Question question) {
+
         QuizQuestionFragment fragment = new QuizQuestionFragment();
         Bundle args = new Bundle();
+
         args.putInt(ARG_PAGE, pageNumber);
         args.putSerializable(ARG_QUESTION, question);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -88,6 +94,15 @@ public class QuizQuestionFragment extends Fragment
         btnOptionC.setOnClickListener(this);
         btnOptionD.setText(question.getOptionD());
         btnOptionD.setOnClickListener(this);
+
+        Button submitButton = (Button) this.getActivity().findViewById(R.id.submit_btn);
+
+        if (submitButton.getVisibility() == View.GONE) {
+            btnOptionA.setEnabled(false);
+            btnOptionB.setEnabled(false);
+            btnOptionC.setEnabled(false);
+            btnOptionD.setEnabled(false);
+        }
     }
 
     private void setAnswer() {

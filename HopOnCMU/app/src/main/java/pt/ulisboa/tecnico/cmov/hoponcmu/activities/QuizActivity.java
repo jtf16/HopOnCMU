@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 
@@ -110,19 +111,30 @@ public class QuizActivity extends ManagerActivity {
     }
 
     private void setClock() {
+
         TextView score = (TextView) findViewById(R.id.score);
+        Button submit = (Button) findViewById(R.id.submit_btn);
         chronometer = (Chronometer) findViewById(R.id.clock);
+
         long openTime = quiz.getOpenTime().getTime();
         long submitTime = (quiz.getSubmitTime() != null) ?
                 quiz.getSubmitTime().getTime() : Calendar.getInstance().getTime().getTime();
         long startingTime = submitTime - openTime;
+
         chronometer.setBase(SystemClock.elapsedRealtime() - startingTime);
+
         if (quiz.getSubmitTime() == null) {
             chronometer.start();
-        } else if (quiz.getScore() >= 0) {
+        }
+        // Offline Mode
+        else if (quiz.getScore() >= 0) {
             chronometer.setVisibility(View.GONE);
-            score.setText("Score: " + quiz.getScore());
+            score.setText(getResources().getText(R.string.score) + ": " + quiz.getScore());
             score.setVisibility(View.VISIBLE);
+            submit.setVisibility(View.GONE);
+        }
+        else {
+            submit.setVisibility(View.GONE);
         }
     }
 
