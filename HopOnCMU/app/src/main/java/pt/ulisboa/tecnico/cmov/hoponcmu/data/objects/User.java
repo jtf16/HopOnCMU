@@ -2,24 +2,18 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.data.objects;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 
-@Entity(tableName = User.TABLE_NAME,
-        indices = {@Index(value = {User.COLUMN_USERNAME}, unique = true)})
+@Entity(tableName = User.TABLE_NAME)
 public class User implements Serializable {
 
     /**
      * The name of the User table.
      */
     public static final String TABLE_NAME = "users";
-    /**
-     * The name of the ID column.
-     */
-    public static final String COLUMN_ID = BaseColumns._ID;
     /**
      * The name of the username column.
      */
@@ -53,13 +47,9 @@ public class User implements Serializable {
      */
     public static final String COLUMN_TIME = "time";
     private static final long serialVersionUID = -8807331723807741905L;
-    /**
-     * The unique ID of the user.
-     */
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(index = true, name = COLUMN_ID)
-    public long id;
 
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = COLUMN_USERNAME)
     private String username;
 
@@ -95,14 +85,6 @@ public class User implements Serializable {
         this.password = password;
         this.score = score;
         this.time = time;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getUsername() {

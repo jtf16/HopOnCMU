@@ -29,6 +29,6 @@ public abstract class QuizDAO {
     @Query("SELECT * FROM " + Quiz.TABLE_NAME + " ORDER BY " + Quiz.COLUMN_ID + " DESC")
     public abstract List<Quiz> loadAllQuizzes();
 
-    @Query("SELECT * FROM " + Quiz.TABLE_NAME + " WHERE " + Quiz.COLUMN_ID + " = :id")
+    @Query("SELECT * FROM " + Quiz.TABLE_NAME + " WHERE " + Quiz.COLUMN_ID + " = :id LIMIT 1")
     public abstract Quiz loadQuizById(long id);
 }

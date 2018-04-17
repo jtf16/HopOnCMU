@@ -12,4 +12,6 @@ public interface ResponseHandler {
     public void handle(DownloadQuizResponse downloadQuizResponse);
 
     public void handle(RankingResponse rankingResponse);
+
+    public void handle(SubmitQuizResponse submitQuizResponse);
 }

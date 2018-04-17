@@ -23,6 +23,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.AnswerByUserAndQuizLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuestionsByQuizIdLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizByIdLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
@@ -31,12 +32,13 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuizRepository;
 
 public class DownloadViewHolder extends RecyclerView.ViewHolder
-        implements LoaderManager.LoaderCallbacks<List> {
+        implements LoaderManager.LoaderCallbacks {
 
     public static final String ARG_QUESTIONS = "questions";
     public static final String ARG_QUIZ = "quiz";
     private static final int LOADER_QUESTIONS = 1;
     private static final int LOADER_ANSWERS = 2;
+    private static final int LOADER_QUIZ = 3;
     LoaderManager loaderManager;
     private TextView monumentName;
     private TextView name;
@@ -67,7 +69,7 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                 Log.d(DownloadViewHolder.class.getName(),
                         "Element " + getAdapterPosition() + " clicked.");
 
-                loader.restartLoader(LOADER_QUESTIONS, null, mLoader);
+                loader.restartLoader(LOADER_QUIZ, null, mLoader);
             }
         });
         monumentName = itemView.findViewById(R.id.monument_name);
@@ -84,25 +86,27 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
     }
 
     @Override
-    public Loader<List> onCreateLoader(int id, Bundle args) {
+    public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_QUESTIONS:
                 return new QuestionsByQuizIdLoader(mContext, quiz.getId());
             case LOADER_ANSWERS:
                 return new AnswerByUserAndQuizLoader(
                         mContext, user.getUsername(), quiz.getId());
+            case LOADER_QUIZ:
+                return new QuizByIdLoader(mContext, quiz.getId());
             default:
                 throw new IllegalArgumentException();
         }
     }
 
     @Override
-    public void onLoadFinished(Loader<List> loader, List data) {
+    public void onLoadFinished(Loader loader, Object data) {
         switch (loader.getId()) {
             case LOADER_QUESTIONS:
-                if (data.size() > 0) {
+                if (((List<Question>) data).size() > 0) {
                     questions = (List<Question>) data;
-                    loaderManager.restartLoader(LOADER_ANSWERS, null, mLoader);
+                    loaderManager.restartLoader(LOADER_ANSWERS, null, this);
                 }
                 break;
             case LOADER_ANSWERS:
@@ -122,11 +126,15 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                 intent.putExtra(ARG_QUIZ, quiz);
                 mContext.startActivity(intent);
                 break;
+            case LOADER_QUIZ:
+                quiz = (Quiz) data;
+                loaderManager.restartLoader(LOADER_QUESTIONS, null, this);
+                break;
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List> loader) {
+    public void onLoaderReset(Loader loader) {
 
     }
 }

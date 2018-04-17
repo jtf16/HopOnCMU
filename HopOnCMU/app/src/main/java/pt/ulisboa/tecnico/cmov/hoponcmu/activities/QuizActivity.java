@@ -24,9 +24,11 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SubmitQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SubmitQuizResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuizRepository;
 
 public class QuizActivity extends ManagerActivity {
 
@@ -42,11 +44,14 @@ public class QuizActivity extends ManagerActivity {
     private PagerAdapter mPagerAdapter;
     private SharedPreferences pref;
     private Chronometer chronometer;
+    private QuizRepository quizRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        quizRepository = new QuizRepository(this);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
@@ -105,11 +110,20 @@ public class QuizActivity extends ManagerActivity {
     }
 
     private void setClock() {
+        TextView score = (TextView) findViewById(R.id.score);
         chronometer = (Chronometer) findViewById(R.id.clock);
-        long startingTime =
-                Calendar.getInstance().getTime().getTime() - quiz.getOpenTime().getTime();
+        long openTime = quiz.getOpenTime().getTime();
+        long submitTime = (quiz.getSubmitTime() != null) ?
+                quiz.getSubmitTime().getTime() : Calendar.getInstance().getTime().getTime();
+        long startingTime = submitTime - openTime;
         chronometer.setBase(SystemClock.elapsedRealtime() - startingTime);
-        chronometer.start();
+        if (quiz.getSubmitTime() == null) {
+            chronometer.start();
+        } else if (quiz.getScore() >= 0) {
+            chronometer.setVisibility(View.GONE);
+            score.setText("Score: " + quiz.getScore());
+            score.setVisibility(View.VISIBLE);
+        }
     }
 
     public void submit(View view) {
@@ -130,6 +144,7 @@ public class QuizActivity extends ManagerActivity {
         SubmitQuizCommand sqc = new SubmitQuizCommand(
                 user.getUsername(), sessionId, quiz, questions);
         new CommunicationTask(this, sqc).execute();
+        finish();
     }
 
     public void goLeft(View view) {
@@ -173,6 +188,9 @@ public class QuizActivity extends ManagerActivity {
 
     @Override
     public void updateInterface(Response response) {
-
+        if (response instanceof SubmitQuizResponse) {
+            SubmitQuizResponse submitQuizResponse = (SubmitQuizResponse) response;
+            quizRepository.updateQuiz(submitQuizResponse.getQuiz());
+        }
     }
 }

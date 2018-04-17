@@ -12,6 +12,7 @@ public class Quiz implements Serializable {
     private String name;
     private Date openTime;
     private Date submitTime;
+    private int score = -1;
 
     public Quiz() {
     }
@@ -65,5 +66,13 @@ public class Quiz implements Serializable {
 
     public void setSubmitTime(Date submitTime) {
         this.submitTime = submitTime;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

@@ -30,6 +30,7 @@ public class QuizQuestionFragment extends Fragment
     private Button btnOptionD;
     private Button currentAnswer = null;
 
+
     public QuizQuestionFragment() {
         // Required empty public constructor
     }
@@ -153,7 +154,7 @@ public class QuizQuestionFragment extends Fragment
                 question.setAnswer(AnswerOption.OPTION_D);
                 break;
         }
-
+        ((QuizActivity) getActivity()).goRight(null);
         answerRepository.insertAnswer(answer);
     }
 }

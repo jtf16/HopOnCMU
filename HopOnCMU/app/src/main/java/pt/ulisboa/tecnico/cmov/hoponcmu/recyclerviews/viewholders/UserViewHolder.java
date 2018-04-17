@@ -7,9 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;

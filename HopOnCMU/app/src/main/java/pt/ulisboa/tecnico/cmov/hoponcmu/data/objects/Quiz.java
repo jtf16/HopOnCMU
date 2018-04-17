@@ -13,7 +13,8 @@ import java.util.Date;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity(tableName = Quiz.TABLE_NAME,
-        indices = {@Index(value = {Quiz.COLUMN_NAME}, unique = true)},
+        indices = {@Index(value = {
+                Quiz.COLUMN_MONUMENT_ID, Quiz.COLUMN_NAME}, unique = true)},
         foreignKeys = {
                 @ForeignKey(onDelete = CASCADE,
                         entity = Monument.class, parentColumns = Monument.COLUMN_ID,
@@ -44,9 +45,13 @@ public class Quiz implements Serializable {
      * The name of the submit time column.
      */
     public static final String COLUMN_SUBMIT_TIME = "submit_time";
+    /**
+     * The name of the score column.
+     */
+    public static final String COLUMN_SCORE = "score";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
-     * The unique ID of the user.
+     * The unique ID of the quiz.
      */
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = COLUMN_ID)
@@ -63,6 +68,9 @@ public class Quiz implements Serializable {
 
     @ColumnInfo(name = COLUMN_SUBMIT_TIME)
     private Date submitTime;
+
+    @ColumnInfo(name = COLUMN_SCORE)
+    private int score = -1;
 
     public Quiz() {
     }
@@ -110,5 +118,13 @@ public class Quiz implements Serializable {
 
     public void setSubmitTime(Date submitTime) {
         this.submitTime = submitTime;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

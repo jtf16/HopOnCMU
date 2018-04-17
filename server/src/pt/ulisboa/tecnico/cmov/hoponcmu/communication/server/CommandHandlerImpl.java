@@ -113,9 +113,11 @@ public class CommandHandlerImpl implements CommandHandler {
 			}
 			user.setScore(user.getScore() + rightAnswers);
 			user.setTime(user.getTime() + (sqc.getQuiz().getSubmitTime().getTime() - sqc.getQuiz().getOpenTime().getTime()));
+			sqc.getQuiz().setScore(rightAnswers);
 			ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername());
 			ServerArgs.sortUsers();
-			System.out.println("Received: " + user.getScore());
+			System.out.println("Received: " + sqc.getQuiz().getScore());
+			return new SubmitQuizResponse(sqc.getQuiz());
 		}
 		return new HelloResponse("Hi from Server!");
 	}
