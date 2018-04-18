@@ -4,20 +4,18 @@ import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 
 public class SubmitQuizCommand implements Command {
 
     private static final long serialVersionUID = -8807331723807741905L;
-    private String username;
     private long sessionID;
-    private Quiz quiz;
+    private UserQuiz userQuiz;
     private List<Question> questions;
 
-    public SubmitQuizCommand(String username, long sessionID, Quiz quiz, List<Question> questions) {
-        this.username = username;
+    public SubmitQuizCommand(long sessionID, UserQuiz userQuiz, List<Question> questions) {
         this.sessionID = sessionID;
-        this.quiz = quiz;
+        this.userQuiz = userQuiz;
         this.questions = questions;
     }
 
@@ -26,16 +24,12 @@ public class SubmitQuizCommand implements Command {
         return chi.handle(this);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public long getSessionID() {
         return sessionID;
     }
 
-    public Quiz getQuiz() {
-        return quiz;
+    public UserQuiz getUserQuiz() {
+        return userQuiz;
     }
 
     public List<Question> getQuestions() {

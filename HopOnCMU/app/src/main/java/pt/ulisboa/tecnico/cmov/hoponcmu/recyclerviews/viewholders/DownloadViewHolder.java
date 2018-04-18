@@ -23,19 +23,21 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.AnswerByUserAndQuizLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuestionsByQuizIdLoader;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizByIdLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.UserQuizByIdAndUserLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuizRepository;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserQuizRepository;
 
 public class DownloadViewHolder extends RecyclerView.ViewHolder
         implements LoaderManager.LoaderCallbacks {
 
     public static final String ARG_QUESTIONS = "questions";
     public static final String ARG_QUIZ = "quiz";
+    public static final String ARG_USER_QUIZ = "user_quiz";
     private static final int LOADER_QUESTIONS = 1;
     private static final int LOADER_ANSWERS = 2;
     private static final int LOADER_QUIZ = 3;
@@ -43,18 +45,19 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
     private TextView monumentName;
     private TextView name;
     private Quiz quiz;
+    private UserQuiz userQuiz;
     private Context mContext;
     private DownloadViewHolder mLoader = this;
     private User user;
     private List<Question> questions;
-    private QuizRepository quizRepository;
+    private UserQuizRepository userQuizRepository;
 
     public DownloadViewHolder(final Context context, View itemView, final LoaderManager loader) {
         super(itemView);
         mContext = context;
         loaderManager = loader;
 
-        quizRepository = new QuizRepository(context);
+        userQuizRepository = new UserQuizRepository(context);
 
         SharedPreferences pref =
                 PreferenceManager.getDefaultSharedPreferences(context);
@@ -94,7 +97,7 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                 return new AnswerByUserAndQuizLoader(
                         mContext, user.getUsername(), quiz.getId());
             case LOADER_QUIZ:
-                return new QuizByIdLoader(mContext, quiz.getId());
+                return new UserQuizByIdAndUserLoader(mContext, quiz.getId(), user.getUsername());
             default:
                 throw new IllegalArgumentException();
         }
@@ -117,17 +120,18 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                         }
                     }
                 }
-                if (quiz.getOpenTime() == null) {
-                    quiz.setOpenTime(Calendar.getInstance().getTime());
-                    quizRepository.updateQuiz(quiz);
+                if (userQuiz.getOpenTime() == null) {
+                    userQuiz.setOpenTime(Calendar.getInstance().getTime());
+                    userQuizRepository.updateUserQuiz(userQuiz);
                 }
                 Intent intent = new Intent(mContext, QuizActivity.class);
                 intent.putExtra(ARG_QUESTIONS, (Serializable) questions);
                 intent.putExtra(ARG_QUIZ, quiz);
+                intent.putExtra(ARG_USER_QUIZ, userQuiz);
                 mContext.startActivity(intent);
                 break;
             case LOADER_QUIZ:
-                quiz = (Quiz) data;
+                userQuiz = (UserQuiz) data;
                 loaderManager.restartLoader(LOADER_QUESTIONS, null, this);
                 break;
         }

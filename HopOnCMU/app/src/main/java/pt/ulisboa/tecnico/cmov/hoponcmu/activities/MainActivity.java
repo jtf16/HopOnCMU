@@ -370,8 +370,9 @@ public class MainActivity extends ManagerActivity implements
             Log.d("HelloResponse", ((HelloResponse) response).getMessage());
         } else if (response instanceof DownloadQuizResponse) {
             DownloadQuizResponse downloadQuizResponse = (DownloadQuizResponse) response;
-            transactionRepository.insertQuizAndQuestions(
-                    downloadQuizResponse.getQuiz(), downloadQuizResponse.getQuestions());
+            transactionRepository.insertQuizUserQuizAndQuestions(
+                    downloadQuizResponse.getUsername(), downloadQuizResponse.getQuiz(),
+                    downloadQuizResponse.getQuestions());
         } else if (response instanceof RankingResponse) {
             RankingResponse rankingResponse = (RankingResponse) response;
             userRepository.insertUser(rankingResponse.getUsers());

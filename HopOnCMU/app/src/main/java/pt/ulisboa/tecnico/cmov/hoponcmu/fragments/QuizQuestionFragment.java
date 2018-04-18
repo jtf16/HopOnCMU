@@ -1,6 +1,5 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,9 +13,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.AnswerOption;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.AnswerRepository;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuizRepository;
 
 public class QuizQuestionFragment extends Fragment
         implements View.OnClickListener {

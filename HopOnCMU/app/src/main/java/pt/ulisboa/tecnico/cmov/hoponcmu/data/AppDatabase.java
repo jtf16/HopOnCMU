@@ -13,14 +13,16 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.daos.QuestionDAO;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.daos.QuizDAO;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.daos.TransactionDAO;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.daos.UserDAO;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.daos.UserQuizDAO;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 
 @Database(version = 1, entities = {User.class, Monument.class, Quiz.class,
-        Question.class, Answer.class})
+        Question.class, Answer.class, UserQuiz.class})
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -57,6 +59,9 @@ public abstract class AppDatabase extends RoomDatabase {
 
     // QuestionDAO is a class annotated with @Dao.
     public abstract QuestionDAO questionDAO();
+
+    // UserQuizDAO is a class annotated with @Dao.
+    public abstract UserQuizDAO userQuizDAO();
 
     // AnswerDAO is a class annotated with @Dao.
     public abstract AnswerDAO answerDAO();

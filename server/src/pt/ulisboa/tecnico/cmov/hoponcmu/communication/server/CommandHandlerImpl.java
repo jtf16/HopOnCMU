@@ -70,7 +70,7 @@ public class CommandHandlerImpl implements CommandHandler {
 	@Override
 	public Response handle(DownloadQuizCommand dqc) {
 		List<Quiz> quizzes = ServerArgs.getQuizzes().get(dqc.getMonument().getId());
-		if (quizzes != null && quizzes.size() > 0) {
+		if (ServerArgs.isCorrectSessionID(dqc.getUsername(), dqc.getSessionID()) && quizzes != null && quizzes.size() > 0) {
 			// TODO: if needed select the quiz by id instead of always 0
 			Quiz quiz = quizzes.get(0);
 			//List<Question> questions = ServerArgs.getQuestions().get(quiz.getId());
@@ -82,7 +82,7 @@ public class CommandHandlerImpl implements CommandHandler {
 				}
 			}
 			if (questions.size() > 0) {
-				return new DownloadQuizResponse(quiz, questions.toArray(new Question[questions.size()]));
+				return new DownloadQuizResponse(dqc.getUsername(), quiz, questions.toArray(new Question[questions.size()]));
 			}
 		}
 		return new HelloResponse("Hi from Server!");
@@ -97,10 +97,10 @@ public class CommandHandlerImpl implements CommandHandler {
 	@Override
 	public Response handle(SubmitQuizCommand sqc) {
 		List<Question> serverQuestions = ServerArgs.getQuestions().get(sqc.getQuestions().get(0).getQuizID());
-		User user = ServerArgs.getUser(sqc.getUsername());
+		User user = ServerArgs.getUser(sqc.getUserQuiz().getUsername());
 		if (serverQuestions != null && user != null && 
-			ServerArgs.isCorrectSessionID(sqc.getUsername(), sqc.getSessionID())) {
-			if (ServerArgs.isUserInQuizAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername())) {
+			ServerArgs.isCorrectSessionID(sqc.getUserQuiz().getUsername(), sqc.getSessionID())) {
+			if (ServerArgs.isUserInQuizAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUserQuiz().getUsername())) {
 				return new HelloResponse("Already answered this quiz");
 			}
 			int i = 0;
@@ -112,12 +112,12 @@ public class CommandHandlerImpl implements CommandHandler {
 				i++;
 			}
 			user.setScore(user.getScore() + rightAnswers);
-			user.setTime(user.getTime() + (sqc.getQuiz().getSubmitTime().getTime() - sqc.getQuiz().getOpenTime().getTime()));
-			sqc.getQuiz().setScore(rightAnswers);
-			ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUsername());
+			user.setTime(user.getTime() + (sqc.getUserQuiz().getSubmitTime().getTime() - sqc.getUserQuiz().getOpenTime().getTime()));
+			sqc.getUserQuiz().setScore(rightAnswers);
+			ServerArgs.addUsersAnswers(sqc.getQuestions().get(0).getQuizID(), sqc.getUserQuiz().getUsername());
 			ServerArgs.sortUsers();
-			System.out.println("Received: " + sqc.getQuiz().getScore());
-			return new SubmitQuizResponse(sqc.getQuiz());
+			System.out.println("Received: " + sqc.getUserQuiz().getScore());
+			return new SubmitQuizResponse(sqc.getUserQuiz());
 		}
 		return new HelloResponse("Hi from Server!");
 	}

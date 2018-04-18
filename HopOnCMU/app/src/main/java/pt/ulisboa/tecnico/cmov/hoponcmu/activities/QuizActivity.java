@@ -29,30 +29,33 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SubmitQuizRespons
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.QuizRepository;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserQuizRepository;
 
 public class QuizActivity extends ManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
     public static final String ARG_QUIZ = "quiz";
+    public static final String ARG_USER_QUIZ = "user_quiz";
     public static User user;
     Toolbar mToolbar;
     List<TextView> pagination = new ArrayList<TextView>();
     private List<Question> questions;
     private Quiz quiz;
+    private UserQuiz userQuiz;
     private int totalQuestions;
     private ViewPager mPager;
     private PagerAdapter mPagerAdapter;
     private SharedPreferences pref;
     private Chronometer chronometer;
-    private QuizRepository quizRepository;
+    private UserQuizRepository userQuizRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        quizRepository = new QuizRepository(this);
+        userQuizRepository = new UserQuizRepository(this);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
@@ -61,6 +64,7 @@ public class QuizActivity extends ManagerActivity {
 
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         quiz = (Quiz) getIntent().getSerializableExtra(ARG_QUIZ);
+        userQuiz = (UserQuiz) getIntent().getSerializableExtra(ARG_USER_QUIZ);
 
         setmToolbar();
         setClock();
@@ -116,24 +120,23 @@ public class QuizActivity extends ManagerActivity {
         Button submit = (Button) findViewById(R.id.submit_btn);
         chronometer = (Chronometer) findViewById(R.id.clock);
 
-        long openTime = quiz.getOpenTime().getTime();
-        long submitTime = (quiz.getSubmitTime() != null) ?
-                quiz.getSubmitTime().getTime() : Calendar.getInstance().getTime().getTime();
+        long openTime = userQuiz.getOpenTime().getTime();
+        long submitTime = (userQuiz.getSubmitTime() != null) ?
+                userQuiz.getSubmitTime().getTime() : Calendar.getInstance().getTime().getTime();
         long startingTime = submitTime - openTime;
 
         chronometer.setBase(SystemClock.elapsedRealtime() - startingTime);
 
-        if (quiz.getSubmitTime() == null) {
+        if (userQuiz.getSubmitTime() == null) {
             chronometer.start();
         }
         // Offline Mode
-        else if (quiz.getScore() >= 0) {
+        else if (userQuiz.getScore() >= 0) {
             chronometer.setVisibility(View.GONE);
-            score.setText(getResources().getText(R.string.score) + ": " + quiz.getScore());
+            score.setText(getResources().getText(R.string.score) + ": " + userQuiz.getScore());
             score.setVisibility(View.VISIBLE);
             submit.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             submit.setVisibility(View.GONE);
         }
     }
@@ -151,10 +154,9 @@ public class QuizActivity extends ManagerActivity {
         });
         snackbar.show();
 
-        quiz.setSubmitTime(Calendar.getInstance().getTime());
+        userQuiz.setSubmitTime(Calendar.getInstance().getTime());
         long sessionId = pref.getLong(LoginActivity.SESSION_ID, -1);
-        SubmitQuizCommand sqc = new SubmitQuizCommand(
-                user.getUsername(), sessionId, quiz, questions);
+        SubmitQuizCommand sqc = new SubmitQuizCommand(sessionId, userQuiz, questions);
         new CommunicationTask(this, sqc).execute();
         finish();
     }
@@ -202,7 +204,7 @@ public class QuizActivity extends ManagerActivity {
     public void updateInterface(Response response) {
         if (response instanceof SubmitQuizResponse) {
             SubmitQuizResponse submitQuizResponse = (SubmitQuizResponse) response;
-            quizRepository.updateQuiz(submitQuizResponse.getQuiz());
+            userQuizRepository.updateUserQuiz(submitQuizResponse.getUserQuiz());
         }
     }
 }

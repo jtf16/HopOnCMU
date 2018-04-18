@@ -3,40 +3,41 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import java.util.List;
-
+import pt.ulisboa.tecnico.cmov.hoponcmu.InterestingConfigChanges;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.AppDatabase;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 
-public class QuizByPartMonumentNameLoader extends
-        AsyncTaskLoader<List<Quiz>> {
+public class UserQuizByIdAndUserLoader extends
+        AsyncTaskLoader<UserQuiz> {
 
-    private List<Quiz> mData;
-
+    final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
+    private UserQuiz mData;
     private AppDatabase appDatabase;
 
-    private String query;
+    private long id;
+    private String username;
 
-    public QuizByPartMonumentNameLoader(Context context, String query) {
+    public UserQuizByIdAndUserLoader(Context context, long id, String username) {
         super(context);
         appDatabase = AppDatabase.getAppDatabase(context);
-        this.query = query;
+        this.id = id;
+        this.username = username;
     }
 
     @Override
-    public List<Quiz> loadInBackground() {
-        // Retrieve all known quizzes based on query.
-        return appDatabase.transactionDAO().loadQuizzesByMonumentName(query);
+    public UserQuiz loadInBackground() {
+        // Retrieve all known users based on query.
+        return appDatabase.userQuizDAO().loadUserQuizByIdAndUsername(id, username);
     }
 
     @Override
-    public void deliverResult(List<Quiz> data) {
+    public void deliverResult(UserQuiz data) {
         if (isReset()) {
             if (data != null) {
                 onReleaseResources(data);
             }
         }
-        List<Quiz> oldData = mData;
+        UserQuiz oldData = mData;
         mData = data;
 
         if (isStarted()) {
@@ -54,7 +55,9 @@ public class QuizByPartMonumentNameLoader extends
             deliverResult(mData);
         }
 
-        if (takeContentChanged() || mData == null) {
+        boolean configChange = mLastConfig.applyNewConfig(getContext().getResources());
+
+        if (takeContentChanged() || mData == null || configChange) {
             forceLoad();
         }
     }
@@ -65,7 +68,7 @@ public class QuizByPartMonumentNameLoader extends
     }
 
     @Override
-    public void onCanceled(List<Quiz> data) {
+    public void onCanceled(UserQuiz data) {
         super.onCanceled(data);
 
         onReleaseResources(data);
@@ -83,7 +86,7 @@ public class QuizByPartMonumentNameLoader extends
         }
     }
 
-    protected void onReleaseResources(List<Quiz> data) {
+    protected void onReleaseResources(UserQuiz data) {
 
     }
 }

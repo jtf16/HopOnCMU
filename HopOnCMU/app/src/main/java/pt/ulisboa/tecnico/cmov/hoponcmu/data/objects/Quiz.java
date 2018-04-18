@@ -8,7 +8,6 @@ import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
@@ -37,18 +36,6 @@ public class Quiz implements Serializable {
      * The name of the name column.
      */
     public static final String COLUMN_NAME = "name";
-    /**
-     * The name of the open time column.
-     */
-    public static final String COLUMN_OPEN_TIME = "open_time";
-    /**
-     * The name of the submit time column.
-     */
-    public static final String COLUMN_SUBMIT_TIME = "submit_time";
-    /**
-     * The name of the score column.
-     */
-    public static final String COLUMN_SCORE = "score";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the quiz.
@@ -62,15 +49,6 @@ public class Quiz implements Serializable {
 
     @ColumnInfo(name = COLUMN_NAME)
     private String name;
-
-    @ColumnInfo(name = COLUMN_OPEN_TIME)
-    private Date openTime;
-
-    @ColumnInfo(name = COLUMN_SUBMIT_TIME)
-    private Date submitTime;
-
-    @ColumnInfo(name = COLUMN_SCORE)
-    private int score = -1;
 
     public Quiz() {
     }
@@ -102,29 +80,5 @@ public class Quiz implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Date getOpenTime() {
-        return openTime;
-    }
-
-    public void setOpenTime(Date openTime) {
-        this.openTime = openTime;
-    }
-
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 }

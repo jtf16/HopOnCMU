@@ -1,6 +1,8 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizByPartMonumentNameLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizByPartMonumentNameAndUsernameLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.DownloadAdapter;
 
 public class DownloadsFragment extends ManagerFragment
@@ -27,6 +33,7 @@ public class DownloadsFragment extends ManagerFragment
     private LinearLayoutManager mLayoutManager;
 
     private String search = "";
+    private User user;
 
     public DownloadsFragment() {
         // Required empty public constructor
@@ -42,6 +49,13 @@ public class DownloadsFragment extends ManagerFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences pref =
+                PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor edit = pref.edit();
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        user = gson.fromJson(json, User.class);
         if (getArguments() != null) {
 
         }
@@ -82,8 +96,8 @@ public class DownloadsFragment extends ManagerFragment
     public Loader<List<Quiz>> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_QUIZZES:
-                return new QuizByPartMonumentNameLoader(
-                        getActivity(), search);
+                return new QuizByPartMonumentNameAndUsernameLoader(
+                        getActivity(), search, user.getUsername());
             default:
                 throw new IllegalArgumentException();
         }

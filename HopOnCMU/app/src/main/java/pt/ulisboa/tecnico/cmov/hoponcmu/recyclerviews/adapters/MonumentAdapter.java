@@ -36,7 +36,7 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_monument_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new MonumentViewHolder(v);
+        return new MonumentViewHolder(context, v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
