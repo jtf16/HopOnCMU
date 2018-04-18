@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters;
 
 import android.content.Context;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,12 +22,14 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
     private List<Monument> monuments;
     private LinearLayoutManager mLayoutManager;
     private Context context;
+    private LoaderManager mLoader;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MonumentAdapter(Context context, LinearLayoutManager mLayoutManager) {
+    public MonumentAdapter(Context context, LinearLayoutManager mLayoutManager, LoaderManager loader) {
         this.context = context;
         this.mLayoutManager = mLayoutManager;
         this.monuments = new ArrayList<>();
+        this.mLoader = loader;
     }
 
     // Create new views (invoked by the layout manager)
@@ -36,7 +39,7 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_monument_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new MonumentViewHolder(context, v);
+        return new MonumentViewHolder(context, v, mLoader);
     }
 
     // Replace the contents of a view (invoked by the layout manager)

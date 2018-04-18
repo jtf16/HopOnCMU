@@ -70,7 +70,7 @@ public class MonumentsFragment extends ManagerFragment
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         // specify an adapter (see also next example)
-        monumentAdapter = new MonumentAdapter(getActivity(), mLayoutManager);
+        monumentAdapter = new MonumentAdapter(getActivity(), mLayoutManager, getLoaderManager());
         mRecyclerView.setAdapter(monumentAdapter);
     }
 

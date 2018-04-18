@@ -31,4 +31,7 @@ public abstract class QuizDAO {
 
     @Query("SELECT * FROM " + Quiz.TABLE_NAME + " WHERE " + Quiz.COLUMN_ID + " = :id LIMIT 1")
     public abstract Quiz loadQuizById(long id);
+
+    @Query("SELECT * FROM " + Quiz.TABLE_NAME + " WHERE " + Quiz.COLUMN_MONUMENT_ID + " LIKE :id")
+    public abstract List<Quiz> loadQuizByMonumentId(String id);
 }
