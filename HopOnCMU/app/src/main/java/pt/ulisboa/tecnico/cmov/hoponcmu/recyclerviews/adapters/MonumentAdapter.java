@@ -13,55 +13,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.MonumentViewHolder;
 
 public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
 
     private List<Monument> monuments;
-    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager layoutManager;
     private Context context;
-    private LoaderManager mLoader;
+    private LoaderManager loader;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MonumentAdapter(Context context, LinearLayoutManager mLayoutManager, LoaderManager loader) {
+    public MonumentAdapter(Context context, LinearLayoutManager layoutManager, LoaderManager loader) {
         this.context = context;
-        this.mLayoutManager = mLayoutManager;
+        this.layoutManager = layoutManager;
         this.monuments = new ArrayList<>();
-        this.mLoader = loader;
+        this.loader = loader;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public MonumentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_monument_item, parent, false);
+                .inflate(R.layout.list_card_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new MonumentViewHolder(context, v, mLoader);
+        return new MonumentViewHolder(context, v, loader);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MonumentViewHolder holder, int position) {
-        // - Get element from clients at this position
-        // - Replace the contents of the view with that element
-        holder.setMonument((ManagerActivity) context, monuments.get(position));
+        holder.setMonument(monuments.get(position));
     }
 
-    /**
-     * Scrolls to the top of the {@link List<Monument>}
-     */
     public void scrollToTop() {
-        mLayoutManager.scrollToPositionWithOffset(0, 0);
+        layoutManager.scrollToPositionWithOffset(0, 0);
     }
 
-    /**
-     * Use this method to update the {@link List<Monument>} to be shown to the user
-     *
-     * @param newMonuments
-     */
     public void setMonuments(List<Monument> newMonuments) {
         MonumentAdapter.MonumentsDiffUtil monumentsDiffUtil =
                 new MonumentAdapter.MonumentsDiffUtil(monuments, newMonuments);
@@ -72,7 +58,6 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
         diffResult.dispatchUpdatesTo(this);
     }
 
-    // Return the size of your monuments list (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return monuments.size();
@@ -82,7 +67,7 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentViewHolder> {
 
         private List<Monument> oldList, newList;
 
-        public MonumentsDiffUtil(List<Monument> oldList, List<Monument> newList) {
+        MonumentsDiffUtil(List<Monument> oldList, List<Monument> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }

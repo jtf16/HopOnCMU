@@ -77,21 +77,24 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, int score, long time) {
+    public User(@NonNull String username) {
+        this.username = username;
+    }
+
+    public User(@NonNull String username, String firstName, String lastName, String email, String password) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.score = score;
-        this.time = time;
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NonNull String username) {
         this.username = username;
     }
 

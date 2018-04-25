@@ -197,6 +197,6 @@
         android:background="@drawable/button_submit"
         android:onClick="submit"
         android:text="@string/quiz_submit_btn"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimaryDark" />
 
 </RelativeLayout>

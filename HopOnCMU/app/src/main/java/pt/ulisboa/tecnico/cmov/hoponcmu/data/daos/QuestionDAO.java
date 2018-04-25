@@ -26,6 +26,13 @@ public abstract class QuestionDAO {
     @Query("SELECT COUNT(*) FROM " + Question.TABLE_NAME)
     public abstract int countQuestions();
 
+    @Query("SELECT COUNT(*) FROM " + Question.TABLE_NAME + " WHERE " + Question.COLUMN_QUIZ_ID +
+            " = :id")
+    public abstract int countQuestionsByQuizId(long id);
+
+    @Query("SELECT COUNT(*) FROM " + Question.TABLE_NAME)
+    public abstract List<Integer> countQuestionsByQuizId();
+
     @Query("SELECT * FROM " + Question.TABLE_NAME + " ORDER BY " + Question.COLUMN_ID + " DESC")
     public abstract List<Question> loadAllQuestions();
 

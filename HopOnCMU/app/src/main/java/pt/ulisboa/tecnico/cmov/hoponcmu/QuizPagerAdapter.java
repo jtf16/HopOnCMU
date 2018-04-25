@@ -13,16 +13,19 @@ public class QuizPagerAdapter extends FragmentStatePagerAdapter {
 
     private int numPages;
     private List<Question> questions;
+    private String username;
 
-    public QuizPagerAdapter(FragmentManager fm, int numPages, List<Question> questions) {
+    public QuizPagerAdapter(FragmentManager fm, int numPages,
+                            List<Question> questions, String username) {
         super(fm);
         this.numPages = numPages;
         this.questions = questions;
+        this.username = username;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return QuizQuestionFragment.newInstance(position, questions.get(position));
+        return QuizQuestionFragment.newInstance(questions.get(position), username);
     }
 
     @Override

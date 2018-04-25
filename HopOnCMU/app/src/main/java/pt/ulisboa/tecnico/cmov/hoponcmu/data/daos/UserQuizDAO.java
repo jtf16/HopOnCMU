@@ -15,7 +15,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 public abstract class UserQuizDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    public abstract long[] insertUserQuizzes(UserQuiz... userQuizzes);
+    public abstract void insertUserQuizzes(UserQuiz... userQuizzes);
 
     @Update
     public abstract void updateUserQuizzes(UserQuiz... userQuizzes);

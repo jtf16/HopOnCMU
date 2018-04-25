@@ -26,7 +26,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
-    public static final String DATABASE_NAME = "Server";
+    public static final String DATABASE_NAME = "HopOnCMUDatabase";
 
     private static AppDatabase INSTANCE;
 

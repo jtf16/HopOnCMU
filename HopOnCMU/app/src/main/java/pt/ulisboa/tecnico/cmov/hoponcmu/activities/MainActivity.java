@@ -33,12 +33,10 @@ import com.google.gson.Gson;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.DownloadQuizResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.TransactionRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
@@ -53,21 +51,25 @@ public class MainActivity extends ManagerActivity implements
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private static final String REQUESTING_LOCATION_UPDATES_KEY = "tracking_location";
     private static Location mLastLocation = null;
-    public User mUser;
-    DrawerLayout mDrawerLayout;
-    Toolbar mToolbar;
-    NavigationView mNavigationView;
-    SearchEditText mSearch;
+
+    public User user;
+
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
+    NavigationView navigationView;
+    SearchEditText searchEditText;
+
     boolean areMenuOptionsVisible = true;
     boolean isBackArrowVisible = false;
+
     ManagerFragment fragment;
     // Location classes
     private boolean mRequestingLocationUpdates = true;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
-    private TransactionRepository transactionRepository;
+
     private UserRepository userRepository;
-    private SharedPreferences.Editor edit;
+    private SharedPreferences pref;
 
     public static Location getmLastLocation() {
         return mLastLocation;
@@ -78,14 +80,11 @@ public class MainActivity extends ManagerActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences pref =
-                PreferenceManager.getDefaultSharedPreferences(this);
-        edit = pref.edit();
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
         String json = pref.getString(LoginActivity.USER, "");
-        mUser = gson.fromJson(json, User.class);
+        user = gson.fromJson(json, User.class);
 
-        transactionRepository = new TransactionRepository(this);
         userRepository = new UserRepository(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(
@@ -93,9 +92,9 @@ public class MainActivity extends ManagerActivity implements
 
         fragment = MonumentsFragment.newInstance();
 
-        setmSearch();
+        setSearchEditText();
 
-        setmDrawerLayout();
+        setDrawerLayout();
 
         setmLocationCallback();
 
@@ -145,20 +144,20 @@ public class MainActivity extends ManagerActivity implements
             case android.R.id.home:
                 if (isBackArrowVisible) {
                     isBackArrowVisible = false;
-                    mToolbar.setNavigationIcon(R.drawable.ic_menu_white);
-                    setSupportActionBar(mToolbar);
-                    mSearch.setVisibility(View.GONE);
+                    toolbar.setNavigationIcon(R.drawable.ic_menu_white);
+                    setSupportActionBar(toolbar);
+                    searchEditText.setVisibility(View.GONE);
                 } else {
-                    mDrawerLayout.openDrawer(GravityCompat.START);
+                    drawerLayout.openDrawer(GravityCompat.START);
                 }
                 break;
             case R.id.action_search:
                 areMenuOptionsVisible = false;
                 isBackArrowVisible = true;
-                mSearch.setText("");
-                mSearch.setVisibility(View.VISIBLE);
-                mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
-                setSupportActionBar(mToolbar);
+                searchEditText.setText("");
+                searchEditText.setVisibility(View.VISIBLE);
+                toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
+                setSupportActionBar(toolbar);
                 break;
             case R.id.action_share:
                 // TODO: When share button clicked do something
@@ -187,9 +186,9 @@ public class MainActivity extends ManagerActivity implements
         }
     }
 
-    private void setmSearch() {
-        mSearch = (SearchEditText) findViewById(R.id.search_bar);
-        mSearch.addTextChangedListener(new TextWatcher() {
+    private void setSearchEditText() {
+        searchEditText = findViewById(R.id.search_bar);
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
             }
@@ -203,12 +202,12 @@ public class MainActivity extends ManagerActivity implements
                 fragment.refreshSearch(s.toString());
             }
         });
-        mSearch.setDrawableClickListener(new SearchEditText.DrawableClickListener() {
+        searchEditText.setDrawableClickListener(new SearchEditText.DrawableClickListener() {
 
             public void onClick(DrawablePosition target) {
                 switch (target) {
                     case RIGHT:
-                        mSearch.setText("");
+                        searchEditText.setText("");
                         break;
                     default:
                         break;
@@ -217,28 +216,28 @@ public class MainActivity extends ManagerActivity implements
         });
     }
 
-    private void setmDrawerLayout() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        setmToolbar();
-        setmNavigationView();
+    private void setDrawerLayout() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        setToolbar();
+        setNavigationView();
     }
 
-    private void setmToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(mToolbar);
+    private void setToolbar() {
+        toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
     }
 
-    private void setmNavigationView() {
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        setmNavigationHeader();
-        mNavigationView.setNavigationItemSelectedListener(
+    private void setNavigationView() {
+        navigationView = findViewById(R.id.nav_view);
+        setNavigationHeader();
+        navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
+                        drawerLayout.closeDrawers();
 
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
@@ -247,17 +246,18 @@ public class MainActivity extends ManagerActivity implements
                 });
     }
 
-    private void setmNavigationHeader() {
-        View headerView = mNavigationView.getHeaderView(0);
-        TextView navFullName = (TextView) headerView.findViewById(R.id.full_name);
-        TextView navEmail = (TextView) headerView.findViewById(R.id.email);
-        if (mUser.getLastName() == null) {
-            navFullName.setText(mUser.getFirstName());
+    private void setNavigationHeader() {
+        View headerView = navigationView.getHeaderView(0);
+        TextView navFullName = headerView.findViewById(R.id.full_name);
+        TextView navEmail = headerView.findViewById(R.id.email);
+        if (user.getLastName() == null) {
+            navFullName.setText(user.getFirstName());
         } else {
-            navFullName.setText(mUser.getFirstName() + " " + mUser.getLastName());
+            navFullName.setText(getString(R.string.user_full_name,
+                    user.getFirstName(), user.getLastName()));
         }
-        if (mUser.getEmail() != null) {
-            navEmail.setText(mUser.getEmail());
+        if (user.getEmail() != null) {
+            navEmail.setText(getString(R.string.user_email, user.getEmail()));
             navEmail.setVisibility(View.VISIBLE);
         } else {
             navEmail.setVisibility(View.GONE);
@@ -280,19 +280,19 @@ public class MainActivity extends ManagerActivity implements
         Intent intent;
         switch (menuItem.getItemId()) {
             case R.id.nav_monuments:
-                mToolbar.setTitle(this.getString(R.string.monuments));
-                mSearch.setHint(R.string.monument_search_hint);
+                toolbar.setTitle(this.getString(R.string.monuments));
+                searchEditText.setHint(R.string.monument_search_hint);
                 fragmentClass = MonumentsFragment.class;
                 break;
             case R.id.nav_rankings:
                 new CommunicationTask(this, new RankingCommand()).execute();
-                mToolbar.setTitle(this.getString(R.string.ranking));
-                mSearch.setHint(R.string.username_search_hint);
+                toolbar.setTitle(this.getString(R.string.ranking));
+                searchEditText.setHint(R.string.username_search_hint);
                 fragmentClass = RankingFragment.class;
                 break;
             case R.id.nav_downloads:
-                mToolbar.setTitle(this.getString(R.string.downloads));
-                mSearch.setHint(R.string.monument_search_hint);
+                toolbar.setTitle(this.getString(R.string.downloads));
+                searchEditText.setHint(R.string.monument_search_hint);
                 fragmentClass = DownloadsFragment.class;
                 break;
             case R.id.nav_settings:
@@ -300,6 +300,7 @@ public class MainActivity extends ManagerActivity implements
                 startActivity(intent);
                 return true;
             case R.id.nav_logout:
+                SharedPreferences.Editor edit = pref.edit();
                 edit.remove(LoginActivity.USER);
                 edit.apply();
                 intent = new Intent(this, LoginActivity.class);
@@ -307,8 +308,8 @@ public class MainActivity extends ManagerActivity implements
                 finish();
                 return true;
             default:
-                mToolbar.setTitle(this.getString(R.string.monuments));
-                mSearch.setHint(R.string.monument_search_hint);
+                toolbar.setTitle(this.getString(R.string.monuments));
+                searchEditText.setHint(R.string.monument_search_hint);
                 fragmentClass = MonumentsFragment.class;
         }
 
@@ -350,9 +351,9 @@ public class MainActivity extends ManagerActivity implements
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            mToolbar.setTitle(this.getString(R.string.monuments));
-            setSupportActionBar(mToolbar);
-            mSearch.setHint(R.string.monument_search_hint);
+            toolbar.setTitle(this.getString(R.string.monuments));
+            setSupportActionBar(toolbar);
+            searchEditText.setHint(R.string.monument_search_hint);
             getSupportFragmentManager().beginTransaction().replace(
                     R.id.flContent, fragment).commit();
             return;
@@ -368,11 +369,6 @@ public class MainActivity extends ManagerActivity implements
     public void updateInterface(Response response) {
         if (response instanceof HelloResponse) {
             Log.d("HelloResponse", ((HelloResponse) response).getMessage());
-        } else if (response instanceof DownloadQuizResponse) {
-            DownloadQuizResponse downloadQuizResponse = (DownloadQuizResponse) response;
-            transactionRepository.insertQuizUserQuizAndQuestions(
-                    downloadQuizResponse.getUsername(), downloadQuizResponse.getQuiz(),
-                    downloadQuizResponse.getQuestions());
         } else if (response instanceof RankingResponse) {
             RankingResponse rankingResponse = (RankingResponse) response;
             userRepository.insertUser(rankingResponse.getUsers());

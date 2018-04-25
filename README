@@ -8,8 +8,7 @@
 TODO
 
 ### How to run the server:
-- Open a terminal in the the project directory and run the following three commands:
-  - `cd server/bin`
-  - `javac -d ./ ../src/pt/ulisboa/tecnico/cmov/hoponcmu/**/**/*.java`
-  - `java pt.ulisboa.tecnico.cmov.hoponcmu.communication.server.Server`
+- Open a terminal in the the project directory and run the following commands:
+  - `make`
+  - `make run`
   

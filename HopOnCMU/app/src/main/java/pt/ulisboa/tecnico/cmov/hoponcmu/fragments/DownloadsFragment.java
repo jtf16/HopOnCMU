@@ -24,13 +24,13 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.DownloadAdapter;
 
 public class DownloadsFragment extends ManagerFragment
-        implements LoaderManager.LoaderCallbacks<List<Quiz>> {
+        implements LoaderManager.LoaderCallbacks {
 
     private static final int LOADER_QUIZZES = 1;
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView recyclerView;
     private DownloadAdapter downloadAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager layoutManager;
 
     private String search = "";
     private User user;
@@ -76,14 +76,14 @@ public class DownloadsFragment extends ManagerFragment
     }
 
     private void setRecyclerView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.downloads_list);
+        recyclerView = view.findViewById(R.id.downloads_list);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
-        downloadAdapter = new DownloadAdapter(getActivity(), mLayoutManager, getLoaderManager());
-        mRecyclerView.setAdapter(downloadAdapter);
+        downloadAdapter = new DownloadAdapter(getActivity(), layoutManager, getLoaderManager());
+        recyclerView.setAdapter(downloadAdapter);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class DownloadsFragment extends ManagerFragment
     }
 
     @Override
-    public Loader<List<Quiz>> onCreateLoader(int id, Bundle args) {
+    public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_QUIZZES:
                 return new QuizByPartMonumentNameAndUsernameLoader(
@@ -104,16 +104,16 @@ public class DownloadsFragment extends ManagerFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Quiz>> loader, List<Quiz> data) {
+    public void onLoadFinished(Loader loader, Object data) {
         switch (loader.getId()) {
             case LOADER_QUIZZES:
-                downloadAdapter.setQuizzes(data);
+                downloadAdapter.setQuizzes((List<Quiz>) data);
                 break;
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Quiz>> loader) {
+    public void onLoaderReset(Loader loader) {
         switch (loader.getId()) {
             case LOADER_QUIZZES:
                 downloadAdapter.setQuizzes(new ArrayList<Quiz>());

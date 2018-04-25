@@ -3,36 +3,42 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
+import java.util.List;
+
+import pt.ulisboa.tecnico.cmov.hoponcmu.InterestingConfigChanges;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.AppDatabase;
 
-public class QuizByMonumentIdLoader extends AsyncTaskLoader {
+public class QuizIDsByMonumentAndUserLoader extends
+        AsyncTaskLoader<List<Long>> {
 
-    private Object mData;
-
+    final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
+    private List<Long> mData;
     private AppDatabase appDatabase;
 
     private String monumentID;
+    private String username;
 
-    public QuizByMonumentIdLoader(Context context, String monumentID) {
+    public QuizIDsByMonumentAndUserLoader(Context context, String monumentID, String username) {
         super(context);
         appDatabase = AppDatabase.getAppDatabase(context);
         this.monumentID = monumentID;
+        this.username = username;
     }
 
     @Override
-    public Object loadInBackground() {
-        // Retrieve all known quizzes based on query.
-        return appDatabase.quizDAO().loadQuizByMonumentId(monumentID);
+    public List<Long> loadInBackground() {
+        // Retrieve all known users based on query.
+        return appDatabase.transactionDAO().loadUserQuizzesByMonumentIdAndUser(monumentID, username);
     }
 
     @Override
-    public void deliverResult(Object data) {
+    public void deliverResult(List<Long> data) {
         if (isReset()) {
             if (data != null) {
                 onReleaseResources(data);
             }
         }
-        Object oldData = mData;
+        List<Long> oldData = mData;
         mData = data;
 
         if (isStarted()) {
@@ -50,7 +56,9 @@ public class QuizByMonumentIdLoader extends AsyncTaskLoader {
             deliverResult(mData);
         }
 
-        if (takeContentChanged() || mData == null) {
+        boolean configChange = mLastConfig.applyNewConfig(getContext().getResources());
+
+        if (takeContentChanged() || mData == null || configChange) {
             forceLoad();
         }
     }
@@ -61,7 +69,7 @@ public class QuizByMonumentIdLoader extends AsyncTaskLoader {
     }
 
     @Override
-    public void onCanceled(Object data) {
+    public void onCanceled(List<Long> data) {
         super.onCanceled(data);
 
         onReleaseResources(data);
@@ -79,7 +87,7 @@ public class QuizByMonumentIdLoader extends AsyncTaskLoader {
         }
     }
 
-    protected void onReleaseResources(Object data) {
+    protected void onReleaseResources(List<Long> data) {
 
     }
 }

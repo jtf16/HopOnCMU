@@ -38,32 +38,42 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
     public static final String ARG_QUESTIONS = "questions";
     public static final String ARG_QUIZ = "quiz";
     public static final String ARG_USER_QUIZ = "user_quiz";
+
     private static final int LOADER_QUESTIONS = 1;
     private static final int LOADER_ANSWERS = 2;
     private static final int LOADER_QUIZ = 3;
-    LoaderManager loaderManager;
-    private TextView monumentName;
-    private TextView name;
+
     private Quiz quiz;
     private UserQuiz userQuiz;
-    private Context mContext;
-    private DownloadViewHolder mLoader = this;
     private User user;
+
+    private Context context;
+
+    private LoaderManager loaderManager;
+
+    private TextView monumentNameView;
+    private TextView quizNameView;
+
+    private SharedPreferences pref;
+
+    private DownloadViewHolder mLoader = this;
+
     private List<Question> questions;
+
     private UserQuizRepository userQuizRepository;
 
     public DownloadViewHolder(final Context context, View itemView, final LoaderManager loader) {
         super(itemView);
-        mContext = context;
+        this.context = context;
         loaderManager = loader;
 
-        userQuizRepository = new UserQuizRepository(context);
+        getSharedPreferences(context);
 
-        SharedPreferences pref =
-                PreferenceManager.getDefaultSharedPreferences(context);
-        Gson gson = new Gson();
-        String json = pref.getString(LoginActivity.USER, "");
-        user = gson.fromJson(json, User.class);
+        monumentNameView = itemView.findViewById(R.id.top_string);
+        quizNameView = itemView.findViewById(R.id.bottom_string);
+        itemView.findViewById(R.id.right_image).setVisibility(View.GONE);
+
+        userQuizRepository = new UserQuizRepository(context);
 
         // Define click listener for the ViewHolder's View.
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,29 +85,34 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                 loader.restartLoader(LOADER_QUIZ, null, mLoader);
             }
         });
-        monumentName = itemView.findViewById(R.id.monument_name);
-        name = itemView.findViewById(R.id.download_name);
+    }
+
+    private void getSharedPreferences(Context context) {
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        user = gson.fromJson(json, User.class);
     }
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
-        name.setText(quiz.getName());
+        quizNameView.setText(quiz.getName());
     }
 
     public void setMonumentName(Monument monument) {
-        monumentName.setText(monument.getName());
+        monumentNameView.setText(monument.getName());
     }
 
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_QUESTIONS:
-                return new QuestionsByQuizIdLoader(mContext, quiz.getId());
+                return new QuestionsByQuizIdLoader(context, quiz.getId());
             case LOADER_ANSWERS:
                 return new AnswerByUserAndQuizLoader(
-                        mContext, user.getUsername(), quiz.getId());
+                        context, user.getUsername(), quiz.getId());
             case LOADER_QUIZ:
-                return new UserQuizByIdAndUserLoader(mContext, quiz.getId(), user.getUsername());
+                return new UserQuizByIdAndUserLoader(context, quiz.getId(), user.getUsername());
             default:
                 throw new IllegalArgumentException();
         }
@@ -124,11 +139,11 @@ public class DownloadViewHolder extends RecyclerView.ViewHolder
                     userQuiz.setOpenTime(Calendar.getInstance().getTime());
                     userQuizRepository.updateUserQuiz(userQuiz);
                 }
-                Intent intent = new Intent(mContext, QuizActivity.class);
+                Intent intent = new Intent(context, QuizActivity.class);
                 intent.putExtra(ARG_QUESTIONS, (Serializable) questions);
                 intent.putExtra(ARG_QUIZ, quiz);
                 intent.putExtra(ARG_USER_QUIZ, userQuiz);
-                mContext.startActivity(intent);
+                context.startActivity(intent);
                 break;
             case LOADER_QUIZ:
                 userQuiz = (UserQuiz) data;

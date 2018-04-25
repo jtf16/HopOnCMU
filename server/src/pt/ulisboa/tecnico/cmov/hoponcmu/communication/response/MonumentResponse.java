@@ -1,8 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.communication.response;
 
-import java.util.HashMap;
-
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 
 public class MonumentResponse implements Response {
 

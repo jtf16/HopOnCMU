@@ -6,44 +6,53 @@
     card_view:cardUseCompatPadding="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/monument"
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/monument_image"
+            android:id="@+id/left_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:src="@mipmap/icon_launcher_round" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/monument_name"
+                android:id="@+id/top_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="@string/sample_monument_name"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/monument_distance"
+                android:id="@+id/bottom_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="@string/sample_monument_distance"
-                android:textSize="16sp" />
+                android:text="@string/sample_quiz_name"
+                android:textSize="15sp" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/right_image"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_download_primary_color" />
 
     </LinearLayout>
 

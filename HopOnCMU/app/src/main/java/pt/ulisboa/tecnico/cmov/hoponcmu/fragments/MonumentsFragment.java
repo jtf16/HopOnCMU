@@ -19,14 +19,14 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.MonumentAdapter;
 
 public class MonumentsFragment extends ManagerFragment
-        implements LoaderManager.LoaderCallbacks<List<Monument>> {
+        implements LoaderManager.LoaderCallbacks {
 
     private static final int LOADER_MONUMENTS_SEARCH = 1;
     private static final int LOADER_MONUMENTS_LOCATION = 2;
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView recyclerView;
     private MonumentAdapter monumentAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager layoutManager;
 
     private String search = "";
 
@@ -64,18 +64,18 @@ public class MonumentsFragment extends ManagerFragment
     }
 
     private void setRecyclerView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.monuments_list);
+        recyclerView = view.findViewById(R.id.monuments_list);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
-        monumentAdapter = new MonumentAdapter(getActivity(), mLayoutManager, getLoaderManager());
-        mRecyclerView.setAdapter(monumentAdapter);
+        monumentAdapter = new MonumentAdapter(getActivity(), layoutManager, getLoaderManager());
+        recyclerView.setAdapter(monumentAdapter);
     }
 
     @Override
-    public Loader<List<Monument>> onCreateLoader(int id, Bundle args) {
+    public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_MONUMENTS_SEARCH:
             case LOADER_MONUMENTS_LOCATION:
@@ -87,18 +87,18 @@ public class MonumentsFragment extends ManagerFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Monument>> loader, List<Monument> data) {
+    public void onLoadFinished(Loader loader, Object data) {
         switch (loader.getId()) {
             case LOADER_MONUMENTS_SEARCH:
                 monumentAdapter.scrollToTop();
             case LOADER_MONUMENTS_LOCATION:
-                monumentAdapter.setMonuments(data);
+                monumentAdapter.setMonuments((List<Monument>) data);
                 break;
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<Monument>> loader) {
+    public void onLoaderReset(Loader loader) {
         switch (loader.getId()) {
             case LOADER_MONUMENTS_SEARCH:
             case LOADER_MONUMENTS_LOCATION:

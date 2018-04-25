@@ -21,57 +21,45 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.DownloadViewHolder;
 
 public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder>
-        implements LoaderManager.LoaderCallbacks<Monument> {
+        implements LoaderManager.LoaderCallbacks {
 
     public static final String ARG_QUIZ = "quiz";
+    private static final int LOADER_MONUMENT = 1;
     private List<Quiz> quizzes;
-    private LinearLayoutManager mLayoutManager;
-    private Context mContext;
-    private LoaderManager mLoader;
+    private LinearLayoutManager layoutManager;
+    private Context context;
+    private LoaderManager loader;
     private DownloadViewHolder downloadViewHolder;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public DownloadAdapter(Context context, LinearLayoutManager mLayoutManager, LoaderManager loader) {
-        this.mLayoutManager = mLayoutManager;
+    public DownloadAdapter(Context context, LinearLayoutManager layoutManager, LoaderManager loader) {
+        this.layoutManager = layoutManager;
         this.quizzes = new ArrayList<>();
-        this.mContext = context;
-        this.mLoader = loader;
+        this.context = context;
+        this.loader = loader;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public DownloadViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_downloads_item, parent, false);
+                .inflate(R.layout.list_card_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new DownloadViewHolder(mContext, v, mLoader);
+        return new DownloadViewHolder(context, v, loader);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(DownloadViewHolder holder, int position) {
-        // - Get element from clients at this position
-        // - Replace the contents of the view with that element
         downloadViewHolder = holder;
         Bundle args = new Bundle();
         args.putSerializable(ARG_QUIZ, quizzes.get(position));
-        mLoader.restartLoader(0, args, this);
+        loader.restartLoader(LOADER_MONUMENT, args, this);
         holder.setQuiz(quizzes.get(position));
     }
 
-    /**
-     * Scrolls to the top of the {@link List<Quiz>}
-     */
     public void scrollToTop() {
-        mLayoutManager.scrollToPositionWithOffset(0, 0);
+        layoutManager.scrollToPositionWithOffset(0, 0);
     }
 
-    /**
-     * Use this method to update the {@link List<Quiz>} to be shown to the user
-     *
-     * @param newQuizzes
-     */
     public void setQuizzes(List<Quiz> newQuizzes) {
         DownloadAdapter.DownloadsDiffUtil quizzesDiffUtil =
                 new DownloadAdapter.DownloadsDiffUtil(quizzes, newQuizzes);
@@ -82,25 +70,33 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder>
         diffResult.dispatchUpdatesTo(this);
     }
 
-    // Return the size of your quizzes list (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return quizzes.size();
     }
 
     @Override
-    public Loader<Monument> onCreateLoader(int id, Bundle args) {
-        Quiz quiz = (Quiz) args.getSerializable(ARG_QUIZ);
-        return new MonumentByIDLoader(mContext, quiz.getMonumentID());
+    public Loader onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_MONUMENT:
+                Quiz quiz = (Quiz) args.getSerializable(ARG_QUIZ);
+                return new MonumentByIDLoader(context, quiz.getMonumentID());
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 
     @Override
-    public void onLoadFinished(Loader<Monument> loader, Monument data) {
-        downloadViewHolder.setMonumentName(data);
+    public void onLoadFinished(Loader loader, Object data) {
+        switch (loader.getId()) {
+            case LOADER_MONUMENT:
+                downloadViewHolder.setMonumentName((Monument) data);
+                break;
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<Monument> loader) {
+    public void onLoaderReset(Loader loader) {
 
     }
 
@@ -108,7 +104,7 @@ public class DownloadAdapter extends RecyclerView.Adapter<DownloadViewHolder>
 
         private List<Quiz> oldList, newList;
 
-        public DownloadsDiffUtil(List<Quiz> oldList, List<Quiz> newList) {
+        DownloadsDiffUtil(List<Quiz> oldList, List<Quiz> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }

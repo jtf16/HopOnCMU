@@ -15,34 +15,39 @@ import org.apache.commons.lang3.StringUtils;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.LoginCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.LoginResponse;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.PasswordExceptionResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.UsernameExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 
 public class LoginActivity extends ManagerActivity {
 
     public static final String USER = "user";
     public static final String SESSION_ID = "session_id";
-    EditText username;
-    EditText password;
+
+    SharedPreferences pref;
+
     String strUsername;
     String strPassword;
+
+    private EditText username;
+    private EditText password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        username = (EditText) findViewById(R.id.usernameLogin);
-        password = (EditText) findViewById(R.id.passLogin);
+        username = findViewById(R.id.usernameLogin);
+        password = findViewById(R.id.passLogin);
         password.setTypeface(Typeface.DEFAULT);
 
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+
         Intent intent = getIntent();
-        strUsername = intent.getStringExtra("Username");
-        strPassword = intent.getStringExtra("Password");
+        strUsername = intent.getStringExtra(CreateAccountActivity.USERNAME);
+        strPassword = intent.getStringExtra(CreateAccountActivity.PASSWORD);
 
         if (strUsername != null && strPassword != null) {
             username.setText(strUsername);
@@ -66,8 +71,7 @@ public class LoginActivity extends ManagerActivity {
         } else if (StringUtils.isBlank(strPassword)) {
             password.setError("You must enter your password");
         } else {
-            User user = new User();
-            user.setUsername(strUsername);
+            User user = new User(strUsername);
             user.setPassword(strPassword);
             new CommunicationTask(this, new LoginCommand(user)).execute();
         }
@@ -77,31 +81,31 @@ public class LoginActivity extends ManagerActivity {
     public void updateInterface(Response response) {
         if (response instanceof LoginResponse) {
             LoginResponse loginResponse = (LoginResponse) response;
-            if (!loginResponse.getErrors()[1]) {
-                username.setError("No such username!");
-            }
-            if (!loginResponse.getErrors()[2]) {
-                password.setError("Incorrect password");
-            }
-            if (loginResponse.getErrors()[0]) {
-                new CommunicationTask(this, new RankingCommand()).execute();
-                SharedPreferences pref =
-                        PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor edit = pref.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(loginResponse.getUser());
-                edit.putString(USER, json);
-                edit.putLong(SESSION_ID, loginResponse.getSessionId());
-                edit.apply();
 
-                Intent loginIntent = new Intent(this, MainActivity.class);
-                startActivity(loginIntent);
-                finish();
-            }
-        } else if (response instanceof RankingResponse) {
-            UserRepository userRepository = new UserRepository(this);
-            userRepository.insertUser(((RankingResponse) response).getUsers());
+            addObjectToSharedPrefs(USER, loginResponse.getUser());
+            addLongToSharedPrefs(SESSION_ID, loginResponse.getSessionId());
+
+            Intent loginIntent = new Intent(this, MainActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else if (response instanceof PasswordExceptionResponse) {
+            password.setError(((PasswordExceptionResponse) response).getMessage());
+        } else if (response instanceof UsernameExceptionResponse) {
+            username.setError(((UsernameExceptionResponse) response).getMessage());
         }
+    }
 
+    private void addObjectToSharedPrefs(String tag, Object o) {
+        SharedPreferences.Editor edit = pref.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(o);
+        edit.putString(tag, json);
+        edit.apply();
+    }
+
+    private void addLongToSharedPrefs(String tag, Long l) {
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putLong(tag, l);
+        edit.apply();
     }
 }

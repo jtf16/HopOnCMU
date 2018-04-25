@@ -21,13 +21,13 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.UserAdapter;
 
 public class RankingFragment extends ManagerFragment
-        implements LoaderManager.LoaderCallbacks<List<User>> {
+        implements LoaderManager.LoaderCallbacks {
 
     private static final int LOADER_USERS = 1;
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView recyclerView;
     private UserAdapter userAdapter;
-    private LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager layoutManager;
 
     private String search = "";
 
@@ -67,14 +67,14 @@ public class RankingFragment extends ManagerFragment
     }
 
     private void setRecyclerView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.users_list);
+        recyclerView = view.findViewById(R.id.users_list);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
         // specify an adapter (see also next example)
-        userAdapter = new UserAdapter(getActivity(), mLayoutManager);
-        mRecyclerView.setAdapter(userAdapter);
+        userAdapter = new UserAdapter(getActivity(), layoutManager);
+        recyclerView.setAdapter(userAdapter);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class RankingFragment extends ManagerFragment
     }
 
     @Override
-    public Loader<List<User>> onCreateLoader(int id, Bundle args) {
+    public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_USERS:
                 return new UsersByPartUsernameLoader(
@@ -105,16 +105,16 @@ public class RankingFragment extends ManagerFragment
     }
 
     @Override
-    public void onLoadFinished(Loader<List<User>> loader, List<User> data) {
+    public void onLoadFinished(Loader loader, Object data) {
         switch (loader.getId()) {
             case LOADER_USERS:
-                userAdapter.setUsers(data);
+                userAdapter.setUsers((List<User>) data);
                 break;
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<User>> loader) {
+    public void onLoaderReset(Loader loader) {
         switch (loader.getId()) {
             case LOADER_USERS:
                 userAdapter.setUsers(new ArrayList<User>());

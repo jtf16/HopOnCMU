@@ -13,15 +13,19 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class UserViewHolder extends RecyclerView.ViewHolder {
-    CardView userLayout;
-    private TextView ranking;
-    private TextView username;
-    private TextView score;
-    private TextView time;
+
     private User user;
+
+    private CardView cardView;
+    private TextView rankingView, usernameView, scoreView, timeView;
 
     public UserViewHolder(View itemView) {
         super(itemView);
+        cardView = itemView.findViewById(R.id.user);
+        rankingView = itemView.findViewById(R.id.user_ranking);
+        usernameView = itemView.findViewById(R.id.username);
+        scoreView = itemView.findViewById(R.id.user_score);
+        timeView = itemView.findViewById(R.id.user_time);
         // Define click listener for the ViewHolder's View.
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,45 +34,40 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
                         "Element " + getAdapterPosition() + " clicked.");
             }
         });
-        userLayout = itemView.findViewById(R.id.user);
-        ranking = itemView.findViewById(R.id.user_ranking);
-        username = itemView.findViewById(R.id.username);
-        score = itemView.findViewById(R.id.user_score);
-        time = itemView.findViewById(R.id.user_time);
     }
 
     public void setUser(Context context, User user, int position) {
         this.user = user;
+        long hours = TimeUnit.MILLISECONDS.toHours(user.getTime()),
+                minutes = TimeUnit.MILLISECONDS.toMinutes(user.getTime()) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(user.getTime())),
+                seconds = TimeUnit.MILLISECONDS.toSeconds(user.getTime()) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(user.getTime()));
         switch (user.getRanking()) {
             case 1:
-                ranking.setBackgroundResource(R.drawable.degrade_gold);
+                rankingView.setBackgroundResource(R.drawable.degrade_gold);
                 break;
             case 2:
-                ranking.setBackgroundResource(R.drawable.degrade_silver);
+                rankingView.setBackgroundResource(R.drawable.degrade_silver);
                 break;
             case 3:
-                ranking.setBackgroundResource(R.drawable.degrade_bronze);
+                rankingView.setBackgroundResource(R.drawable.degrade_bronze);
                 break;
             default:
-                ranking.setBackgroundResource(android.R.color.transparent);
+                rankingView.setBackgroundResource(android.R.color.transparent);
                 break;
         }
         switch (position % 2) {
             case 0:
-                userLayout.setBackgroundResource(R.drawable.degrade_ranked_even);
+                cardView.setBackgroundResource(R.drawable.degrade_ranked_even);
                 break;
             default:
-                userLayout.setBackgroundResource(R.drawable.degrade_ranked_odd);
+                cardView.setBackgroundResource(R.drawable.degrade_ranked_odd);
                 break;
         }
-        ranking.setText(user.getRanking() + ".");
-        username.setText(user.getUsername());
-        score.setText(Integer.toString(user.getScore()));
-        time.setText(String.format("%02d:%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(user.getTime()),
-                TimeUnit.MILLISECONDS.toMinutes(user.getTime()) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(user.getTime())),
-                TimeUnit.MILLISECONDS.toSeconds(user.getTime()) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(user.getTime()))));
+        rankingView.setText(context.getString(R.string.user_ranking, user.getRanking()));
+        usernameView.setText(context.getString(R.string.user_username, user.getUsername()));
+        scoreView.setText(context.getString(R.string.user_score, user.getScore()));
+        timeView.setText(context.getString(R.string.user_time, hours, minutes, seconds));
     }
 }

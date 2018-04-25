@@ -29,35 +29,44 @@
     <string name="sample_name">Sample Name</string>
     <string name="sample_email">sample_email@email.com</string>
     <string name="profile_image">User Profile Image</string>
+    <string name="user_full_name">%1$s %2$s</string>
+    <string name="user_email">%1$s</string>
 
     <!-- RankingFragment strings -->
     <string name="username_search_hint">Search by username</string>
-    <string name="sample_user_ranking">1.</string>
+    <string name="sample_ranking">1.</string>
     <string name="sample_username">username123</string>
     <string name="sample_score">123</string>
+    <string name="sample_time">00:51:24</string>
     <string name="rank">Rank</string>
     <string name="user">User</string>
     <string name="score">Score</string>
+    <string name="user_ranking">%1$d.</string>
+    <string name="user_username">%1$s</string>
+    <string name="user_score">%1$d</string>
+    <string name="user_time">%1$02d:%2$02d:%3$02d</string>
 
     <!-- MonumentsFragment strings -->
     <string name="monument_search_hint">Search by monument</string>
     <string name="sample_monument_name">Torre de Belem</string>
     <string name="sample_monument_distance">3.5Km</string>
+    <string name="monument_name">%1$s</string>
+    <string name="monument_distance_Km">%1$.1fKm</string>
+    <string name="monument_distance_meters">%1$dm</string>
 
     <!-- DownloadsFragment strings -->
     <string name="sample_quiz_name">Quiz 1</string>
 
     <!-- QuizActivity strings -->
     <string name="quiz_submit_btn">Submit quiz</string>
-    <string name="quiz_submited">Quiz submited!</string>
+    <string name="quiz_submitted">Quiz submitted!</string>
     <string name="quiz_undo">UNDO</string>
 
     <!-- QuizQuestionFragment strings -->
+    <string name="question">In what year was Torre de Belem built?</string>
     <string name="option_a">Option A</string>
     <string name="option_b">Option B</string>
     <string name="option_c">Option C</string>
     <string name="option_d">Option D</string>
-    <string name="question">In what year was Torre de Belem built?</string>
-    <string name="time">00:51:24</string>
 
 </resources>

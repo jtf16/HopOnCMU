@@ -18,17 +18,15 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.UserViewHolder
 public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     private List<User> users;
-    private LinearLayoutManager mLayoutManager;
-    private Context mContext;
+    private LinearLayoutManager layoutManager;
+    private Context context;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public UserAdapter(Context context, LinearLayoutManager mLayoutManager) {
-        this.mContext = context;
-        this.mLayoutManager = mLayoutManager;
+    public UserAdapter(Context context, LinearLayoutManager layoutManager) {
+        this.context = context;
+        this.layoutManager = layoutManager;
         this.users = new ArrayList<>();
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
@@ -38,26 +36,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
         return new UserViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
-        // - Get element from clients at this position
-        // - Replace the contents of the view with that element
-        holder.setUser(mContext, users.get(position), position);
+        holder.setUser(context, users.get(position), position);
     }
 
-    /**
-     * Scrolls to the top of the {@link List<User>}
-     */
     public void scrollToTop() {
-        mLayoutManager.scrollToPositionWithOffset(0, 0);
+        layoutManager.scrollToPositionWithOffset(0, 0);
     }
 
-    /**
-     * Use this method to update the {@link List<User>} to be shown to the user
-     *
-     * @param newUsers
-     */
     public void setUsers(List<User> newUsers) {
         UsersDiffUtil usersDiffUtil =
                 new UsersDiffUtil(users, newUsers);
@@ -68,7 +55,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
         diffResult.dispatchUpdatesTo(this);
     }
 
-    // Return the size of your users list (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return users.size();
@@ -78,7 +64,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
         private List<User> oldList, newList;
 
-        public UsersDiffUtil(List<User> oldList, List<User> newList) {
+        UsersDiffUtil(List<User> oldList, List<User> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }

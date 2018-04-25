@@ -37,17 +37,24 @@ public class QuizActivity extends ManagerActivity {
     public static final String ARG_QUESTIONS = "questions";
     public static final String ARG_QUIZ = "quiz";
     public static final String ARG_USER_QUIZ = "user_quiz";
-    public static User user;
-    Toolbar mToolbar;
-    List<TextView> pagination = new ArrayList<TextView>();
-    private List<Question> questions;
-    private Quiz quiz;
+
+    public User user;
     private UserQuiz userQuiz;
+    private Quiz quiz;
+
+    private List<TextView> pagination = new ArrayList<>();
+    private List<Question> questions;
+
+    private Toolbar toolbar;
+    private SharedPreferences sharedPreferences;
+
     private int totalQuestions;
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
-    private SharedPreferences pref;
+
+    private ViewPager pager;
+    private PagerAdapter pagerAdapter;
+
     private Chronometer chronometer;
+
     private UserQuizRepository userQuizRepository;
 
     @Override
@@ -57,16 +64,16 @@ public class QuizActivity extends ManagerActivity {
 
         userQuizRepository = new UserQuizRepository(this);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         Gson gson = new Gson();
-        String json = pref.getString(LoginActivity.USER, "");
+        String json = sharedPreferences.getString(LoginActivity.USER, "");
         user = gson.fromJson(json, User.class);
 
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         quiz = (Quiz) getIntent().getSerializableExtra(ARG_QUIZ);
         userQuiz = (UserQuiz) getIntent().getSerializableExtra(ARG_USER_QUIZ);
 
-        setmToolbar();
+        setToolbar();
         setClock();
 
         pagination.add((TextView) findViewById(R.id.pagination1));
@@ -79,12 +86,12 @@ public class QuizActivity extends ManagerActivity {
 
         totalQuestions = questions.size();
 
-        mPager = (ViewPager) findViewById(R.id.view_pager);
-        mPagerAdapter = new QuizPagerAdapter(
-                getSupportFragmentManager(), totalQuestions, questions);
-        mPager.setAdapter(mPagerAdapter);
+        pager = findViewById(R.id.view_pager);
+        pagerAdapter = new QuizPagerAdapter(
+                getSupportFragmentManager(), totalQuestions, questions, user.getUsername());
+        pager.setAdapter(pagerAdapter);
 
-        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
@@ -108,17 +115,17 @@ public class QuizActivity extends ManagerActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setmToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(mToolbar);
+    private void setToolbar() {
+        toolbar = findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(quiz.getName());
     }
 
     private void setClock() {
 
-        TextView score = (TextView) findViewById(R.id.score);
-        Button submit = (Button) findViewById(R.id.submit_btn);
-        chronometer = (Chronometer) findViewById(R.id.clock);
+        TextView score = findViewById(R.id.score);
+        Button submit = findViewById(R.id.submit_btn);
+        chronometer = findViewById(R.id.clock);
 
         long openTime = userQuiz.getOpenTime().getTime();
         long submitTime = (userQuiz.getSubmitTime() != null) ?
@@ -129,9 +136,7 @@ public class QuizActivity extends ManagerActivity {
 
         if (userQuiz.getSubmitTime() == null) {
             chronometer.start();
-        }
-        // Offline Mode
-        else if (userQuiz.getScore() >= 0) {
+        } else if (userQuiz.getScore() >= 0) {
             chronometer.setVisibility(View.GONE);
             score.setText(getResources().getText(R.string.score) + ": " + userQuiz.getScore());
             score.setVisibility(View.VISIBLE);
@@ -142,8 +147,8 @@ public class QuizActivity extends ManagerActivity {
     }
 
     public void submit(View view) {
-        Snackbar snackbar = Snackbar.make(view, R.string.quiz_submited, Snackbar.LENGTH_SHORT);
-        View snackbarView = (View) snackbar.getView();
+        Snackbar snackbar = Snackbar.make(view, R.string.quiz_submitted, Snackbar.LENGTH_SHORT);
+        View snackbarView = snackbar.getView();
         snackbarView.setBackgroundColor(getResources().getColor(R.color.colorSnackbar));
         snackbar.setActionTextColor(getResources().getColor(R.color.colorUndoText));
         snackbar.setAction(R.string.quiz_undo, new View.OnClickListener() {
@@ -155,18 +160,18 @@ public class QuizActivity extends ManagerActivity {
         snackbar.show();
 
         userQuiz.setSubmitTime(Calendar.getInstance().getTime());
-        long sessionId = pref.getLong(LoginActivity.SESSION_ID, -1);
+        long sessionId = sharedPreferences.getLong(LoginActivity.SESSION_ID, -1);
         SubmitQuizCommand sqc = new SubmitQuizCommand(sessionId, userQuiz, questions);
         new CommunicationTask(this, sqc).execute();
         finish();
     }
 
     public void goLeft(View view) {
-        mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        pager.setCurrentItem(pager.getCurrentItem() - 1);
     }
 
     public void goRight(View view) {
-        mPager.setCurrentItem(mPager.getCurrentItem() + 1);
+        pager.setCurrentItem(pager.getCurrentItem() + 1);
     }
 
     public void jumpPages(View view) {
@@ -175,7 +180,7 @@ public class QuizActivity extends ManagerActivity {
 
         int diffPages = Integer.valueOf(pagination.get(3).getText().toString()) - Integer.valueOf(page.getText().toString());
 
-        mPager.setCurrentItem(mPager.getCurrentItem() - diffPages);
+        pager.setCurrentItem(pager.getCurrentItem() - diffPages);
     }
 
     public void updatePagination(int hops) {
@@ -193,7 +198,7 @@ public class QuizActivity extends ManagerActivity {
 
             int questionNumber = Integer.valueOf(textView.getText().toString()) - 1;
             if (questionNumber >= 0 && questionNumber < totalQuestions && questions.get(questionNumber).getAnswer() != null) {
-                textView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                textView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             } else {
                 textView.setTextColor(getResources().getColor(R.color.colorPagination));
             }

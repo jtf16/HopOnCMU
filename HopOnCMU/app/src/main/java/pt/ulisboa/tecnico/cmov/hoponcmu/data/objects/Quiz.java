@@ -36,6 +36,10 @@ public class Quiz implements Serializable {
      * The name of the name column.
      */
     public static final String COLUMN_NAME = "name";
+    /**
+     * The name of the number of questions column.
+     */
+    public static final String COLUMN_NUM_QUESTIONS = "num_questions";
     private static final long serialVersionUID = -8807331723807741905L;
     /**
      * The unique ID of the quiz.
@@ -50,12 +54,21 @@ public class Quiz implements Serializable {
     @ColumnInfo(name = COLUMN_NAME)
     private String name;
 
+    @ColumnInfo(name = COLUMN_NUM_QUESTIONS)
+    private int numQuestions = 0;
+
     public Quiz() {
     }
 
     public Quiz(String monumentID, String name) {
         this.monumentID = monumentID;
         this.name = name;
+    }
+
+    public Quiz(String monumentID, String name, int numQuestions) {
+        this.monumentID = monumentID;
+        this.name = name;
+        this.numQuestions = numQuestions;
     }
 
     public long getId() {
@@ -80,5 +93,13 @@ public class Quiz implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getNumQuestions() {
+        return numQuestions;
+    }
+
+    public void setNumQuestions(int numQuestions) {
+        this.numQuestions = numQuestions;
     }
 }

@@ -26,7 +26,7 @@ public class ServerArgs {
 	private static String EXPRESSION = "^(?<deg>[-+0-9]+)[^0-9]+(?<min>[0-9]+)[^0-9]+(?<sec>[0-9.,]+)[^0-9.,ENSW]+(?<pos>[ENSW]*)$";
 
 	// USERS
-	static User user1 = new User("a", "a", "a", "a", "a", 10, 10000);
+	static User user1 = new User("a", "a", "a", "a", "a", 0, 0);
 	static User user2 = new User("b", "b", "b", "b", "b", 0, 0);
 	static User user3 = new User("c", "c", "c", "c", "c", 0, 0);
 
@@ -303,6 +303,7 @@ public class ServerArgs {
 
 	public static void addUser(User user) {
 		users.add(user);
+        sortUsers();
 	}
 
 	public static void sortUsers() {
@@ -376,6 +377,7 @@ public class ServerArgs {
         } else {
             usersAnswers.get(id).add(username);
         }
+        sortUsers();
     }
 
 	public static double parseLatLonValue(String value) {

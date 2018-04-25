@@ -1,19 +1,19 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.communication.command;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
-import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 
 public class DownloadQuizCommand implements Command {
 
     private static final long serialVersionUID = -8807331723807741905L;
     private String username;
     private long sessionID;
-    private Monument monument;
+    private Quiz quiz;
 
-    public DownloadQuizCommand(String username, long sessionID, Monument monument) {
+    public DownloadQuizCommand(String username, long sessionID, Quiz quiz) {
         this.username = username;
         this.sessionID = sessionID;
-        this.monument = monument;
+        this.quiz = quiz;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class DownloadQuizCommand implements Command {
         return sessionID;
     }
 
-    public Monument getMonument() {
-        return monument;
+    public Quiz getQuiz() {
+        return quiz;
     }
 }

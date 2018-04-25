@@ -1,31 +1,81 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.DownloadQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 
 public class QuizViewHolder extends RecyclerView.ViewHolder {
 
-    private Context mContext;
-    private TextView name;
     private Quiz quiz;
+    private User user;
+    private long sessionID;
+
+    private ManagerActivity activity;
+
+    private TextView quizNameView;
+    private ImageView downloadQuizButtonView;
+
+    private SharedPreferences pref;
 
     public QuizViewHolder(Context context, View itemView) {
         super(itemView);
 
-        mContext = context;
+        getSharedPreferences(context);
 
-        name = itemView.findViewById(R.id.monument_name);
-        itemView.findViewById(R.id.download_name).setVisibility(View.GONE);
+        this.activity = (ManagerActivity) context;
+
+        quizNameView = itemView.findViewById(R.id.top_string);
+        downloadQuizButtonView = itemView.findViewById(R.id.right_image);
+        itemView.findViewById(R.id.bottom_string).setVisibility(View.GONE);
+
+        downloadQuizButtonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                downloadQuizButtonView.setVisibility(View.GONE);
+                DownloadQuizCommand dqc = new DownloadQuizCommand(
+                        user.getUsername(), sessionID, quiz);
+                new CommunicationTask(activity, dqc).execute();
+            }
+        });
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO : Enter inside quiz
+                Log.d(MonumentViewHolder.class.getName(),
+                        "Element " + getAdapterPosition() + " clicked.");
+            }
+        });
     }
 
-    public void setQuiz(Quiz quiz) {
+    private void getSharedPreferences(Context context) {
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        user = gson.fromJson(json, User.class);
+        sessionID = pref.getLong(LoginActivity.SESSION_ID, -1);
+    }
 
+    public void setQuiz(Quiz quiz, boolean isDownloaded) {
         this.quiz = quiz;
-        name.setText(quiz.getName());
+        quizNameView.setText(quiz.getName());
+        if (isDownloaded) {
+            downloadQuizButtonView.setVisibility(View.GONE);
+        }
     }
 }

@@ -58,10 +58,13 @@ public class UserQuiz implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = COLUMN_ID)
     public long id;
+
     @ColumnInfo(name = COLUMN_QUIZ_ID)
     public long quizID;
+
     @ColumnInfo(name = COLUMN_USERNAME)
     private String username;
+
     @ColumnInfo(name = COLUMN_OPEN_TIME)
     private Date openTime;
 

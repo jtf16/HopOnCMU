@@ -18,16 +18,17 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.viewholders.QuizViewHolder
 public class QuizAdapter extends RecyclerView.Adapter<QuizViewHolder> {
 
     private List<Quiz> quizList;
-    private LinearLayoutManager mLayoutManager;
-    private Context mContext;
+    private List<Long> listIDs;
+    private LinearLayoutManager layoutManager;
+    private Context context;
 
-    public QuizAdapter(Context context, LinearLayoutManager mLayoutManager) {
-        this.mLayoutManager = mLayoutManager;
+    public QuizAdapter(Context context, LinearLayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
         this.quizList = new ArrayList<>();
-        this.mContext = context;
+        this.context = context;
     }
 
-    public void setQuizzes(List<Quiz> newQuizList) {
+    public void setQuizzes(List<Quiz> newQuizList, List<Long> newIDs) {
         QuizAdapter.QuizzesDiffUtil monumentsDiffUtil =
                 new QuizAdapter.QuizzesDiffUtil(quizList, newQuizList);
         DiffUtil.DiffResult diffResult =
@@ -35,20 +36,23 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizViewHolder> {
         quizList.clear();
         quizList.addAll(newQuizList);
         diffResult.dispatchUpdatesTo(this);
+        this.listIDs = newIDs;
     }
 
     @Override
     public QuizViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_downloads_item, parent, false);
+                .inflate(R.layout.list_card_item, parent, false);
         // Set the view's size, margins, paddings and layout parameters
-        return new QuizViewHolder(mContext, v);
+        return new QuizViewHolder(context, v);
     }
 
     @Override
     public void onBindViewHolder(QuizViewHolder holder, int position) {
-        holder.setQuiz(quizList.get(position));
+        Quiz quiz = quizList.get(position);
+        boolean isDownloaded = listIDs.contains(quiz.getId());
+        holder.setQuiz(quiz, isDownloaded);
     }
 
     @Override
@@ -56,11 +60,15 @@ public class QuizAdapter extends RecyclerView.Adapter<QuizViewHolder> {
         return quizList.size();
     }
 
+    public void scrollToTop() {
+        layoutManager.scrollToPositionWithOffset(0, 0);
+    }
+
     public class QuizzesDiffUtil extends DiffUtil.Callback {
 
         private List<Quiz> oldList, newList;
 
-        public QuizzesDiffUtil(List<Quiz> oldList, List<Quiz> newList) {
+        QuizzesDiffUtil(List<Quiz> oldList, List<Quiz> newList) {
             this.oldList = oldList;
             this.newList = newList;
         }

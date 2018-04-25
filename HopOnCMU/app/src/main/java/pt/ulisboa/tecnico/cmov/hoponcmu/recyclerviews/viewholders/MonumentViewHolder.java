@@ -19,11 +19,9 @@ import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
-import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.MonumentActivity;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.DownloadQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizByMonumentIdLoader;
+import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.QuizIDsByMonumentAndUserLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
@@ -32,65 +30,78 @@ public class MonumentViewHolder extends RecyclerView.ViewHolder
         implements LoaderManager.LoaderCallbacks {
 
     private static final String ARG_QUIZZES = "quizzes";
+    private static final String ARG_IDS = "ids";
     private static final String ARG_MONUMENT = "monument";
+
     private static final int LOADER_QUIZ = 1;
-    LoaderManager loaderManager;
-    private TextView name;
-    private TextView distance;
-    private Monument monument;
-    private ManagerActivity activity;
-    private SharedPreferences pref;
+    private static final int LOADER_QUIZ_DOWNLOADED = 2;
+
     private User user;
-    private List<Quiz> quizList;
+    private Monument monument;
+
+    private Context context;
+
+    private LoaderManager loaderManager;
+
+    private TextView monumentNameView;
+    private TextView monumentDistanceView;
+
+    private SharedPreferences pref;
+
     private MonumentViewHolder mLoader = this;
 
-    private Context mContext;
+    private List<Quiz> quizList;
+    private List<Long> listIDs;
 
     public MonumentViewHolder(Context context, View itemView, final LoaderManager loader) {
         super(itemView);
 
-        this.mContext = context;
+        this.context = context;
         loaderManager = loader;
 
-        pref = PreferenceManager.getDefaultSharedPreferences(context);
+        monumentNameView = itemView.findViewById(R.id.top_string);
+        monumentDistanceView = itemView.findViewById(R.id.bottom_string);
+        itemView.findViewById(R.id.right_image).setVisibility(View.GONE);
+
+        getSharedPreferences(context);
+
         // Define click listener for the ViewHolder's View.
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Gson gson = new Gson();
-                String json = pref.getString(LoginActivity.USER, "");
-                user = gson.fromJson(json, User.class);
-                long sessionId = pref.getLong(LoginActivity.SESSION_ID, -1);
-                DownloadQuizCommand dqc = new DownloadQuizCommand(
-                        user.getUsername(), sessionId, monument);
-                new CommunicationTask(activity, dqc).execute();
                 Log.d(MonumentViewHolder.class.getName(),
                         "Element " + getAdapterPosition() + " clicked.");
-
 
                 loader.restartLoader(LOADER_QUIZ, null, mLoader);
 
             }
         });
-        name = itemView.findViewById(R.id.monument_name);
-        distance = itemView.findViewById(R.id.monument_distance);
     }
 
-    public void setMonument(ManagerActivity managerActivity, Monument monument) {
-        this.activity = managerActivity;
+    private void getSharedPreferences(Context context) {
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = pref.getString(LoginActivity.USER, "");
+        user = gson.fromJson(json, User.class);
+    }
+
+    public void setMonument(Monument monument) {
         this.monument = monument;
-        name.setText(monument.getName());
-        double floatDistance = (double) monument.getCosDistance();
+        monumentNameView.setText(context.getString(
+                R.string.monument_name, monument.getName()));
+        double floatDistance = monument.getCosDistance();
         if (floatDistance == 0) {
-            distance.setVisibility(View.INVISIBLE);
+            monumentDistanceView.setVisibility(View.INVISIBLE);
         } else {
-            distance.setVisibility(View.VISIBLE);
+            monumentDistanceView.setVisibility(View.VISIBLE);
             floatDistance = 6371000 * Math.acos(floatDistance);
             if (floatDistance >= 1000) {
-                distance.setText(String.format("%.1fKm", floatDistance / 1000));
+                monumentDistanceView.setText(context.getString(
+                        R.string.monument_distance_Km, floatDistance / 1000));
             } else {
-                distance.setText(String.format("%dm", (int) floatDistance));
+                monumentDistanceView.setText(context.getString(
+                        R.string.monument_distance_meters, (int) floatDistance));
             }
         }
     }
@@ -100,7 +111,9 @@ public class MonumentViewHolder extends RecyclerView.ViewHolder
 
         switch (id) {
             case LOADER_QUIZ:
-                return new QuizByMonumentIdLoader(mContext, monument.getId());
+                return new QuizByMonumentIdLoader(context, monument.getId());
+            case LOADER_QUIZ_DOWNLOADED:
+                return new QuizIDsByMonumentAndUserLoader(context, monument.getId(), user.getUsername());
             default:
                 throw new IllegalArgumentException();
         }
@@ -112,10 +125,15 @@ public class MonumentViewHolder extends RecyclerView.ViewHolder
         switch (loader.getId()) {
             case LOADER_QUIZ:
                 quizList = (List<Quiz>) data;
-                Intent intent = new Intent(mContext, MonumentActivity.class);
+                loaderManager.restartLoader(LOADER_QUIZ_DOWNLOADED, null, mLoader);
+                break;
+            case LOADER_QUIZ_DOWNLOADED:
+                listIDs = (List<Long>) data;
+                Intent intent = new Intent(context, MonumentActivity.class);
                 intent.putExtra(ARG_QUIZZES, (Serializable) quizList);
+                intent.putExtra(ARG_IDS, (Serializable) listIDs);
                 intent.putExtra(ARG_MONUMENT, monument);
-                mContext.startActivity(intent);
+                context.startActivity(intent);
                 break;
         }
     }
