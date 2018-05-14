@@ -4,14 +4,22 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+
+import javax.crypto.SecretKey;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SignUpCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.keys.PubKeySignUpExchangeCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.SignUpSealedCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.PubKeyExchangeResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SignUpResponse;
@@ -19,11 +27,14 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.Passwo
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.UsernameExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
+import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
 public class CreateAccountActivity extends ManagerActivity {
 
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+
+    private User user;
 
     private EditText firstName;
     private EditText lastName;
@@ -31,6 +42,8 @@ public class CreateAccountActivity extends ManagerActivity {
     private EditText username;
     private EditText password;
     private EditText confirmPassword;
+
+    private KeyPair keyPair;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +85,22 @@ public class CreateAccountActivity extends ManagerActivity {
         } else if (StringUtils.isBlank(strPassword)) {
             password.setError("You must enter your password");
         } else if (!strPassword.equals(strConfirmPassword)) {
-            confirmPassword.setError("Your passwords doesn't match");
+            confirmPassword.setError("Your passwords don't match");
         } else {
-            User user = new User(strUsername, strFirstName, strLastName, strEmail, strPassword);
+            user = new User(strUsername, strFirstName, strLastName, strEmail, strPassword);
 
-            SignUpCommand suc = new SignUpCommand(user);
-            new CommunicationTask(this, suc).execute();
+            publicKeyToServer(strUsername);
         }
     }
 
     private boolean findInitialSpace(String string) {
         return !string.equals(string.trim());
+    }
+
+    private void publicKeyToServer(String username) {
+        keyPair = SecurityManager.getNewKeyPair();
+        new CommunicationTask(this, new PubKeySignUpExchangeCommand(
+                username, keyPair.getPublic().getEncoded())).execute();
     }
 
     @Override
@@ -92,10 +110,19 @@ public class CreateAccountActivity extends ManagerActivity {
             new CommunicationTask(this, new RankingCommand()).execute();
 
             Intent loginIntent = new Intent(this, LoginActivity.class);
-            loginIntent.putExtra(USERNAME, signUpResponse.getUser().getUsername());
-            loginIntent.putExtra(PASSWORD, signUpResponse.getUser().getPassword());
+            loginIntent.putExtra(USERNAME, user.getUsername());
+            loginIntent.putExtra(PASSWORD, user.getPassword());
             startActivity(loginIntent);
             finish();
+        } else if (response instanceof PubKeyExchangeResponse) {
+            try {
+                SecretKey sharedSecret = SecurityManager.generateSharedSecret(keyPair.getPrivate(),
+                        ((PubKeyExchangeResponse) response).getPublicKey());
+                new CommunicationTask(this, new SignUpSealedCommand(user.getUsername(),
+                        sharedSecret, user)).execute();
+            } catch (InvalidKeyException e) {
+                e.printStackTrace();
+            }
         } else if (response instanceof PasswordExceptionResponse) {
             password.setError(((PasswordExceptionResponse) response).getMessage());
         } else if (response instanceof UsernameExceptionResponse) {

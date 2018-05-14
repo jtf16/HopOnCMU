@@ -11,19 +11,23 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import javax.crypto.SecretKey;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.DownloadQuizCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.DownloadQuizSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
 public class QuizViewHolder extends RecyclerView.ViewHolder {
 
     private Quiz quiz;
     private User user;
     private long sessionID;
+    private SecretKey sharedSecret;
 
     private ManagerActivity activity;
 
@@ -32,7 +36,7 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
 
     private SharedPreferences pref;
 
-    public QuizViewHolder(Context context, View itemView) {
+    public QuizViewHolder(final Context context, View itemView) {
         super(itemView);
 
         getSharedPreferences(context);
@@ -47,9 +51,9 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
                 downloadQuizButtonView.setVisibility(View.GONE);
-                DownloadQuizCommand dqc = new DownloadQuizCommand(
-                        user.getUsername(), sessionID, quiz);
-                new CommunicationTask(activity, dqc).execute();
+                DownloadQuizSealedCommand dqsc = new DownloadQuizSealedCommand(user.getUsername(),
+                        sharedSecret, sessionID, quiz);
+                new CommunicationTask(activity, dqsc).execute();
             }
         });
 
@@ -69,6 +73,7 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
         String json = pref.getString(LoginActivity.USER, "");
         user = gson.fromJson(json, User.class);
         sessionID = pref.getLong(LoginActivity.SESSION_ID, -1);
+        sharedSecret = SecurityManager.getSecretKey(pref);
     }
 
     public void setQuiz(Quiz quiz, boolean isDownloaded) {

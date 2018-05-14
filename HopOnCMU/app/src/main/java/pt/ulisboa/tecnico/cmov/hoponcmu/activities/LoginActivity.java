@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 
@@ -12,27 +13,37 @@ import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.security.InvalidKeyException;
+import java.security.KeyPair;
+
+import javax.crypto.SecretKey;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.LoginCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.keys.PubKeyExchangeCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.LoginSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.LoginResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.PubKeyExchangeResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.PasswordExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.UsernameExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
+import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
 public class LoginActivity extends ManagerActivity {
 
     public static final String USER = "user";
     public static final String SESSION_ID = "session_id";
-
+    public static final String SHARED_SECRET = "secret_key";
     SharedPreferences pref;
-
     String strUsername;
     String strPassword;
-
+    private User user;
     private EditText username;
     private EditText password;
+
+    private KeyPair keyPair;
+    private SecretKey sharedSecret;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +82,9 @@ public class LoginActivity extends ManagerActivity {
         } else if (StringUtils.isBlank(strPassword)) {
             password.setError("You must enter your password");
         } else {
-            User user = new User(strUsername);
+            user = new User(strUsername);
             user.setPassword(strPassword);
-            new CommunicationTask(this, new LoginCommand(user)).execute();
-        }
-    }
-
-    @Override
-    public void updateInterface(Response response) {
-        if (response instanceof LoginResponse) {
-            LoginResponse loginResponse = (LoginResponse) response;
-
-            addObjectToSharedPrefs(USER, loginResponse.getUser());
-            addLongToSharedPrefs(SESSION_ID, loginResponse.getSessionId());
-
-            Intent loginIntent = new Intent(this, MainActivity.class);
-            startActivity(loginIntent);
-            finish();
-        } else if (response instanceof PasswordExceptionResponse) {
-            password.setError(((PasswordExceptionResponse) response).getMessage());
-        } else if (response instanceof UsernameExceptionResponse) {
-            username.setError(((UsernameExceptionResponse) response).getMessage());
+            publicKeyToServer(strUsername);
         }
     }
 
@@ -107,5 +100,56 @@ public class LoginActivity extends ManagerActivity {
         SharedPreferences.Editor edit = pref.edit();
         edit.putLong(tag, l);
         edit.apply();
+    }
+
+    private void addStringToSharedPrefs(String tag, String s) {
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString(tag, s);
+        edit.apply();
+    }
+
+    private void addByteArrayToSharedPrefs(String tag, byte[] array) {
+        SharedPreferences.Editor edit = pref.edit();
+        String stringArray = Base64.encodeToString(array, Base64.DEFAULT);
+        edit.putString(tag, stringArray);
+        edit.apply();
+    }
+
+    private void publicKeyToServer(String username) {
+        keyPair = SecurityManager.getNewKeyPair();
+        new CommunicationTask(this, new PubKeyExchangeCommand(
+                username, keyPair.getPublic().getEncoded())).execute();
+    }
+
+    @Override
+    public void updateInterface(Response response) {
+        if (response instanceof LoginResponse) {
+            LoginResponse loginResponse = (LoginResponse) response;
+
+            addObjectToSharedPrefs(USER, loginResponse.getUser());
+            addLongToSharedPrefs(SESSION_ID, loginResponse.getSessionId());
+
+            Intent loginIntent = new Intent(this, MainActivity.class);
+            startActivity(loginIntent);
+            finish();
+        } else if (response instanceof PubKeyExchangeResponse) {
+            try {
+                sharedSecret = SecurityManager.generateSharedSecret(keyPair.getPrivate(),
+                        ((PubKeyExchangeResponse) response).getPublicKey());
+
+                // save secret key on shared preferences
+                addByteArrayToSharedPrefs(SHARED_SECRET, sharedSecret.getEncoded());
+            } catch (InvalidKeyException e) {
+                e.printStackTrace();
+            }
+            SecretKey key = SecurityManager.getSecretKey(pref);
+
+            new CommunicationTask(this, new LoginSealedCommand(strUsername,
+                    key, user)).execute();
+        } else if (response instanceof PasswordExceptionResponse) {
+            password.setError(((PasswordExceptionResponse) response).getMessage());
+        } else if (response instanceof UsernameExceptionResponse) {
+            username.setError(((UsernameExceptionResponse) response).getMessage());
+        }
     }
 }

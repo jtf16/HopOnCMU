@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.data.objects;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Monument implements Serializable {
 
@@ -22,6 +23,17 @@ public class Monument implements Serializable {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Monument(String id, String name, double latitude, double longitude) {
+        this.id = id;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.sinLatitude = valueToSin(latitude);
+        this.sinLongitude = valueToSin(longitude);
+        this.cosLatitude = valueToCos(latitude);
+        this.cosLongitude = valueToCos(longitude);
     }
 
     public Monument(String id, String name, double latitude, double longitude,
@@ -99,5 +111,13 @@ public class Monument implements Serializable {
 
     public void setCosLongitude(double cosLongitude) {
         this.cosLongitude = cosLongitude;
+    }
+
+    public static double valueToSin(double value) {
+        return Math.sin(Math.toRadians(value));
+    }
+
+    public static double valueToCos(double value) {
+        return Math.cos(Math.toRadians(value));
     }
 }

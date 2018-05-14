@@ -12,6 +12,7 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
+    <string name="security_issue">Login failed due to security issues</string>
 
     <!-- Menu drawer options -->
     <string name="monuments">Monuments</string>

@@ -20,10 +20,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.crypto.SecretKey;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SubmitQuizCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.SubmitQuizSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SubmitQuizResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
@@ -31,6 +34,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserQuizRepository;
+import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
 public class QuizActivity extends ManagerActivity {
 
@@ -41,6 +45,7 @@ public class QuizActivity extends ManagerActivity {
     public User user;
     private UserQuiz userQuiz;
     private Quiz quiz;
+    private SecretKey key;
 
     private List<TextView> pagination = new ArrayList<>();
     private List<Question> questions;
@@ -68,6 +73,7 @@ public class QuizActivity extends ManagerActivity {
         Gson gson = new Gson();
         String json = sharedPreferences.getString(LoginActivity.USER, "");
         user = gson.fromJson(json, User.class);
+        key = SecurityManager.getSecretKey(sharedPreferences);
 
         questions = (List<Question>) getIntent().getSerializableExtra(ARG_QUESTIONS);
         quiz = (Quiz) getIntent().getSerializableExtra(ARG_QUIZ);
@@ -161,8 +167,10 @@ public class QuizActivity extends ManagerActivity {
 
         userQuiz.setSubmitTime(Calendar.getInstance().getTime());
         long sessionId = sharedPreferences.getLong(LoginActivity.SESSION_ID, -1);
-        SubmitQuizCommand sqc = new SubmitQuizCommand(sessionId, userQuiz, questions);
-        new CommunicationTask(this, sqc).execute();
+        //SubmitQuizCommand sqc = new SubmitQuizCommand(sessionId, userQuiz, questions);
+        SubmitQuizSealedCommand sqsc = new SubmitQuizSealedCommand(user.getUsername(),
+                key, sessionId, userQuiz, questions);
+        new CommunicationTask(this, sqsc).execute();
         finish();
     }
 

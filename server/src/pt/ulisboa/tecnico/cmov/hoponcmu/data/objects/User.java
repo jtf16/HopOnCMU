@@ -2,6 +2,8 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.data.objects;
 
 import java.io.Serializable;
 
+import javax.crypto.*;
+
 public class User implements Serializable {
     
     private static final long serialVersionUID = -8807331723807741905L;
@@ -14,6 +16,7 @@ public class User implements Serializable {
     private int ranking;
     private int score;
     private long time;
+    private transient SecretKey sharedSecret = null;
 
     public User() {
     }
@@ -90,5 +93,13 @@ public class User implements Serializable {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public SecretKey getSharedSecret() {
+        return sharedSecret;
+    }
+
+    public void setSharedSecret(SecretKey sharedSecret) {
+        this.sharedSecret = sharedSecret;
     }
 }

@@ -5,6 +5,6 @@ public class SessionExceptionResponse extends ExceptionResponse {
     private static final long serialVersionUID = 734457624276534179L;
 
     public SessionExceptionResponse(String message) {
-        this.message = message;
+        super(message);
     }
 }

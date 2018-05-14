@@ -16,6 +16,8 @@ public interface ResponseHandler {
 
     public void handle(MonumentResponse monumentResponse);
 
+    public void handle(PubKeyExchangeResponse pubKeyExchangeResponse);
+
     public void handle(PasswordExceptionResponse passwordExceptionResponse);
 
     public void handle(RankingResponse rankingResponse);

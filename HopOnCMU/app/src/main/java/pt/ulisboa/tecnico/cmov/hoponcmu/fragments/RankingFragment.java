@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
-import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.loaders.UsersByPartUsernameLoader;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.UserAdapter;
@@ -48,8 +45,6 @@ public class RankingFragment extends ManagerFragment
         if (getArguments() != null) {
 
         }
-        RankingCommand rc = new RankingCommand();
-        new CommunicationTask((ManagerActivity) this.getActivity(), rc).execute();
     }
 
     @Override

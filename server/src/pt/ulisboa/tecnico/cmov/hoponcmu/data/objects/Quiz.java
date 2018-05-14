@@ -1,7 +1,6 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.data.objects;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Quiz implements Serializable {
 
@@ -10,9 +9,7 @@ public class Quiz implements Serializable {
     public long id;
     public String monumentID;
     private String name;
-    private Date openTime;
-    private Date submitTime;
-    private int score = -1;
+    private int numQuestions = 0;
 
     public Quiz() {
     }
@@ -20,6 +17,12 @@ public class Quiz implements Serializable {
     public Quiz(String monumentID, String name) {
         this.monumentID = monumentID;
         this.name = name;
+    }
+
+    public Quiz(String monumentID, String name, int numQuestions) {
+        this.monumentID = monumentID;
+        this.name = name;
+        this.numQuestions = numQuestions;
     }
 
     public Quiz(long id, String monumentID, String name) {
@@ -52,27 +55,11 @@ public class Quiz implements Serializable {
         this.name = name;
     }
 
-    public Date getOpenTime() {
-        return openTime;
+    public int getNumQuestions() {
+        return numQuestions;
     }
 
-    public void setOpenTime(Date openTime) {
-        this.openTime = openTime;
-    }
-
-    public Date getSubmitTime() {
-        return submitTime;
-    }
-
-    public void setSubmitTime(Date submitTime) {
-        this.submitTime = submitTime;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
+    public void setNumQuestions(int numQuestions) {
+        this.numQuestions = numQuestions;
     }
 }

@@ -4,7 +4,11 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 
 public class ExceptionResponse implements Response {
 
-    public String message;
+    private String message;
+
+    ExceptionResponse(String message) {
+        this.message = message;
+    }
 
     public String getMessage() {
         return message;
