@@ -1,11 +1,18 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Messenger;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +38,12 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
+import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
+import pt.inesc.termite.wifidirect.SimWifiP2pDevice;
+import pt.inesc.termite.wifidirect.SimWifiP2pDeviceList;
+import pt.inesc.termite.wifidirect.SimWifiP2pManager;
+import pt.inesc.termite.wifidirect.service.SimWifiP2pService;
+import pt.inesc.termite.wifidirect.sockets.SimWifiP2pSocketManager;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
@@ -43,6 +57,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.RankingFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.location.FetchCoordinatesTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.termite.SimWifiP2pBroadcastReceiver;
 import pt.ulisboa.tecnico.cmov.hoponcmu.views.SearchEditText;
 
 public class MainActivity extends ManagerActivity implements
@@ -282,6 +297,7 @@ public class MainActivity extends ManagerActivity implements
             case R.id.nav_monuments:
                 toolbar.setTitle(this.getString(R.string.monuments));
                 searchEditText.setHint(R.string.monument_search_hint);
+                getPeers();
                 fragmentClass = MonumentsFragment.class;
                 break;
             case R.id.nav_rankings:
@@ -364,6 +380,23 @@ public class MainActivity extends ManagerActivity implements
                     REQUESTING_LOCATION_UPDATES_KEY);
         }
     }
+
+    /*public void termiteReceiver() {
+        // initialize the Termite API
+        SimWifiP2pSocketManager.Init(getApplicationContext());
+        // register broadcast receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_STATE_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_PEERS_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_NETWORK_MEMBERSHIP_CHANGED_ACTION);
+        filter.addAction(SimWifiP2pBroadcast.WIFI_P2P_GROUP_OWNERSHIP_CHANGED_ACTION);
+        mReceiver = new SimWifiP2pBroadcastReceiver(this);
+        registerReceiver(mReceiver, filter);
+
+        Intent intent = new Intent(getApplicationContext(), SimWifiP2pService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        mBound = true;
+    }*/
 
     @Override
     public void updateInterface(Response response) {

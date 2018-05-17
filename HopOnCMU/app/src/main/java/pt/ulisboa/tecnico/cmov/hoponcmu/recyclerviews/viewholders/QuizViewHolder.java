@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -50,10 +51,17 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
         downloadQuizButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                downloadQuizButtonView.setVisibility(View.GONE);
-                DownloadQuizSealedCommand dqsc = new DownloadQuizSealedCommand(user.getUsername(),
-                        sharedSecret, sessionID, quiz);
-                new CommunicationTask(activity, dqsc).execute();
+                if (activity.getPeers().contains(quiz.getMonumentID())) {
+                    downloadQuizButtonView.setVisibility(View.GONE);
+                    DownloadQuizSealedCommand dqsc =
+                            new DownloadQuizSealedCommand(user.getUsername(),
+                            sharedSecret, sessionID, quiz);
+                    new CommunicationTask(activity, dqsc).execute();
+                }
+                else {
+                    Toast.makeText(activity, "Not at the monument",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
