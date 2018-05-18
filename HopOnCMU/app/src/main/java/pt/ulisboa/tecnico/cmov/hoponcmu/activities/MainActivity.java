@@ -35,6 +35,7 @@ import javax.crypto.SecretKey;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.RankingSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
@@ -302,7 +303,10 @@ public class MainActivity extends TermiteManagerActivity implements
                 fragmentClass = MonumentsFragment.class;
                 break;
             case R.id.nav_rankings:
-                new CommunicationTask(this, new RankingCommand()).execute();
+                SecretKey secretKey = SecurityManager.getSecretKey(pref);
+                RankingSealedCommand rsc =
+                        new RankingSealedCommand(user.getUsername(), secretKey);
+                new CommunicationTask(this, rsc).execute();
                 toolbar.setTitle(this.getString(R.string.ranking));
                 searchEditText.setHint(R.string.username_search_hint);
                 fragmentClass = RankingFragment.class;
@@ -386,9 +390,9 @@ public class MainActivity extends TermiteManagerActivity implements
     public void updateInterface(Response response) {
 
         if (response instanceof SealedResponse) {
+            Log.d("AAAAAAAAAAAAAA","AAAAAAAAAAAAAAAAA");
 
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SecretKey secretKey = SecurityManager.getSecretKey(sharedPreferences);
+            SecretKey secretKey = SecurityManager.getSecretKey(pref);
 
             SealedResponse sr = (SealedResponse) response;
 
@@ -397,6 +401,7 @@ public class MainActivity extends TermiteManagerActivity implements
                 Log.d("HelloResponse", ((HelloResponse) response1).getMessage());
             } else if (response1 instanceof RankingResponse) {
                 RankingResponse rankingResponse = (RankingResponse) response1;
+
                 userRepository.insertUser(rankingResponse.getUsers());
                 fragment.refreshRanking();
             }
