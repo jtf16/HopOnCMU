@@ -226,4 +226,19 @@ public class SecurityManager {
             return false;
         }
     }
+
+    public static Object getObject(SealedObject sealedObject, byte[] digestObject, SecretKey key) {
+        Object o = null;
+        try {
+            o = decryptObject(sealedObject, key);
+        } catch (ClassNotFoundException | IllegalBlockSizeException | BadPaddingException |
+                InvalidKeyException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (verifyDigest(o, digestObject)) {
+            return o;
+        }
+        return null;
+    }
 }

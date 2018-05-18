@@ -12,15 +12,19 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import javax.crypto.SecretKey;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.DownloadQuizResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.InvalidQuizExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.SessionExceptionResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.sealed.SealedResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Monument;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.TransactionRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.QuizAdapter;
+import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
 public class MonumentActivity extends TermiteManagerActivity {
 
@@ -93,22 +97,33 @@ public class MonumentActivity extends TermiteManagerActivity {
 
     @Override
     public void updateInterface(Response response) {
-        if (response instanceof DownloadQuizResponse) {
-            DownloadQuizResponse downloadQuizResponse = (DownloadQuizResponse) response;
-            transactionRepository.insertUserQuizAndQuestions(
-                    downloadQuizResponse.getUsername(), downloadQuizResponse.getQuiz(),
-                    downloadQuizResponse.getQuestions());
-        } else if (response instanceof InvalidQuizExceptionResponse) {
-            Toast.makeText(this, ((InvalidQuizExceptionResponse) response)
-                    .getMessage(), Toast.LENGTH_SHORT).show();
-        } else if (response instanceof SessionExceptionResponse) {
-            SharedPreferences.Editor edit = pref.edit();
-            edit.remove(LoginActivity.USER);
-            edit.apply();
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+
+        if (response instanceof SealedResponse) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SecretKey secretKey = SecurityManager.getSecretKey(sharedPreferences);
+
+            SealedResponse sr = (SealedResponse) response;
+
+            Response response1 = (Response) SecurityManager.getObject(sr.getSealedContent(), sr.getDigest(), secretKey);
+
+            if (response1 instanceof DownloadQuizResponse) {
+                DownloadQuizResponse downloadQuizResponse = (DownloadQuizResponse) response1;
+                transactionRepository.insertUserQuizAndQuestions(
+                        downloadQuizResponse.getUsername(), downloadQuizResponse.getQuiz(),
+                        downloadQuizResponse.getQuestions());
+            } else if (response1 instanceof InvalidQuizExceptionResponse) {
+                Toast.makeText(this, ((InvalidQuizExceptionResponse) response1)
+                        .getMessage(), Toast.LENGTH_SHORT).show();
+            } else if (response1 instanceof SessionExceptionResponse) {
+                SharedPreferences.Editor edit = pref.edit();
+                edit.remove(LoginActivity.USER);
+                edit.apply();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
         }
     }
 }

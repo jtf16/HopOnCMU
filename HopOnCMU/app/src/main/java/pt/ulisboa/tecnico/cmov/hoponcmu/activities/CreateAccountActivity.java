@@ -1,10 +1,13 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -24,6 +27,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SignUpResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.PasswordExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.UsernameExceptionResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.sealed.SealedResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
@@ -43,6 +47,7 @@ public class CreateAccountActivity extends ManagerActivity {
     private EditText confirmPassword;
 
     private KeyPair keyPair;
+    SecretKey sharedSecret;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,31 +109,40 @@ public class CreateAccountActivity extends ManagerActivity {
 
     @Override
     public void updateInterface(Response response) {
-        if (response instanceof SignUpResponse) {
-            SignUpResponse signUpResponse = (SignUpResponse) response;
-            new CommunicationTask(this, new RankingCommand()).execute();
 
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            loginIntent.putExtra(USERNAME, user.getUsername());
-            loginIntent.putExtra(PASSWORD, user.getPassword());
-            startActivity(loginIntent);
-            finish();
-        } else if (response instanceof PubKeyExchangeResponse) {
+        if (response instanceof PubKeyExchangeResponse) {
             try {
-                SecretKey sharedSecret = SecurityManager.generateSharedSecret(keyPair.getPrivate(),
+                sharedSecret = SecurityManager.generateSharedSecret(keyPair.getPrivate(),
                         ((PubKeyExchangeResponse) response).getPublicKey());
                 new CommunicationTask(this, new SignUpSealedCommand(user.getUsername(),
                         sharedSecret, user)).execute();
             } catch (InvalidKeyException e) {
                 e.printStackTrace();
             }
-        } else if (response instanceof PasswordExceptionResponse) {
-            password.setError(((PasswordExceptionResponse) response).getMessage());
-        } else if (response instanceof UsernameExceptionResponse) {
-            username.setError(((UsernameExceptionResponse) response).getMessage());
-        } else if (response instanceof RankingResponse) {
-            UserRepository userRepository = new UserRepository(this);
-            userRepository.insertUser(((RankingResponse) response).getUsers());
+        } else if (response instanceof SealedResponse) {
+
+            SealedResponse sr = (SealedResponse) response;
+
+            Response response1 = (Response) SecurityManager.getObject(sr.getSealedContent(), sr.getDigest(), sharedSecret);
+
+            if (response1 instanceof SignUpResponse) {
+                Toast.makeText(this, "AAAA", Toast.LENGTH_SHORT).show();
+                SignUpResponse signUpResponse = (SignUpResponse) response1;
+                new CommunicationTask(this, new RankingCommand()).execute();
+
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                loginIntent.putExtra(USERNAME, user.getUsername());
+                loginIntent.putExtra(PASSWORD, user.getPassword());
+                startActivity(loginIntent);
+                finish();
+            } else if (response1 instanceof PasswordExceptionResponse) {
+                password.setError(((PasswordExceptionResponse) response1).getMessage());
+            } else if (response1 instanceof UsernameExceptionResponse) {
+                username.setError(((UsernameExceptionResponse) response1).getMessage());
+            } else if (response1 instanceof RankingResponse) {
+                UserRepository userRepository = new UserRepository(this);
+                userRepository.insertUser(((RankingResponse) response1).getUsers());
+            }
         }
     }
 }

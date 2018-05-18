@@ -58,7 +58,7 @@ public abstract class TermiteManagerActivity extends ManagerActivity
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver(mReceiver);
+        //unregisterReceiver(mReceiver);
     }
 
     public boolean isPeer(String peer) {

@@ -169,7 +169,7 @@ public class SecurityManager {
         return null;
     }
 
-    public static boolean verifyDigest(Object object, byte[] digestObject, SecretKey key) {
+    public static boolean verifyDigest(Object object, byte[] digestObject) {
         try {
             MessageDigest digest = MessageDigest.getInstance(DIGEST_INSTANCE);
             return digest.isEqual(digestObject, digestObject(object));

@@ -27,6 +27,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.PubKeyExchangeRes
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.PasswordExceptionResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.UsernameExceptionResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.sealed.SealedResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
@@ -123,16 +124,8 @@ public class LoginActivity extends ManagerActivity {
 
     @Override
     public void updateInterface(Response response) {
-        if (response instanceof LoginResponse) {
-            LoginResponse loginResponse = (LoginResponse) response;
 
-            addObjectToSharedPrefs(USER, loginResponse.getUser());
-            addLongToSharedPrefs(SESSION_ID, loginResponse.getSessionId());
-
-            Intent loginIntent = new Intent(this, MainActivity.class);
-            startActivity(loginIntent);
-            finish();
-        } else if (response instanceof PubKeyExchangeResponse) {
+        if (response instanceof PubKeyExchangeResponse) {
             try {
                 sharedSecret = SecurityManager.generateSharedSecret(keyPair.getPrivate(),
                         ((PubKeyExchangeResponse) response).getPublicKey());
@@ -146,10 +139,30 @@ public class LoginActivity extends ManagerActivity {
 
             new CommunicationTask(this, new LoginSealedCommand(strUsername,
                     key, user)).execute();
-        } else if (response instanceof PasswordExceptionResponse) {
-            password.setError(((PasswordExceptionResponse) response).getMessage());
-        } else if (response instanceof UsernameExceptionResponse) {
-            username.setError(((UsernameExceptionResponse) response).getMessage());
+        } else if (response instanceof SealedResponse) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SecretKey secretKey = SecurityManager.getSecretKey(sharedPreferences);
+
+            SealedResponse sr = (SealedResponse) response;
+
+            Response response1 = (Response) SecurityManager.getObject(sr.getSealedContent(), sr.getDigest(), secretKey);
+
+            if (response1 instanceof LoginResponse) {
+                LoginResponse loginResponse = (LoginResponse) response1;
+
+                addObjectToSharedPrefs(USER, loginResponse.getUser());
+                addLongToSharedPrefs(SESSION_ID, loginResponse.getSessionId());
+
+                Intent loginIntent = new Intent(this, MainActivity.class);
+                startActivity(loginIntent);
+                finish();
+            } else if (response1 instanceof PasswordExceptionResponse) {
+                password.setError(((PasswordExceptionResponse) response1).getMessage());
+            } else if (response1 instanceof UsernameExceptionResponse) {
+                username.setError(((UsernameExceptionResponse) response1).getMessage());
+            }
         }
+
     }
 }
