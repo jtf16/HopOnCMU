@@ -162,8 +162,8 @@ public abstract class TermiteManagerActivity extends ManagerActivity
         mBound = true;
 
         // spawn the chat server background task
-        /*new IncommingCommTask().executeOnExecutor(
-                AsyncTask.THREAD_POOL_EXECUTOR);*/
+        new IncommingCommTask().executeOnExecutor(
+                AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     /*
@@ -175,11 +175,9 @@ public abstract class TermiteManagerActivity extends ManagerActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            Log.d(TermiteManagerActivity.class.getName(),
-                    "IncommingCommTask started (" + this.hashCode() + ").");
-
             try {
-                mSrvSocket = new SimWifiP2pSocketServer(10001);
+                mSrvSocket = new SimWifiP2pSocketServer(
+                        Integer.parseInt("10001"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
