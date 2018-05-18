@@ -7,13 +7,13 @@ import android.widget.Toast;
 
 import pt.inesc.termite.wifidirect.SimWifiP2pBroadcast;
 import pt.inesc.termite.wifidirect.SimWifiP2pInfo;
-import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.TermiteManagerActivity;
 
 public class SimWifiP2pBroadcastReceiver extends BroadcastReceiver {
 
-    private ManagerActivity mActivity;
+    private TermiteManagerActivity mActivity;
 
-    public SimWifiP2pBroadcastReceiver(ManagerActivity activity) {
+    public SimWifiP2pBroadcastReceiver(TermiteManagerActivity activity) {
         super();
         this.mActivity = activity;
     }

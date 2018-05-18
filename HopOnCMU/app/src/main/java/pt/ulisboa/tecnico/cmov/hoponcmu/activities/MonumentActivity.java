@@ -22,7 +22,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.TransactionRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.recyclerviews.adapters.QuizAdapter;
 
-public class MonumentActivity extends ManagerActivity {
+public class MonumentActivity extends TermiteManagerActivity {
 
     private static final String ARG_QUIZZES = "quizzes";
     private static final String ARG_IDS = "ids";

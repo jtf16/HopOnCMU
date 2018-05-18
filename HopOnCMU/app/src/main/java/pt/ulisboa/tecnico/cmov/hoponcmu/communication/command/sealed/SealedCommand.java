@@ -2,7 +2,6 @@ package pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SealedObject;

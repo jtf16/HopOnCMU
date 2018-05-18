@@ -16,7 +16,7 @@ import javax.crypto.SecretKey;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.LoginActivity;
-import pt.ulisboa.tecnico.cmov.hoponcmu.activities.ManagerActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.TermiteManagerActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.DownloadQuizSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
@@ -30,7 +30,7 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
     private long sessionID;
     private SecretKey sharedSecret;
 
-    private ManagerActivity activity;
+    private TermiteManagerActivity activity;
 
     private TextView quizNameView;
     private ImageView downloadQuizButtonView;
@@ -42,7 +42,7 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
 
         getSharedPreferences(context);
 
-        this.activity = (ManagerActivity) context;
+        this.activity = (TermiteManagerActivity) context;
 
         quizNameView = itemView.findViewById(R.id.top_string);
         downloadQuizButtonView = itemView.findViewById(R.id.right_image);
@@ -51,14 +51,13 @@ public class QuizViewHolder extends RecyclerView.ViewHolder {
         downloadQuizButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (activity.getPeers().contains(quiz.getMonumentID())) {
+                if (activity.isPeer(quiz.getMonumentID())) {
                     downloadQuizButtonView.setVisibility(View.GONE);
                     DownloadQuizSealedCommand dqsc =
                             new DownloadQuizSealedCommand(user.getUsername(),
-                            sharedSecret, sessionID, quiz);
+                                    sharedSecret, sessionID, quiz);
                     new CommunicationTask(activity, dqsc).execute();
-                }
-                else {
+                } else {
                     Toast.makeText(activity, "Not at the monument",
                             Toast.LENGTH_SHORT).show();
                 }

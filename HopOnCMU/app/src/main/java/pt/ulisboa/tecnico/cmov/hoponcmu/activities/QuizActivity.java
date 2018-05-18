@@ -25,7 +25,6 @@ import javax.crypto.SecretKey;
 import pt.ulisboa.tecnico.cmov.hoponcmu.QuizPagerAdapter;
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
-import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.SubmitQuizCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.SubmitQuizSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SubmitQuizResponse;
