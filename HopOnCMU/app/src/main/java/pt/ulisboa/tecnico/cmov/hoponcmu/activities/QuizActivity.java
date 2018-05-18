@@ -35,7 +35,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.UserQuiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserQuizRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
-public class QuizActivity extends ManagerActivity {
+public class QuizActivity extends TermiteManagerActivity {
 
     public static final String ARG_QUESTIONS = "questions";
     public static final String ARG_QUIZ = "quiz";
@@ -65,6 +65,10 @@ public class QuizActivity extends ManagerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        /*new SendCommTask().executeOnExecutor(
+                AsyncTask.THREAD_POOL_EXECUTOR,
+                "ola");*/
 
         userQuizRepository = new UserQuizRepository(this);
 

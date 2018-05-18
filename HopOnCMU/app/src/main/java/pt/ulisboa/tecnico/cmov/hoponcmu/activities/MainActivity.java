@@ -78,6 +78,10 @@ public class MainActivity extends TermiteManagerActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!mBound) {
+            bindService();
+        }
+
         setContentView(R.layout.activity_main);
 
         pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -114,6 +118,15 @@ public class MainActivity extends TermiteManagerActivity implements
         super.onPause();
         mRequestingLocationUpdates = true;
         stopLocationUpdates();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
     }
 
     @Override
