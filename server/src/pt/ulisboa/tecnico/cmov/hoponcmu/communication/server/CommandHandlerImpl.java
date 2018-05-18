@@ -9,8 +9,6 @@ import java.security.interfaces.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
-import static javax.xml.bind.DatatypeConverter.printHexBinary;
-
 import java.util.*;
 import java.nio.ByteBuffer;
 
@@ -18,6 +16,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.*;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.*;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.keys.*;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.*;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.sealed.*;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.exceptions.*;
 import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 
@@ -135,7 +134,7 @@ public class CommandHandlerImpl implements CommandHandler {
 		SecretKey key = ServerArgs.getUserKey(susc.getUsername());
 		SignUpCommand suc = (SignUpCommand) getObject(susc.getSealedContent(), susc.getDigest(), key);
 		if (suc != null) {
-			return signUp(suc);
+			return new SealedResponse(key, signUp(suc));
 		}
 		return new SecurityExceptionResponse("Security issue");
 	}
@@ -158,20 +157,23 @@ public class CommandHandlerImpl implements CommandHandler {
 			return new UsernameExceptionResponse("No such username");
 		}
 		Command c = (Command) getObject(sc.getSealedContent(), sc.getDigest(), user.getSharedSecret());
+		Response response;
 		if (c instanceof DownloadQuizCommand) {
-			return downloadQuiz((DownloadQuizCommand) c);
+			response = downloadQuiz((DownloadQuizCommand) c);
 		} else if (c instanceof HelloCommand) {
-			return hello((HelloCommand) c);
+			response = hello((HelloCommand) c);
 		} else if (c instanceof LoginCommand) {
-			return login((LoginCommand) c);
+			response = login((LoginCommand) c);
 		} else if (c instanceof MonumentCommand) {
-			return monuments((MonumentCommand) c);
+			response = monuments((MonumentCommand) c);
 		} else if (c instanceof RankingCommand) {
-			return ranking((RankingCommand) c);
+			response = ranking((RankingCommand) c);
 		} else if (c instanceof SubmitQuizCommand) {
-			return submitQuiz((SubmitQuizCommand) c);
+			response = submitQuiz((SubmitQuizCommand) c);
+		} else {
+			return new SecurityExceptionResponse("Security issue!");
 		}
-		return new SecurityExceptionResponse("Security issue!");
+		return new SealedResponse(user.getSharedSecret(), response);
 	}
 
 	private Response downloadQuiz(DownloadQuizCommand dqc) {
@@ -263,7 +265,7 @@ public class CommandHandlerImpl implements CommandHandler {
 			e.printStackTrace();
 			return null;
 		}
-		if (SecurityManager.verifyDigest(o, digestObject, key)) {
+		if (SecurityManager.verifyDigest(o, digestObject)) {
 			return o;
 		}
 		return null;

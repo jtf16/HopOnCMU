@@ -1,6 +1,7 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.activities;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -28,6 +29,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.sealed.SubmitQuizSealedCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.SubmitQuizResponse;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.sealed.SealedResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Quiz;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
@@ -65,10 +67,6 @@ public class QuizActivity extends TermiteManagerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-
-        /*new SendCommTask().executeOnExecutor(
-                AsyncTask.THREAD_POOL_EXECUTOR,
-                "ola");*/
 
         userQuizRepository = new UserQuizRepository(this);
 
@@ -218,9 +216,19 @@ public class QuizActivity extends TermiteManagerActivity {
 
     @Override
     public void updateInterface(Response response) {
-        if (response instanceof SubmitQuizResponse) {
-            SubmitQuizResponse submitQuizResponse = (SubmitQuizResponse) response;
-            userQuizRepository.updateUserQuiz(submitQuizResponse.getUserQuiz());
+
+        if (response instanceof SealedResponse) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SecretKey secretKey = SecurityManager.getSecretKey(sharedPreferences);
+
+            SealedResponse sr = (SealedResponse) response;
+
+            Response response1 = (Response) SecurityManager.getObject(sr.getSealedContent(), sr.getDigest(), secretKey);
+            if (response1 instanceof SubmitQuizResponse) {
+                SubmitQuizResponse submitQuizResponse = (SubmitQuizResponse) response1;
+                userQuizRepository.updateUserQuiz(submitQuizResponse.getUserQuiz());
+            }
         }
     }
 }

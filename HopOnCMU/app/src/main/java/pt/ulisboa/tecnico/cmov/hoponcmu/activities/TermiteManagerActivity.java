@@ -64,7 +64,7 @@ public abstract class TermiteManagerActivity extends ManagerActivity
     };
     private boolean mReceiverBound = false;
     private SimWifiP2pSocketServer mSrvSocket = null;
-    private SimWifiP2pSocket mCliSocket = null;
+    private static SimWifiP2pSocket mCliSocket = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -210,19 +210,13 @@ public abstract class TermiteManagerActivity extends ManagerActivity
         }
     }
 
-    public class SendCommTask extends AsyncTask<String, Void, String> {
+    public static class SendCommTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... msg) {
             try {
                 for (SimWifiP2pDevice device : groupList) {
-                    /*mCliSocket = new SimWifiP2pSocket(params[0],
-                            Integer.parseInt(getString(R.string.port)));*/
-                    Log.d("AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAA");
-                    Log.d("192.168.0.2:", "10001");
-                    Log.d(device.getVirtIp() + ":", device.getVirtPort() + "");
-                    Log.d(device.getRealIp() + ":", device.getRealPort() + "");
-                    mCliSocket = new SimWifiP2pSocket(device.virtDeviceAddress,
+                    mCliSocket = new SimWifiP2pSocket(device.getVirtIp(),
                             device.getVirtPort());
                     mCliSocket.getOutputStream().write((msg[0] + "\n").getBytes());
                     BufferedReader sockIn = new BufferedReader(

@@ -1,5 +1,6 @@
 package pt.ulisboa.tecnico.cmov.hoponcmu.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.activities.QuizActivity;
+import pt.ulisboa.tecnico.cmov.hoponcmu.activities.TermiteManagerActivity;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Answer;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.AnswerOption;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.Question;
@@ -20,8 +22,10 @@ public class QuizQuestionFragment extends Fragment
 
     public static final String ARG_QUESTION = "question";
     public static final String ARG_USERNAME = "username";
+    public static final String ARG_QUESTION_NUMBER = "questionNumber";
     private String username;
     private Question question;
+    private int questionNumber;
     private AnswerRepository answerRepository;
     private TextView textQuestion;
     private Button btnOptionA;
@@ -34,13 +38,14 @@ public class QuizQuestionFragment extends Fragment
         // Required empty public constructor
     }
 
-    public static QuizQuestionFragment newInstance(Question question, String username) {
+    public static QuizQuestionFragment newInstance(Question question, String username, int questionNumber) {
 
         QuizQuestionFragment fragment = new QuizQuestionFragment();
         Bundle args = new Bundle();
 
         args.putSerializable(ARG_QUESTION, question);
         args.putString(ARG_USERNAME, username);
+        args.putInt(ARG_QUESTION_NUMBER, questionNumber);
         fragment.setArguments(args);
 
         return fragment;
@@ -55,6 +60,7 @@ public class QuizQuestionFragment extends Fragment
         if (getArguments() != null) {
             question = (Question) getArguments().getSerializable(ARG_QUESTION);
             username = getArguments().getString(ARG_USERNAME);
+            questionNumber = getArguments().getInt(ARG_QUESTION_NUMBER);
         }
     }
 
@@ -136,6 +142,8 @@ public class QuizQuestionFragment extends Fragment
     @Override
     public void onClick(View view) {
 
+        String shared = "User: " + username + " Q: " + questionNumber + " A: ";
+
         if (currentAnswer != null) {
             currentAnswer.setSelected(false);
         }
@@ -147,21 +155,29 @@ public class QuizQuestionFragment extends Fragment
             case R.id.option_A:
                 answer.setAnswer(AnswerOption.OPTION_A);
                 question.setAnswer(AnswerOption.OPTION_A);
+                shared += "A";
                 break;
             case R.id.option_B:
                 answer.setAnswer(AnswerOption.OPTION_B);
                 question.setAnswer(AnswerOption.OPTION_B);
+                shared += "B";
                 break;
             case R.id.option_C:
                 answer.setAnswer(AnswerOption.OPTION_C);
                 question.setAnswer(AnswerOption.OPTION_C);
+                shared += "C";
                 break;
             case R.id.option_D:
                 answer.setAnswer(AnswerOption.OPTION_D);
                 question.setAnswer(AnswerOption.OPTION_D);
+                shared += "D";
                 break;
         }
         ((QuizActivity) getActivity()).goRight(null);
         answerRepository.insertAnswer(answer);
+
+        new TermiteManagerActivity.SendCommTask().executeOnExecutor(
+                AsyncTask.THREAD_POOL_EXECUTOR,
+                shared);
     }
 }

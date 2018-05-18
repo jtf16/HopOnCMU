@@ -30,12 +30,15 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
+import javax.crypto.SecretKey;
+
 import pt.ulisboa.tecnico.cmov.hoponcmu.R;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.CommunicationTask;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.command.RankingCommand;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.HelloResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.RankingResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.Response;
+import pt.ulisboa.tecnico.cmov.hoponcmu.communication.response.sealed.SealedResponse;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.objects.User;
 import pt.ulisboa.tecnico.cmov.hoponcmu.data.repositories.UserRepository;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.DownloadsFragment;
@@ -43,6 +46,7 @@ import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.ManagerFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.MonumentsFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.fragments.RankingFragment;
 import pt.ulisboa.tecnico.cmov.hoponcmu.location.FetchCoordinatesTask;
+import pt.ulisboa.tecnico.cmov.hoponcmu.security.SecurityManager;
 import pt.ulisboa.tecnico.cmov.hoponcmu.views.SearchEditText;
 
 public class MainActivity extends TermiteManagerActivity implements
@@ -380,12 +384,22 @@ public class MainActivity extends TermiteManagerActivity implements
 
     @Override
     public void updateInterface(Response response) {
-        if (response instanceof HelloResponse) {
-            Log.d("HelloResponse", ((HelloResponse) response).getMessage());
-        } else if (response instanceof RankingResponse) {
-            RankingResponse rankingResponse = (RankingResponse) response;
-            userRepository.insertUser(rankingResponse.getUsers());
-            fragment.refreshRanking();
+
+        if (response instanceof SealedResponse) {
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SecretKey secretKey = SecurityManager.getSecretKey(sharedPreferences);
+
+            SealedResponse sr = (SealedResponse) response;
+
+            Response response1 = (Response) SecurityManager.getObject(sr.getSealedContent(), sr.getDigest(), secretKey);
+            if (response1 instanceof HelloResponse) {
+                Log.d("HelloResponse", ((HelloResponse) response1).getMessage());
+            } else if (response1 instanceof RankingResponse) {
+                RankingResponse rankingResponse = (RankingResponse) response1;
+                userRepository.insertUser(rankingResponse.getUsers());
+                fragment.refreshRanking();
+            }
         }
     }
 
